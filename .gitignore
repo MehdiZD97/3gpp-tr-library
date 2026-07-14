@@ -1,0 +1,20 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local scratch — don't commit source PDFs/docx
+_scratch/
+*.pdf
+*.docx
