@@ -1,43 +1,17 @@
-import csv
-import glob
 import os
-import re
+import sys
 
 import pytest
 import yaml
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+
+from section_utils import discover_section_md_files, read_csv_rows, split_front_matter  # noqa: E402
 
 SECTION_7_4_MD = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "7.4-pathloss.md")
 SECTION_7_4_YAML = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "7.4-pathloss.yaml")
 TABLES_DIR = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "tables")
-
-FRONT_MATTER_RE = re.compile(r"^---\n(.*?)\n---\n(.*)$", re.DOTALL)
-
-
-def split_front_matter(md_text):
-    match = FRONT_MATTER_RE.match(md_text)
-    assert match, "front matter block (---...---) not found at top of file"
-    return match.group(1), match.group(2)
-
-
-def discover_section_md_files():
-    """Any .md file under TR-*/v*/ that isn't a TR-level or top-level README."""
-    pattern = os.path.join(REPO_ROOT, "TR-*", "v*", "**", "*.md")
-    files = glob.glob(pattern, recursive=True)
-    return sorted(f for f in files if os.path.basename(f) != "README.md")
-
-
-def read_csv_rows(path):
-    with open(path, newline="") as f:
-        reader = csv.reader(f)
-        rows = list(reader)
-    assert rows, f"{path} is empty"
-    header = rows[0]
-    ncols = len(header)
-    for i, row in enumerate(rows[1:], start=2):
-        assert len(row) == ncols, f"{path}: row {i} has {len(row)} columns, expected {ncols}"
-    return rows
 
 
 @pytest.fixture(scope="session")

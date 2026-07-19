@@ -1,0 +1,13 @@
+# Dependencies for working on this repo itself: source extraction, tests,
+# and verification tooling. NOT tools/tr_api/'s runtime dependencies — those
+# are much narrower and live in tools/tr_api/pyproject.toml.
+#
+# Setup: python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements-dev.txt
+
+python-docx      # .docx parsing (structure, prose, table cells)
+pymupdf          # PDF page rendering for visual cross-checks
+beautifulsoup4   # HTML export parsing
+lxml             # XML export parsing; also BeautifulSoup's backing parser
+pyyaml           # section YAML / schema YAML (always yaml.safe_load, never yaml.load)
+pytest           # test suite (tests/), filterwarnings = error via pytest.ini
+pydantic         # schema models (tools/tr_api/models.py), also used by verify_tables.py

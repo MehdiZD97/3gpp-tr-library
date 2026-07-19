@@ -1,88 +1,96 @@
 """
 Cross-file consistency checks: CSV <-> YAML <-> inline Markdown table must
-all agree. This is a hand-written preview of what `tools/verify_tables.py`
-(Phase 3) will do generically -- written so the comparison logic here could
-plausibly be lifted into that tool later rather than thrown away.
+all agree. The CSV <-> YAML comparisons below call `tools/verify_tables.py`'s
+generalized `verify_table()` / `verify_flat_param_table()` -- promoted in
+Phase 3 from five near-identical hand-written functions that lived here in
+Phase 2.
 """
+import os
 import re
+import sys
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+
+from verify_tables import (  # noqa: E402
+    _variant_key_normalizer,
+    flatten_std,
+    identity,
+    join_notes,
+    verify_flat_param_table,
+    verify_table,
+)
 
 
-def _flatten_std(std_list):
-    if len(std_list) == 1 and std_list[0]["condition"] is None:
-        return str(std_list[0]["value_db"])
-    return "; ".join(f"{s['value_db']} dB ({s['condition']})" for s in std_list)
+def test_table_7_4_1_1_csv_matches_yaml(tables_dir, section_7_4_yaml_data):
+    errors = verify_table(
+        os.path.join(tables_dir, "table-7.4.1-1.csv"),
+        section_7_4_yaml_data["pathloss"],
+        key_fields=("scenario", "condition", "variant"),
+        key_normalizer=_variant_key_normalizer,
+        field_map={
+            "formula": ("formula", identity),
+            "shadow_fading_std_db": ("shadow_fading_std_db", flatten_std),
+            "applicability_range": ("applicability_range", identity),
+            "notes": ("notes", join_notes),
+        },
+    )
+    assert not errors, "\n".join(errors)
 
 
-def test_table_7_4_1_1_csv_matches_yaml(table_7_4_1_1_rows, section_7_4_yaml_data):
-    header, *data_rows = table_7_4_1_1_rows
-    assert header == ["scenario", "condition", "variant", "formula", "shadow_fading_std_db", "applicability_range", "notes"]
-
-    yaml_by_key = {
-        (row["scenario"], row["condition"], row["variant"] or ""): row
-        for row in section_7_4_yaml_data["pathloss"]
-    }
-    assert len(data_rows) == len(yaml_by_key)
-
-    for scenario, condition, variant, formula, std, applicability, notes in data_rows:
-        key = (scenario, condition, variant)
-        assert key in yaml_by_key, f"CSV row {key} has no matching YAML entry"
-        yrow = yaml_by_key[key]
-        assert formula == yrow["formula"]
-        assert std == _flatten_std(yrow["shadow_fading_std_db"])
-        assert applicability == yrow["applicability_range"]
-        assert notes == "; ".join(yrow["notes"])
+def test_table_7_4_2_1_csv_matches_yaml(tables_dir, section_7_4_yaml_data):
+    errors = verify_table(
+        os.path.join(tables_dir, "table-7.4.2-1.csv"),
+        section_7_4_yaml_data["los_probability"],
+        key_fields=("scenario",),
+        field_map={
+            "formula": ("formula", identity),
+            "notes": ("notes", join_notes),
+        },
+    )
+    assert not errors, "\n".join(errors)
 
 
-def test_table_7_4_2_1_csv_matches_yaml(table_7_4_2_1_rows, section_7_4_yaml_data):
-    header, *data_rows = table_7_4_2_1_rows
-    assert header == ["scenario", "formula", "notes"]
-
-    yaml_by_scenario = {row["scenario"]: row for row in section_7_4_yaml_data["los_probability"]}
-    assert len(data_rows) == len(yaml_by_scenario)
-
-    for scenario, formula, notes in data_rows:
-        yrow = yaml_by_scenario[scenario]
-        assert formula == yrow["formula"]
-        assert notes == "; ".join(yrow["notes"])
-
-
-def test_table_7_4_3_1_csv_matches_yaml(table_7_4_3_1_rows, section_7_4_yaml_data):
-    header, *data_rows = table_7_4_3_1_rows
-    assert header == ["material", "formula", "notes"]
-
-    yaml_by_material = {m["material"]: m for m in section_7_4_yaml_data["o2i_penetration_loss"]["materials"]}
-    assert len(data_rows) == len(yaml_by_material)
-
-    for material, formula, notes in data_rows:
-        yrow = yaml_by_material[material]
-        assert formula == yrow["formula"]
-        assert notes == "; ".join(yrow["notes"])
+def test_table_7_4_3_1_csv_matches_yaml(tables_dir, section_7_4_yaml_data):
+    errors = verify_table(
+        os.path.join(tables_dir, "table-7.4.3-1.csv"),
+        section_7_4_yaml_data["o2i_penetration_loss"]["materials"],
+        key_fields=("material",),
+        field_map={
+            "formula": ("formula", identity),
+            "notes": ("notes", join_notes),
+        },
+    )
+    assert not errors, "\n".join(errors)
 
 
-def test_table_7_4_3_2_csv_matches_yaml(table_7_4_3_2_rows, section_7_4_yaml_data):
-    header, *data_rows = table_7_4_3_2_rows
-    assert header == ["model", "pl_tw_formula", "pl_in_formula", "std_p_db"]
+def test_table_7_4_3_2_csv_matches_yaml(tables_dir, section_7_4_yaml_data):
+    errors = verify_table(
+        os.path.join(tables_dir, "table-7.4.3-2.csv"),
+        section_7_4_yaml_data["o2i_penetration_loss"]["building_models"],
+        key_fields=("model",),
+        field_map={
+            "pl_tw_formula": ("pl_tw_formula", identity),
+            "pl_in_formula": ("pl_in_formula", identity),
+            "std_p_db": ("std_p_db", lambda v: str(v)),
+        },
+    )
+    assert not errors, "\n".join(errors)
 
-    yaml_by_model = {m["model"]: m for m in section_7_4_yaml_data["o2i_penetration_loss"]["building_models"]}
-    assert len(data_rows) == len(yaml_by_model)
 
-    for model, pl_tw, pl_in, std in data_rows:
-        yrow = yaml_by_model[model]
-        assert pl_tw == yrow["pl_tw_formula"]
-        assert pl_in == yrow["pl_in_formula"]
-        assert float(std) == yrow["std_p_db"]
-
-
-def test_table_7_4_3_3_csv_matches_yaml(table_7_4_3_3_rows, section_7_4_yaml_data):
-    header, *data_rows = table_7_4_3_3_rows
-    assert header == ["parameter", "value"]
-
+def test_table_7_4_3_3_csv_matches_yaml(tables_dir, section_7_4_yaml_data):
     entry = section_7_4_yaml_data["o2i_penetration_loss"]["building_single_frequency_below_6ghz"]
-    values = {row[0]: row[1] for row in data_rows}
-    assert values["PL_tw"] == f"{entry['pl_tw_db']} dB"
-    assert values["PL_in"] == entry["pl_in_formula"]
-    assert values["sigma_P"] == f"{entry['sigma_p_db']} dB"
-    assert values["sigma_SF"] == f"{entry['sigma_sf_db']} dB ({entry['note']})"
+    errors = verify_flat_param_table(
+        os.path.join(tables_dir, "table-7.4.3-3.csv"),
+        entry,
+        field_map={
+            "PL_tw": ("pl_tw_db", lambda v: f"{v} dB"),
+            "PL_in": ("pl_in_formula", identity),
+            "sigma_P": ("sigma_p_db", lambda v: f"{v} dB"),
+            "sigma_SF": ("sigma_sf_db", lambda v: f"{v} dB ({entry['note']})"),
+        },
+    )
+    assert not errors, "\n".join(errors)
 
 
 def test_inline_markdown_table_7_4_1_1_matches_csv(section_7_4_body, table_7_4_1_1_rows):
