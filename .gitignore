@@ -19,10 +19,30 @@ _scratch/
 *.pdf
 *.docx
 
-# reference files
+# reference files — ignore everything under references/ except the top-level
+# README.md and each document folder's own README.md. A directory that's
+# already ignored won't be descended into for further negation, so each
+# nested README.md needs its parent directories explicitly un-ignored too.
 references/*
 !/references/README.md
 
+!/references/3gpp-tr38901/
+/references/3gpp-tr38901/*
+!/references/3gpp-tr38901/v19.4.0/
+/references/3gpp-tr38901/v19.4.0/*
+!/references/3gpp-tr38901/v19.4.0/README.md
+
+!/references/3gpp-tr36777/
+/references/3gpp-tr36777/*
+!/references/3gpp-tr36777/v15.0.0/
+/references/3gpp-tr36777/v15.0.0/*
+!/references/3gpp-tr36777/v15.0.0/README.md
+
+!/references/3gpp-R1-2509126/
+/references/3gpp-R1-2509126/*
+!/references/3gpp-R1-2509126/README.md
+
 # planning and development notes
+# Claude Code context — internal notes, not for public repo
 CLAUDE.md
 docs/phase-plans
