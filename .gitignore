@@ -22,3 +22,5 @@ _scratch/
 # reference files
 references/*
 !/references/README.md
+
+CLAUDE.md
