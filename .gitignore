@@ -23,4 +23,6 @@ _scratch/
 references/*
 !/references/README.md
 
+# planning and development notes
 CLAUDE.md
+docs/phase-plans
