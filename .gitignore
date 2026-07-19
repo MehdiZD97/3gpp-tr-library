@@ -18,3 +18,7 @@ Thumbs.db
 _scratch/
 *.pdf
 *.docx
+
+# reference files
+references/*
+
