@@ -97,3 +97,69 @@ def test_both_sections_usable_from_same_import():
     lsp = tr38901.section("7.5").channel_model_parameters(scenario="RMa", condition="LOS")
     assert type(pathloss).__name__ == "PathlossEntry"
     assert type(lsp).__name__ == "ChannelModelParameterEntry"
+
+
+# ---------------------------------------------------------------------------
+# TR 36.777 Annex B -- the second TR, accessed via annex() rather than
+# section(). Exercises the shared-loader generalization from a caller's view.
+# ---------------------------------------------------------------------------
+from tr_api import tr36777  # noqa: E402
+
+
+def test_annex_b_pathloss_returns_list_of_height_bands():
+    bands = tr36777.annex("B").pathloss(scenario="RMa-AV", condition="LOS")
+    assert isinstance(bands, list) and len(bands) == 2
+    assert type(bands[0]).__name__ == "PathlossDeltaEntry"
+    # One terrestrial-baseline row, one aerial-specific formula row.
+    assert any("According to" in b.pathloss for b in bands)
+    assert any("PL_{RMa-AV-LOS}" in b.pathloss for b in bands)
+
+
+def test_annex_b_alternative_1_returns_single_typed_entry():
+    entry = tr36777.annex("B").alternative_1(scenario="UMa-AV", condition="NLOS")
+    assert entry.asa_deg == "1"
+    assert entry.desired_ds_ns == "30"
+    assert type(entry).__name__ == "Alternative1DesiredParametersEntry"
+
+
+def test_annex_b_alternative_2_returns_single_typed_entry():
+    entry = tr36777.annex("B").alternative_2(scenario="RMa-AV", parameter="K", condition="LOS")
+    assert entry.mu == r"22.55\log_{10}(h_{UT}) - 4.72"
+
+
+def test_annex_b_lookup_for_missing_scenario_raises_informative_error():
+    with pytest.raises(tr36777.ScenarioNotFoundError) as exc_info:
+        tr36777.annex("B").alternative_1(scenario="Mars-AV", condition="LOS")
+    assert "Mars-AV" in str(exc_info.value)
+
+
+def test_annex_lookup_for_unprocessed_annex_raises_informative_error():
+    with pytest.raises(tr36777.SectionNotFoundError) as exc_info:
+        tr36777.annex("Z")
+    message = str(exc_info.value)
+    assert "Z" in message and "'B'" in message  # lists what *is* processed
+
+
+def test_annex_caching_returns_same_instance():
+    assert tr36777.annex("B") is tr36777.annex("B")
+
+
+def test_shared_loader_errors_are_the_same_type_across_trs():
+    # The dispatcher generalization moved SectionNotFoundError/ScenarioNotFoundError
+    # into the shared _loader; both TR modules must raise the *same* classes,
+    # so a caller can catch one regardless of which TR raised it.
+    from tr_api._loader import ScenarioNotFoundError as BaseScenario
+    from tr_api._loader import SectionNotFoundError as BaseSection
+
+    assert tr38901.SectionNotFoundError is BaseSection
+    assert tr36777.SectionNotFoundError is BaseSection
+    assert tr38901.ScenarioNotFoundError is BaseScenario
+    assert tr36777.ScenarioNotFoundError is BaseScenario
+
+
+def test_both_trs_usable_from_same_import():
+    from tr_api import tr36777 as t36, tr38901 as t38
+    pathloss = t38.section("7.4").pathloss(scenario="RMa", condition="LOS")
+    aerial = t36.annex("B").pathloss(scenario="RMa-AV", condition="LOS")
+    assert type(pathloss).__name__ == "PathlossEntry"
+    assert isinstance(aerial, list)

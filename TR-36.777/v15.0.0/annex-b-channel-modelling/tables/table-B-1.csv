@@ -1,0 +1,9 @@
+scenario,height_range,los_probability,notes
+RMa-AV,1.5m <= hUT <= 10m,According to Table 7.4.2-1 of [4] using the $Pr_{LOS}$ formula of RMa,
+RMa-AV,10m < hUT <= 40m,"Pr_{LOS} = \begin{cases} 1 & d_{2D} \le d_1 \\ \dfrac{d_1}{d_{2D}} + \exp\left(\dfrac{-d_{2D}}{p_1}\right)\left(1 - \dfrac{d_1}{d_{2D}}\right) & d_{2D} > d_1 \end{cases}; \quad p_1 = \max(15021\log_{10}(h_{UT}) - 16053, 1000); \quad d_1 = \max(1350.8\log_{10}(h_{UT}) - 1602, 18)",Note 1; Note 2
+RMa-AV,40m < hUT <= 300m,100%,
+UMa-AV,1.5m <= hUT <= 22.5m,According to Table 7.4.2-1 of [4] using the $Pr_{LOS}$ formula of UMa,
+UMa-AV,22.5m < hUT <= 100m,"Pr_{LOS} = \begin{cases} 1 & d_{2D} \le d_1 \\ \dfrac{d_1}{d_{2D}} + \exp\left(\dfrac{-d_{2D}}{p_1}\right)\left(1 - \dfrac{d_1}{d_{2D}}\right) & d_{2D} > d_1 \end{cases}; \quad p_1 = 4300\log_{10}(h_{UT}) - 3800; \quad d_1 = \max(460\log_{10}(h_{UT}) - 700, 18)",Note 1; Note 2
+UMa-AV,100m < hUT <= 300m,100%,
+UMi-AV,1.5m <= hUT <= 22.5m,According to Table 7.4.2-1 of [4] using the $Pr_{LOS}$ formula of UMi,
+UMi-AV,22.5m < hUT <= 300m,"Pr_{LOS} = \begin{cases} 1 & d_{2D} \le d_1 \\ \dfrac{d_1}{d_{2D}} + \exp\left(\dfrac{-d_{2D}}{p_1}\right)\left(1 - \dfrac{d_1}{d_{2D}}\right) & d_{2D} > d_1 \end{cases}; \quad p_1 = 233.98\log_{10}(h_{UT}) - 0.95; \quad d_1 = \max(294.05\log_{10}(h_{UT}) - 432.94, 18)",Note 1; Note 2

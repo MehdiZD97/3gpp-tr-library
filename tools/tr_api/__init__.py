@@ -1,16 +1,22 @@
 """
 tr_api: typed Python access to this repo's structured 3GPP TR data.
 
-    from tr_api import tr38901
+    from tr_api import tr38901, tr36777
 
+    # TR 38.901 -- numbered clauses, accessed via section():
     entry = tr38901.section("7.4").pathloss(scenario="UMi-StreetCanyon", condition="NLOS")
     entry.shadow_fading_std_db
 
-Organized by TR (`tr38901`, with `tr36777` a natural future sibling) and by
-version (passed to `section()`, defaulting to the latest processed version)
-so the package still makes sense once a second TR or a second version of
-TR 38.901 exists.
-"""
-from . import tr38901
+    # TR 36.777 -- a lettered annex, accessed via annex():
+    b = tr36777.annex("B")
+    b.pathloss(scenario="RMa-AV", condition="LOS")   # aerial-UE pathloss deltas
 
-__all__ = ["tr38901"]
+Organized by TR (`tr38901`, `tr36777`) and by version (passed to
+`section()` / `annex()`, defaulting to each TR's latest processed version).
+The TR-agnostic load/validate/cache machinery lives in `_loader.py` and is
+shared by every per-TR module, so adding a further TR is a new thin module
+plus its registry, not a copy of the loader.
+"""
+from . import tr36777, tr38901
+
+__all__ = ["tr38901", "tr36777"]

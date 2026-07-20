@@ -8,7 +8,14 @@ docs/CONTRIBUTING.md's Development setup section.
 """
 import pytest
 from pydantic import ValidationError
-from tr_api.models import ChannelModelParameterEntry, PathlossEntry, ZsdZodOffsetEntry
+from tr_api.models import (
+    Alternative1DesiredParametersEntry,
+    Alternative2ModifiedParameterEntry,
+    ChannelModelParameterEntry,
+    PathlossDeltaEntry,
+    PathlossEntry,
+    ZsdZodOffsetEntry,
+)
 
 
 def _valid_pathloss_kwargs(**overrides):
@@ -105,3 +112,56 @@ def test_valid_zsd_zod_offset_entry_validates():
 def test_zsd_zod_offset_entry_invalid_condition_value_rejected():
     with pytest.raises(ValidationError):
         ZsdZodOffsetEntry(condition="SOMETHING_ELSE", mu_lgZSD="0", sigma_lgZSD="0", mu_offset_ZOD="0")
+
+
+# --- TR 36.777 Annex B models ---
+def test_valid_pathloss_delta_entry_validates():
+    entry = PathlossDeltaEntry(
+        scenario="RMa-AV", condition="LOS", height_range="10m < hUT <= 300m",
+        pathloss=r"PL = 20\log_{10}(d)", notes=["Note 2"],
+    )
+    assert entry.scenario == "RMa-AV"
+    assert entry.notes == ["Note 2"]
+
+
+def test_pathloss_delta_entry_defaults_notes():
+    entry = PathlossDeltaEntry(
+        scenario="UMa-AV", condition="NLOS", height_range="x", pathloss="According to Table 7.4.1-1 of [4]",
+    )
+    assert entry.notes == []
+
+
+def test_pathloss_delta_entry_invalid_condition_rejected():
+    with pytest.raises(ValidationError):
+        PathlossDeltaEntry(scenario="RMa-AV", condition="O2I", height_range="x", pathloss="y")
+
+
+def test_valid_alternative_1_entry_validates():
+    entry = Alternative1DesiredParametersEntry(
+        scenario="RMa-AV", condition="LOS", asa_deg="0.2", asd_deg="0.2",
+        zsa_deg="0.1", zsd_deg="0.1", desired_k_db="20", desired_ds_ns="10",
+    )
+    assert entry.desired_k_db == "20"
+
+
+def test_alternative_1_entry_missing_field_rejected():
+    with pytest.raises(ValidationError):
+        Alternative1DesiredParametersEntry(
+            scenario="RMa-AV", condition="LOS", asa_deg="0.2", asd_deg="0.2",
+            zsa_deg="0.1", zsd_deg="0.1", desired_k_db="20",  # desired_ds_ns missing
+        )
+
+
+def test_valid_alternative_2_entry_validates():
+    entry = Alternative2ModifiedParameterEntry(
+        scenario="UMa-AV", parameter="DS", condition="NLOS",
+        mu=r"0.0965\log_{10}(h_{UT}) - 7.503", sigma=r"0.9745\exp(-0.0045 h_{UT})",
+    )
+    assert entry.parameter == "DS"
+
+
+def test_alternative_2_entry_invalid_parameter_rejected():
+    with pytest.raises(ValidationError):
+        Alternative2ModifiedParameterEntry(
+            scenario="UMa-AV", parameter="NOTAPARAM", condition="LOS", mu="x", sigma="y",
+        )

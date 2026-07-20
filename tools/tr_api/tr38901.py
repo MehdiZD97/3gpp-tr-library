@@ -23,21 +23,24 @@ Python API for TR 38.901's processed sections.
 
     notations = tr38901.section("7.5").notations   # Table 7.5-1
 
-`section()` is cached per (section_id, version) -- repeated calls don't
-re-read or re-validate the YAML. It's a genuine dispatcher, not a
-single-shape assumption: each registered section id maps to its own data
-file, Pydantic model, and accessor class, since §7.4 and §7.5 don't share a
-data shape and future sections won't necessarily either.
+`section()` is cached per (section_id, version) via the shared TRLoader --
+repeated calls don't re-read or re-validate the YAML. Each registered
+section id maps to its own data file, Pydantic model, and accessor class:
+§7.4 and §7.5 don't share a data shape and future sections won't
+necessarily either.
+
+The TR-agnostic load/validate/cache machinery lives in `_loader.py` and is
+shared with `tr36777` (and any future TR module); this file is just
+TR 38.901's registry, accessor classes, and the `section()` verb.
 """
-from functools import lru_cache
-from pathlib import Path
 from typing import Optional
 
-import yaml
-
+# Re-exported for backwards compatibility: callers import these from here.
+from ._loader import ScenarioNotFoundError, SectionNotFoundError, TRLoader
 from .models import (
     ChannelModelParameterEntry,
     LosProbabilityEntry,
+    NotationEntry,
     O2IPenetrationLoss,
     PathlossEntry,
     RayOffsetAngle,
@@ -46,22 +49,12 @@ from .models import (
     Section75Data,
     ShadowFadingAutocorrelation,
     SubClusterInfo,
-    NotationEntry,
     ZsdZodOffsetEntry,
 )
 
 DEFAULT_VERSION = "v19.4.0"
 
-# This file lives at tools/tr_api/tr38901.py; the repo root is two levels up.
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-
-
-class SectionNotFoundError(LookupError):
-    """Raised when a section id or version has no processed data available."""
-
-
-class ScenarioNotFoundError(LookupError):
-    """Raised when a lookup's scenario/condition/variant doesn't match any entry."""
+__all__ = ["section", "Section74", "Section75", "ScenarioNotFoundError", "SectionNotFoundError", "DEFAULT_VERSION"]
 
 
 class Section74:
@@ -158,29 +151,15 @@ class Section75:
 
 # Registry: section id -> (YAML path relative to TR-38.901/<version>/, the
 # Pydantic model that validates the whole file, the accessor class wrapping
-# it). Adding a processed section means adding one line here, not touching
-# the dispatch logic in section() below.
+# it). Adding a processed section means adding one line here.
 _SECTION_REGISTRY = {
     "7.4": ("07-channel-models/7.4-pathloss.yaml", Section74Data, Section74),
     "7.5": ("07-channel-models/7.5-fast-fading.yaml", Section75Data, Section75),
 }
 
+_loader = TRLoader("TR-38.901", "TR 38.901", DEFAULT_VERSION, _SECTION_REGISTRY)
 
-@lru_cache(maxsize=None)
-def section(section_id: str, version: str = DEFAULT_VERSION):
-    """Load and validate a processed TR 38.901 section's data."""
-    if section_id not in _SECTION_REGISTRY:
-        raise SectionNotFoundError(
-            f"No data available for TR 38.901 section {section_id!r}. "
-            f"Processed sections: {sorted(_SECTION_REGISTRY)}"
-        )
-    rel_path, model_cls, accessor_cls = _SECTION_REGISTRY[section_id]
-    yaml_path = _REPO_ROOT / "TR-38.901" / version / rel_path
-    if not yaml_path.is_file():
-        raise SectionNotFoundError(
-            f"No data file for TR 38.901 §{section_id} version {version!r} -- expected {yaml_path}"
-        )
-    with open(yaml_path) as f:
-        raw = yaml.safe_load(f)
-    data = model_cls(**raw)
-    return accessor_cls(section_id, version, data)
+
+def section(section_id: str, version: str = None):
+    """Load and validate a processed TR 38.901 section's data (cached per id+version)."""
+    return _loader.load(section_id, version)

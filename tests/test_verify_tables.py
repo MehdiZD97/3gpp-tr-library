@@ -9,7 +9,13 @@ import sys
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
 
-from verify_tables import identity, main, verify_flat_param_table, verify_table  # noqa: E402
+from verify_tables import (  # noqa: E402
+    html_region_has_text_formulas,
+    identity,
+    main,
+    verify_flat_param_table,
+    verify_table,
+)
 
 
 def _write_csv(path, header, rows):
@@ -83,3 +89,29 @@ def test_main_passes_cleanly_against_real_repo_data(capsys):
     captured = capsys.readouterr()
     assert exit_code == 0
     assert "PASSED" in captured.out
+
+
+def test_html_region_detects_text_vs_image_formulas(tmp_path):
+    # An OMML-bearing region (TR 38.901 style) -> formulas are text.
+    omml = tmp_path / "omml.html"
+    omml.write_text("<p>START</p><m:oMath><m:r>28.0</m:r></m:oMath><p>END</p>")
+    assert html_region_has_text_formulas(str(omml), "START", "END") is True
+
+    # An image-only region (TR 36.777 style) -> not text.
+    imaged = tmp_path / "imaged.html"
+    imaged.write_text('<p>START</p><img src="image029.png"><p>END</p>')
+    assert html_region_has_text_formulas(str(imaged), "START", "END") is False
+
+
+def test_html_region_check_matches_real_tr36777_when_present():
+    # If the (gitignored) TR 36.777 HTML is present locally, confirm the
+    # helper agrees that its Annex B region is image-embedded -- the finding
+    # that makes verify_annex_b skip (not fail) the formula cross-check.
+    html = os.path.join(
+        REPO_ROOT, "references", "3gpp-tr36777", "v15.0.0", "36777-f00_1.html"
+    )
+    if not os.path.isfile(html):
+        import pytest
+
+        pytest.skip("TR 36.777 HTML not present locally (gitignored)")
+    assert html_region_has_text_formulas(html, "Channel modelling details", "Calibration results and RSRP") is False

@@ -233,3 +233,85 @@ class Section75Data(BaseModel):
     sub_cluster_info: List[SubClusterInfo]
     channel_model_parameters: List[ChannelModelParameterEntry]
     zsd_zod_offset_parameters: Dict[str, ZsdZodOffsetTable]
+
+
+# ---------------------------------------------------------------------------
+# TR 36.777 Annex B (Channel modelling details) -- the aerial-UE (drone)
+# channel model. Every model here is TR 36.777-specific: these are height-
+# dependent *deltas* to TR 38.901's terrestrial UMa/UMi/RMa models, not a
+# generic reusable shape, so they stay out of schemas/ (same restraint as
+# the §7.4/§7.5 section-specific models above). Formula-bearing fields are
+# `str` (LaTeX or an "According to ... of [4]" reference), like §7.5's
+# formula cells -- see the section .md's verification note on why TR 36.777
+# formula content is PDF-visual single-source.
+# ---------------------------------------------------------------------------
+class LosProbabilityDeltaEntry(BaseModel):
+    """One (scenario, height band) row of Table B-1."""
+
+    scenario: str
+    height_range: str
+    los_probability: str
+    notes: List[str] = Field(default_factory=list)
+
+
+class PathlossDeltaEntry(BaseModel):
+    """One (scenario, condition, height band) row of Table B-2."""
+
+    scenario: str
+    condition: Literal["LOS", "NLOS"]
+    height_range: str
+    pathloss: str
+    notes: List[str] = Field(default_factory=list)
+
+
+class ShadowFadingDeltaEntry(BaseModel):
+    """One (scenario, condition, height band) row of Table B-3."""
+
+    scenario: str
+    condition: Literal["LOS", "NLOS"]
+    height_range: str
+    sf_std: str
+
+
+class FastFadingModelSelectionEntry(BaseModel):
+    """One (scenario, height band) row of Table B-4."""
+
+    scenario: str
+    height_range: str
+    model: str
+
+
+class Alternative1DesiredParametersEntry(BaseModel):
+    """One (scenario, condition) row of Table B.1.1-1 / B.1.1-2 (Alternative 1)."""
+
+    scenario: str
+    condition: Literal["LOS", "NLOS"]
+    asa_deg: str
+    asd_deg: str
+    zsa_deg: str
+    zsd_deg: str
+    desired_k_db: str
+    desired_ds_ns: str
+
+
+class Alternative2ModifiedParameterEntry(BaseModel):
+    """One (scenario, parameter, condition) row of Table B.1.2-1 / B.1.2-2 (Alternative 2)."""
+
+    scenario: str
+    parameter: Literal["DS", "ASA", "ASD", "ZSA", "ZSD", "K"]
+    condition: Literal["LOS", "NLOS"]
+    mu: str
+    sigma: str
+
+
+class AnnexBData(BaseModel):
+    """The full validated shape of a `B-channel-modelling.yaml`-style annex file."""
+
+    los_probability: List[LosProbabilityDeltaEntry]
+    los_probability_notes: Dict[str, str]
+    pathloss: List[PathlossDeltaEntry]
+    pathloss_notes: Dict[str, str]
+    shadow_fading_std: List[ShadowFadingDeltaEntry]
+    fast_fading_model_selection: List[FastFadingModelSelectionEntry]
+    alternative_1_desired_parameters: List[Alternative1DesiredParametersEntry]
+    alternative_2_modified_parameters: List[Alternative2ModifiedParameterEntry]

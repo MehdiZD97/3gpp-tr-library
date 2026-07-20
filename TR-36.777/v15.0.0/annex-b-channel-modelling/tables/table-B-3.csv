@@ -1,0 +1,13 @@
+scenario,condition,height_range,sf_std
+RMa-AV,LOS,1.5m <= hUT <= 10m,According to Table 7.4.1-1 of [4]
+RMa-AV,LOS,10m < hUT <= 300m,\sigma_{SF} = 4.2\exp(-0.0046 h_{UT})
+RMa-AV,NLOS,1.5m <= hUT <= 10m,According to Table 7.4.1-1 of [4]
+RMa-AV,NLOS,10m < hUT <= 40m,\sigma_{SF} = 6
+UMa-AV,LOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4]
+UMa-AV,LOS,22.5m < hUT <= 300m,\sigma_{SF} = 4.64\exp(-0.0066 h_{UT})
+UMa-AV,NLOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4]
+UMa-AV,NLOS,22.5m < hUT <= 100m,\sigma_{SF} = 6
+UMi-AV,LOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4]
+UMi-AV,LOS,22.5m < hUT <= 300m,"\sigma_{SF} = \max(5\exp(-0.01 h_{UT}), 2)"
+UMi-AV,NLOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4]
+UMi-AV,NLOS,22.5m < hUT <= 300m,\sigma_{SF} = 8

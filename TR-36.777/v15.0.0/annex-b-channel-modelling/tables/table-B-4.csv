@@ -1,0 +1,7 @@
+scenario,height_range,model
+RMa-AV,1.5m <= hUT <= 10m,According to Section 7.5 of [4]
+RMa-AV,10m < hUT <= 300m,According to Annex B.1
+UMa-AV,1.5m <= hUT <= 22.5m,According to Section 7.5 of [4]
+UMa-AV,22.5m < hUT <= 300m,According to Annex B.1
+UMi-AV,1.5m <= hUT <= 22.5m,According to Section 7.5 of [4]
+UMi-AV,22.5m < hUT <= 300m,According to Annex B.1

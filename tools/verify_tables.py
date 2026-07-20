@@ -36,7 +36,7 @@ from pydantic import ValidationError
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from section_utils import REPO_ROOT, discover_section_md_files, read_csv_rows, split_front_matter  # noqa: E402
-from tr_api.models import ChannelModelParameterEntry, Section74Data, Section75Data  # noqa: E402
+from tr_api.models import AnnexBData, ChannelModelParameterEntry, Section74Data, Section75Data  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -167,6 +167,28 @@ def check_formulas_against_html(html_path, start_text, end_text, formulas):
         if missing:
             mismatches.append((formula, missing))
     return mismatches
+
+
+def html_region_has_text_formulas(html_path, start_text, end_text):
+    """
+    Return True if the HTML region between start_text and end_text carries
+    equations as recoverable OMML *text* (Word's `<m:oMath>` markup), False
+    if they're image-embedded (old-style OLE objects rendered as .png/.wmz).
+
+    This is what makes the formula cross-check meaningful for one TR and not
+    another: TR 38.901 (2026) exports OMML text, so `check_formulas_against_html`
+    genuinely re-reads every formula constant. TR 36.777 (2017) renders every
+    equation as an image (0 OMML, hundreds of image refs, confirmed on-disk),
+    so running the numeric cross-check there would report every formula digit
+    as "missing" -- a false failure. Callers use this to *skip* the cross-check
+    for an image-embedded region rather than fail it or fake a pass.
+    """
+    with open(html_path, "r", errors="ignore") as f:
+        content = f.read()
+    start = content.rfind(start_text)
+    end = content.find(end_text, start + len(start_text)) if start != -1 else -1
+    region = content[start:end] if (start != -1 and end != -1) else content
+    return "m:oMath" in region
 
 
 # ---------------------------------------------------------------------------
@@ -468,6 +490,88 @@ def verify_section_7_5():
 
 
 # ---------------------------------------------------------------------------
+# TR 36.777 Annex B configuration
+#
+# Every Annex B CSV/YAML pair fits the existing verify_table() list-of-
+# entities checker, so no new checker shape is needed here (same outcome as
+# §7.5). The two-part split tables (B.1.1-1/-2, B.1.2-1/-2) share a flat YAML
+# list distinguished by scenario -- filtered per CSV below, the same way
+# §7.5's per-scenario ZSD/ZOD tables are handled.
+#
+# The HTML formula cross-check does NOT apply to this TR: TR 36.777 (2017)
+# renders every equation as an image (0 OMML), so it's skipped via
+# html_region_has_text_formulas() rather than run and false-failed. Formula
+# content here is PDF-visual single-source (see the section .md).
+# ---------------------------------------------------------------------------
+ANNEX_B_DIR = os.path.join(REPO_ROOT, "TR-36.777", "v15.0.0", "annex-b-channel-modelling")
+ANNEX_B_YAML_PATH = os.path.join(ANNEX_B_DIR, "B-channel-modelling.yaml")
+ANNEX_B_TABLES_DIR = os.path.join(ANNEX_B_DIR, "tables")
+ANNEX_B_SOURCE_HTML = os.path.join(REPO_ROOT, "references", "3gpp-tr36777", "v15.0.0", "36777-f00_1.html")
+
+_ALT1_SCENARIO_TABLES = {"RMa-AV": "B.1.1-1", "UMa-AV": "B.1.1-2"}
+_ALT2_SCENARIO_TABLES = {"RMa-AV": "B.1.2-1", "UMa-AV": "B.1.2-2"}
+
+
+def verify_annex_b():
+    errors = []
+
+    with open(ANNEX_B_YAML_PATH) as f:
+        data = yaml.safe_load(f)
+
+    try:
+        AnnexBData(**data)
+    except ValidationError as exc:
+        errors.append(f"{ANNEX_B_YAML_PATH}: schema validation failed:\n{exc}")
+        return errors
+
+    errors += verify_table(
+        os.path.join(ANNEX_B_TABLES_DIR, "table-B-1.csv"),
+        data["los_probability"], key_fields=("scenario", "height_range"),
+        field_map={"los_probability": ("los_probability", identity), "notes": ("notes", join_notes)},
+    )
+    errors += verify_table(
+        os.path.join(ANNEX_B_TABLES_DIR, "table-B-2.csv"),
+        data["pathloss"], key_fields=("scenario", "condition", "height_range"),
+        field_map={"pathloss": ("pathloss", identity), "notes": ("notes", join_notes)},
+    )
+    errors += verify_table(
+        os.path.join(ANNEX_B_TABLES_DIR, "table-B-3.csv"),
+        data["shadow_fading_std"], key_fields=("scenario", "condition", "height_range"),
+        field_map={"sf_std": ("sf_std", identity)},
+    )
+    errors += verify_table(
+        os.path.join(ANNEX_B_TABLES_DIR, "table-B-4.csv"),
+        data["fast_fading_model_selection"], key_fields=("scenario", "height_range"),
+        field_map={"model": ("model", identity)},
+    )
+    for scenario, tr_number in _ALT1_SCENARIO_TABLES.items():
+        rows = [e for e in data["alternative_1_desired_parameters"] if e["scenario"] == scenario]
+        errors += verify_table(
+            os.path.join(ANNEX_B_TABLES_DIR, f"table-{tr_number}.csv"),
+            rows, key_fields=("scenario", "condition"),
+            field_map={f: (f, identity) for f in ("asa_deg", "asd_deg", "zsa_deg", "zsd_deg", "desired_k_db", "desired_ds_ns")},
+        )
+    for scenario, tr_number in _ALT2_SCENARIO_TABLES.items():
+        rows = [e for e in data["alternative_2_modified_parameters"] if e["scenario"] == scenario]
+        errors += verify_table(
+            os.path.join(ANNEX_B_TABLES_DIR, f"table-{tr_number}.csv"),
+            rows, key_fields=("scenario", "parameter", "condition"),
+            field_map={"mu": ("mu", identity), "sigma": ("sigma", identity)},
+        )
+
+    if os.path.isfile(ANNEX_B_SOURCE_HTML):
+        if html_region_has_text_formulas(ANNEX_B_SOURCE_HTML, "Channel modelling details", "Calibration results and RSRP"):
+            print("  (unexpected: TR 36.777 Annex B HTML has OMML text formulas -- formula cross-check would apply)")
+        else:
+            print("  (skipping HTML formula cross-check: TR 36.777 renders equations as images, "
+                  "no text formula source -- formula content is PDF-visual single-source)")
+    else:
+        print(f"  (skipping HTML formula cross-check: {ANNEX_B_SOURCE_HTML} not present locally)")
+
+    return errors
+
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 def main():
@@ -477,19 +581,28 @@ def main():
 
     total_errors = []
 
+    # Keyed on (tr, section), not section alone: a second TR could reuse a
+    # clause number (e.g. TR 36.777 also has a §7.x), so dispatching on the
+    # section string by itself wouldn't stay unambiguous as more TRs land.
+    checkers = {
+        ("TR 38.901", "7.4"): verify_section_7_4,
+        ("TR 38.901", "7.5"): verify_section_7_5,
+        ("TR 36.777", "Annex B"): verify_annex_b,
+    }
+
     for path in sections:
         with open(path) as f:
             fm_text, _ = split_front_matter(f.read())
         front_matter = yaml.safe_load(fm_text)
+        tr = front_matter.get("tr")
         section = front_matter.get("section")
-        print(f"\nVerifying section {section} ({os.path.relpath(path, REPO_ROOT)})...")
+        print(f"\nVerifying {tr} {section} ({os.path.relpath(path, REPO_ROOT)})...")
 
-        if section == "7.4":
-            errors = verify_section_7_4()
-        elif section == "7.5":
-            errors = verify_section_7_5()
+        checker = checkers.get((tr, section))
+        if checker is not None:
+            errors = checker()
         else:
-            errors = [f"{path}: no verify_tables.py checker registered for section {section!r} yet"]
+            errors = [f"{path}: no verify_tables.py checker registered for {tr} {section!r} yet"]
 
         if errors:
             for e in errors:

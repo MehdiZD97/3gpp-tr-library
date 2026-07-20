@@ -1,0 +1,13 @@
+scenario,condition,height_range,pathloss,notes
+RMa-AV,LOS,1.5m <= hUT <= 10m,According to Table 7.4.1-1 of [4] using the $PL_{RMa-LOS}$ formula,
+RMa-AV,LOS,"10m < hUT <= 300m, d2D <= 10km","PL_{RMa-AV-LOS} = \max(23.9 - 1.8\log_{10}(h_{UT}), 20)\log_{10}(d_{3D}) + 20\log_{10}\left(\dfrac{40\pi f_c}{3}\right)",
+RMa-AV,NLOS,1.5m <= hUT <= 10m,According to Table 7.4.1-1 of [4] using the $PL_{RMa-NLOS}$ formula,
+RMa-AV,NLOS,"10m < hUT <= 300m, d2D <= 10km","PL_{RMa-AV-NLOS} = \max\left(PL_{RMa-AV-LOS},\; -12 + (35 - 5.3\log_{10}(h_{UT}))\log_{10}(d_{3D}) + 20\log_{10}\left(\dfrac{40\pi f_c}{3}\right)\right)",Note 2
+UMa-AV,LOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4] using the $PL_{UMa-LOS}$ formula,
+UMa-AV,LOS,"22.5m < hUT <= 300m, d2D <= 4km",PL_{UMa-AV-LOS} = 28.0 + 22\log_{10}(d_{3D}) + 20\log_{10}(f_c),Note 1
+UMa-AV,NLOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4] using the $PL_{UMa-NLOS}$ formula,
+UMa-AV,NLOS,"10m < hUT <= 100m, d2D <= 4km",PL_{UMa-AV-NLOS} = -17.5 + (46 - 7\log_{10}(h_{UT}))\log_{10}(d_{3D}) + 20\log_{10}\left(\dfrac{40\pi f_c}{3}\right),
+UMi-AV,LOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4] using the $PL_{UMi-LOS}$ formula,
+UMi-AV,LOS,"22.5m < hUT <= 300m, d2D <= 4km","PL_{UMi-AV-LOS} = \max\{PL',\; 30.9 + (22.25 - 0.5\log_{10}(h_{UT}))\log_{10}(d_{3D}) + 20\log_{10}(f_c)\}",Note 3
+UMi-AV,NLOS,1.5m <= hUT <= 22.5m,According to Table 7.4.1-1 of [4] using the $PL_{UMi-NLOS}$ formula,
+UMi-AV,NLOS,"22.5m < hUT <= 300m, d2D <= 4km","PL_{UMi-AV-NLOS} = \max\{PL_{UMi-AV-LOS},\; 32.4 + (43.2 - 7.6\log_{10}(h_{UT}))\log_{10}(d_{3D}) + 20\log_{10}(f_c)\}",Note 4

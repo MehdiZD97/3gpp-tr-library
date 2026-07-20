@@ -117,3 +117,43 @@ def test_index_md_contains_7_5_row(repo_root):
     with open(path) as f:
         content = f.read()
     assert "§7.5" in content
+
+
+# --- TR 36.777 Annex B: the second-TR structural checks. The generic
+# discovery-based tests above (test_all_discovered_sections_*) already cover
+# Annex B automatically -- these add the annex-specific assertions. ---
+def test_annex_b_md_exists(annex_b_md_path):
+    assert os.path.isfile(annex_b_md_path)
+
+
+def test_annex_b_section_field_is_lettered_string(annex_b_front_matter):
+    # A lettered annex, not a numeric clause -- confirm the front matter and
+    # discovery handle "Annex B" as cleanly as "7.4".
+    assert isinstance(annex_b_front_matter["section"], str)
+    assert annex_b_front_matter["section"] == "Annex B"
+    assert annex_b_front_matter["tr"] == "TR 36.777"
+    assert annex_b_front_matter["version"] == "v15.0.0"
+
+
+def test_annex_b_yaml_has_expected_top_level_keys(annex_b_yaml_data):
+    for key in (
+        "los_probability", "pathloss", "shadow_fading_std", "fast_fading_model_selection",
+        "alternative_1_desired_parameters", "alternative_2_modified_parameters",
+    ):
+        assert key in annex_b_yaml_data
+
+
+def test_annex_b_tables_parse_with_consistent_columns(annex_b_table_rows):
+    table_id, rows = annex_b_table_rows
+    assert len(rows) > 1, f"table-{table_id}.csv"
+
+
+def test_tr_36777_readme_exists(repo_root):
+    assert os.path.isfile(os.path.join(repo_root, "TR-36.777", "README.md"))
+
+
+def test_index_md_contains_annex_b_row(repo_root):
+    with open(os.path.join(repo_root, "INDEX.md")) as f:
+        content = f.read()
+    assert "TR 36.777" in content
+    assert "Annex B" in content

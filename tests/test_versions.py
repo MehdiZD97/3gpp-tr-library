@@ -3,6 +3,7 @@ import os
 # TR -> known canonical 3gpp.org link, for the generic cross-TR check below.
 KNOWN_SOURCE_PDF_BY_TR = {
     "TR 38.901": "https://www.3gpp.org/dynareport/38901.htm",
+    "TR 36.777": "https://www.3gpp.org/dynareport/36777.htm",
 }
 KNOWN_SOURCE_PDF = KNOWN_SOURCE_PDF_BY_TR["TR 38.901"]
 
