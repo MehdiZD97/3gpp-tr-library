@@ -46,12 +46,54 @@ def test_o2i_and_autocorrelation_accessors():
 
 def test_section_lookup_for_unprocessed_section_raises_informative_error():
     with pytest.raises(SectionNotFoundError) as exc_info:
-        tr38901.section("7.5")
+        tr38901.section("7.6")
     message = str(exc_info.value)
-    assert "7.5" in message
-    assert "7.4" in message  # lists what *is* processed
+    assert "7.6" in message
+    assert "7.4" in message and "7.5" in message  # lists what *is* processed
 
 
 def test_section_lookup_for_unknown_version_raises_informative_error():
     with pytest.raises(SectionNotFoundError):
         tr38901.section("7.4", version="v0.0.0")
+
+
+def test_known_good_channel_model_parameters_lookup_returns_expected_typed_value():
+    entry = tr38901.section("7.5").channel_model_parameters(scenario="UMi - Street Canyon", condition="LOS")
+    assert entry.mu_K == "9"
+    assert entry.number_of_clusters == "12"
+    assert type(entry).__name__ == "ChannelModelParameterEntry"
+
+
+def test_channel_model_parameters_lookup_for_missing_scenario_raises_informative_error():
+    with pytest.raises(ScenarioNotFoundError) as exc_info:
+        tr38901.section("7.5").channel_model_parameters(scenario="Mars-Colony", condition="LOS")
+    message = str(exc_info.value)
+    assert "Mars-Colony" in message
+    assert "Available" in message
+
+
+def test_zsd_zod_offset_lookup_returns_expected_value():
+    entry = tr38901.section("7.5").zsd_zod_offset(scenario="SMa", condition="LOS")
+    assert entry.mu_lgZSD == "0.14"
+
+
+def test_zsd_zod_offset_lookup_for_missing_scenario_raises_informative_error():
+    with pytest.raises(ScenarioNotFoundError) as exc_info:
+        tr38901.section("7.5").zsd_zod_offset(scenario="Mars-Colony", condition="LOS")
+    assert "Mars-Colony" in str(exc_info.value)
+
+
+def test_7_5_small_table_accessors():
+    section = tr38901.section("7.5")
+    assert len(section.notations) == 16
+    assert len(section.sub_cluster_info) == 3
+    assert any(e.num_clusters == 12 for e in section.scaling_factors_aoa_aod_generation)
+
+
+def test_both_sections_usable_from_same_import():
+    # The dispatcher refactor's actual risk: §7.4's surface must survive
+    # unchanged now that section() resolves to different accessor classes.
+    pathloss = tr38901.section("7.4").pathloss(scenario="RMa", condition="LOS")
+    lsp = tr38901.section("7.5").channel_model_parameters(scenario="RMa", condition="LOS")
+    assert type(pathloss).__name__ == "PathlossEntry"
+    assert type(lsp).__name__ == "ChannelModelParameterEntry"

@@ -67,3 +67,53 @@ def test_index_md_contains_7_4_row(repo_root):
         content = f.read()
     assert "§7.4" in content
     assert "TR 38.901" in content
+
+
+def test_section_7_5_md_exists(section_7_5_md_path):
+    assert os.path.isfile(section_7_5_md_path)
+
+
+def test_section_7_5_section_field_is_string(section_7_5_front_matter):
+    assert isinstance(section_7_5_front_matter["section"], str)
+    assert section_7_5_front_matter["section"] == "7.5"
+
+
+def test_section_7_5_status_is_valid(section_7_5_front_matter):
+    assert section_7_5_front_matter["status"] in ("planned", "in-progress", "verified")
+
+
+def test_section_7_5_yaml_exists_and_parses(section_7_5_yaml_path):
+    assert os.path.isfile(section_7_5_yaml_path)
+    with open(section_7_5_yaml_path) as f:
+        data = yaml.safe_load(f)
+    assert isinstance(data, dict)
+
+
+def test_section_7_5_yaml_has_expected_top_level_keys(section_7_5_yaml_data):
+    for key in (
+        "notations", "scaling_factors_aoa_aod_generation", "ray_offset_angles",
+        "scaling_factors_zoa_zod_generation", "sub_cluster_info",
+        "channel_model_parameters", "zsd_zod_offset_parameters",
+    ):
+        assert key in section_7_5_yaml_data
+
+
+def test_all_7_5_tables_parse_with_consistent_columns(
+    table_7_5_1_rows, table_7_5_2_rows, table_7_5_3_rows, table_7_5_4_rows, table_7_5_5_rows, table_7_5_6_rows,
+):
+    # read_csv_rows() (used by each fixture) already asserts consistent column
+    # counts per row; reaching this point means every table parsed cleanly.
+    for rows in (table_7_5_1_rows, table_7_5_2_rows, table_7_5_3_rows, table_7_5_4_rows, table_7_5_5_rows, table_7_5_6_rows):
+        assert len(rows) > 1
+
+
+def test_zsd_zod_tables_parse_with_consistent_columns(zsd_zod_table_rows):
+    tr_number, rows = zsd_zod_table_rows
+    assert len(rows) > 1, f"table-{tr_number}.csv"
+
+
+def test_index_md_contains_7_5_row(repo_root):
+    path = os.path.join(repo_root, "INDEX.md")
+    with open(path) as f:
+        content = f.read()
+    assert "§7.5" in content

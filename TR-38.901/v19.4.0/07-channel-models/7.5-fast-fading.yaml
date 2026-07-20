@@ -1,0 +1,1019 @@
+notations:
+- parameter: LOS AOD
+  notation: ϕLOS,AOD
+- parameter: LOS AOA
+  notation: ϕLOS,AOA
+- parameter: LOS ZOD
+  notation: θLOS,ZOD
+- parameter: LOS ZOA
+  notation: θLOS,ZOA
+- parameter: AOA for cluster n
+  notation: ϕn,AOA
+- parameter: AOD for cluster n
+  notation: ϕn,AOD
+- parameter: AOA for ray m in cluster n
+  notation: ϕn,m,AOA
+- parameter: AOD for ray m in cluster n
+  notation: ϕn,m,AOD
+- parameter: ZOA for cluster n
+  notation: θn,ZOA
+- parameter: ZOD for cluster n
+  notation: θn,ZOD
+- parameter: ZOA for ray m in cluster n
+  notation: θn,m,ZOA
+- parameter: ZOD for ray m in cluster n
+  notation: θn,m,ZOD
+- parameter: Receive antenna element u field pattern in the direction of the spherical basis vector
+  notation: Frx,u,θ
+- parameter: Receive antenna element u field pattern in the direction of the spherical basis vector
+  notation: Frx,u,ϕ
+- parameter: Transmit antenna element s field pattern in the direction of the spherical basis vector
+  notation: Ftx,s,θ
+- parameter: Transmit antenna element s field pattern in the direction of the spherical basis vector
+  notation: Frx,s,ϕ
+scaling_factors_aoa_aod_generation:
+- num_clusters: 4
+  c_phi_nlos: 0.779
+- num_clusters: 5
+  c_phi_nlos: 0.86
+- num_clusters: 6
+  c_phi_nlos: 0.921
+- num_clusters: 7
+  c_phi_nlos: 0.973
+- num_clusters: 8
+  c_phi_nlos: 1.018
+- num_clusters: 10
+  c_phi_nlos: 1.09
+- num_clusters: 11
+  c_phi_nlos: 1.123
+- num_clusters: 12
+  c_phi_nlos: 1.146
+- num_clusters: 14
+  c_phi_nlos: 1.19
+- num_clusters: 15
+  c_phi_nlos: 1.211
+- num_clusters: 16
+  c_phi_nlos: 1.226
+- num_clusters: 19
+  c_phi_nlos: 1.273
+- num_clusters: 20
+  c_phi_nlos: 1.289
+- num_clusters: 25
+  c_phi_nlos: 1.358
+ray_offset_angles:
+- ray_numbers: 1,2
+  offset_angle: '0.0447'
+- ray_numbers: 3,4
+  offset_angle: '0.1413'
+- ray_numbers: 5,6
+  offset_angle: '0.2492'
+- ray_numbers: 7,8
+  offset_angle: '0.3715'
+- ray_numbers: 9,10
+  offset_angle: '0.5129'
+- ray_numbers: 11,12
+  offset_angle: '0.6797'
+- ray_numbers: 13,14
+  offset_angle: '0.8844'
+- ray_numbers: 15,16
+  offset_angle: '1.1481'
+- ray_numbers: 17,18
+  offset_angle: '1.5195'
+- ray_numbers: 19,20
+  offset_angle: '2.1551'
+scaling_factors_zoa_zod_generation:
+- num_clusters: 6
+  c_theta_nlos: 0.788
+- num_clusters: 7
+  c_theta_nlos: 0.847
+- num_clusters: 8
+  c_theta_nlos: 0.889
+- num_clusters: 10
+  c_theta_nlos: 0.957
+- num_clusters: 11
+  c_theta_nlos: 1.031
+- num_clusters: 12
+  c_theta_nlos: 1.104
+- num_clusters: 14
+  c_theta_nlos: 1.1072
+- num_clusters: 15
+  c_theta_nlos: 1.1088
+- num_clusters: 16
+  c_theta_nlos: 1.1276
+- num_clusters: 19
+  c_theta_nlos: 1.184
+- num_clusters: 20
+  c_theta_nlos: 1.178
+- num_clusters: 25
+  c_theta_nlos: 1.282
+sub_cluster_info:
+- sub_cluster: 1
+  mapping_to_rays: 1,2,3,4,5,6,7,8,19,20
+  power_fraction: 10/20
+  delay_offset: '0'
+- sub_cluster: 2
+  mapping_to_rays: 9,10,11,12,17,18
+  power_fraction: 6/20
+  delay_offset: 1.28\, c_{DS}
+- sub_cluster: 3
+  mapping_to_rays: 13,14,15,16
+  power_fraction: 4/20
+  delay_offset: 2.56\, c_{DS}
+channel_model_parameters:
+- scenario: UMi - Street Canyon
+  condition: LOS
+  mu_lgDS: -0.18 log10(1+ fc) - 7.28, see note 8
+  sigma_lgDS: 0.39, see note 8
+  mu_lgASD: -0.05 log10(1+ fc) + 1.21 see note 9
+  sigma_lgASD: 0.08 log10(1+ fc) + 0.29 see note 8
+  mu_lgASA: -0.07 log10(1+ fc) + 1.66, see note 8
+  sigma_lgASA: 0.021 log10(1+ fc) + 0.26, see note 8
+  mu_lgZSA: -0.11 log10(1+ fc) + 0.81 see note 8
+  sigma_lgZSA: -0.03 log10(1+ fc) + 0.29 see note 8
+  sigma_SF: See Table 7.4.1-1
+  mu_K: '9'
+  sigma_K: '5'
+  corr_ASD_DS: '0.5'
+  corr_ASA_DS: '0.8'
+  corr_ASA_SF: '-0.4'
+  corr_ASD_SF: '-0.5'
+  corr_DS_SF: '-0.4'
+  corr_ASD_ASA: '0.4'
+  corr_ASD_K: '-0.2'
+  corr_ASA_K: '-0.3'
+  corr_DS_K: '-0.7'
+  corr_SF_K: '0.5'
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: '0'
+  corr_ZSA_K: '0'
+  corr_ZSD_DS: '0'
+  corr_ZSA_DS: '0.2'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '0.3'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '3'
+  mu_XPR: '9'
+  sigma_XPR: '3'
+  number_of_clusters: '12'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: '5'
+  cluster_ASD_deg: '3'
+  cluster_ASA_deg: '17'
+  cluster_ZSA_deg: '7'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '7'
+  corr_distance_ASD_m: '8'
+  corr_distance_ASA_m: '8'
+  corr_distance_SF_m: '10'
+  corr_distance_K_m: '15'
+  corr_distance_ZSA_m: '12'
+  corr_distance_ZSD_m: '12'
+- scenario: UMi - Street Canyon
+  condition: NLOS
+  mu_lgDS: -0.22 log10(1+ fc) - 6.87, see note 8
+  sigma_lgDS: 0.19 log10(1+ fc) + 0.22, see note 8
+  mu_lgASD: -0.24 log10(1+ fc) + 1.54 see note 8
+  sigma_lgASD: 0.10 log10(1+ fc) + 0.33 see note 8
+  mu_lgASA: -0.07 log10(1+ fc) + 1.76, see note 8
+  sigma_lgASA: 0.05 log10(1+ fc) + 0.27, see note 8
+  mu_lgZSA: -0.03 log10(1+ fc) + 0.92 see note 8
+  sigma_lgZSA: -0.05 log10(1+ fc) + 0.35 see note 8
+  sigma_SF: See Table 7.4.1-1
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0'
+  corr_ASA_DS: '0.4'
+  corr_ASA_SF: '-0.4'
+  corr_ASD_SF: '0'
+  corr_DS_SF: '-0.7'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.5'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '0.5'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0.2'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '2.1'
+  mu_XPR: '8.0'
+  sigma_XPR: '3'
+  number_of_clusters: '19'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: '11'
+  cluster_ASD_deg: '10'
+  cluster_ASA_deg: '22'
+  cluster_ZSA_deg: '7'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '10'
+  corr_distance_ASD_m: '10'
+  corr_distance_ASA_m: '9'
+  corr_distance_SF_m: '13'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '10'
+  corr_distance_ZSD_m: '10'
+- scenario: UMi - Street Canyon
+  condition: O2I
+  mu_lgDS: '-6.62'
+  sigma_lgDS: '0.32'
+  mu_lgASD: '1.25'
+  sigma_lgASD: '0.42'
+  mu_lgASA: '1.76'
+  sigma_lgASA: '0.16'
+  mu_lgZSA: '1.01'
+  sigma_lgZSA: '0.43'
+  sigma_SF: '7'
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0.4'
+  corr_ASA_DS: '0.4'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '0.2'
+  corr_DS_SF: '-0.5'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.6'
+  corr_ZSA_DS: '-0.2'
+  corr_ZSD_ASD: '-0.2'
+  corr_ZSA_ASD: '0'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0.5'
+  corr_ZSD_ZSA: '0.5'
+  delay_scaling_parameter_r_tau: '2.2'
+  mu_XPR: '9'
+  sigma_XPR: '5'
+  number_of_clusters: '12'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: '11'
+  cluster_ASD_deg: '5'
+  cluster_ASA_deg: '8'
+  cluster_ZSA_deg: '3'
+  per_cluster_shadowing_std_zeta_db: '4'
+  corr_distance_DS_m: '10'
+  corr_distance_ASD_m: '11'
+  corr_distance_ASA_m: '17'
+  corr_distance_SF_m: '7'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '25'
+  corr_distance_ZSD_m: '25'
+- scenario: UMa
+  condition: LOS
+  mu_lgDS: -7.067 - 0.0794 log10(fc), see note 8
+  sigma_lgDS: 0.57 + 0.026 log10(fc), see note 8
+  mu_lgASD: 0.92, see note 8
+  sigma_lgASD: 0.31, see note 8
+  mu_lgASA: 1.76, see note 8
+  sigma_lgASA: 0.19, see note 8
+  mu_lgZSA: 0.96 see note 8
+  sigma_lgZSA: 0.15 see note 8
+  sigma_SF: See Table 7.4.1-1
+  mu_K: '9'
+  sigma_K: '3.5'
+  corr_ASD_DS: '0.4'
+  corr_ASA_DS: '0.8'
+  corr_ASA_SF: '-0.5'
+  corr_ASD_SF: '-0.5'
+  corr_DS_SF: '-0.4'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: '0'
+  corr_ASA_K: '-0.2'
+  corr_DS_K: '-0.4'
+  corr_SF_K: '0'
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '-0.8'
+  corr_ZSD_K: '0'
+  corr_ZSA_K: '0'
+  corr_ZSD_DS: '-0.2'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '0'
+  corr_ZSD_ASA: '-0.3'
+  corr_ZSA_ASA: '0.4'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '2.5'
+  mu_XPR: '8'
+  sigma_XPR: '4'
+  number_of_clusters: '12'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: max(0.25, 6.5622 -3.4084 log10(fc))
+  cluster_ASD_deg: 3.58, see note 8
+  cluster_ASA_deg: '11'
+  cluster_ZSA_deg: '7'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '30'
+  corr_distance_ASD_m: '18'
+  corr_distance_ASA_m: '15'
+  corr_distance_SF_m: '37'
+  corr_distance_K_m: '12'
+  corr_distance_ZSA_m: '15'
+  corr_distance_ZSD_m: '15'
+- scenario: UMa
+  condition: NLOS
+  mu_lgDS: -6.47 - 0.134 log10(fc), see note 8
+  sigma_lgDS: 0.39 see note 9
+  mu_lgASD: 1.09, see note 8
+  sigma_lgASD: 0.44, see note 8
+  mu_lgASA: 2.04 - 0.25 log10(fc), see note 8
+  sigma_lgASA: 0.17 - 0.03 log10(fc), see note 8
+  mu_lgZSA: -0.2856 log10(fc) + 1.445, see note 8
+  sigma_lgZSA: 0.17, see note 8
+  sigma_SF: See Table 7.4.1-1
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0.4'
+  corr_ASA_DS: '0.6'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '-0.6'
+  corr_DS_SF: '-0.4'
+  corr_ASD_ASA: '0.4'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '-0.4'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.5'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '-0.1'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '2.3'
+  mu_XPR: '7'
+  sigma_XPR: '3'
+  number_of_clusters: '20'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: max(0.25, 6.5622 -3.4084 log10(fc))
+  cluster_ASD_deg: 1.8, see note 8
+  cluster_ASA_deg: '15'
+  cluster_ZSA_deg: '7'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '40'
+  corr_distance_ASD_m: '50'
+  corr_distance_ASA_m: '50'
+  corr_distance_SF_m: '50'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '50'
+  corr_distance_ZSD_m: '50'
+- scenario: UMa
+  condition: O2I
+  mu_lgDS: '-6.62'
+  sigma_lgDS: '0.32'
+  mu_lgASD: 0.58, see note 8
+  sigma_lgASD: 0.7 see note 8
+  mu_lgASA: '1.76'
+  sigma_lgASA: '0.16'
+  mu_lgZSA: '1.01'
+  sigma_lgZSA: '0.43'
+  sigma_SF: '7'
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0.4'
+  corr_ASA_DS: '0.4'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '0.2'
+  corr_DS_SF: '-0.5'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.6'
+  corr_ZSA_DS: '-0.2'
+  corr_ZSD_ASD: '-0.2'
+  corr_ZSA_ASD: '0'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0.5'
+  corr_ZSD_ZSA: '0.5'
+  delay_scaling_parameter_r_tau: '2.2'
+  mu_XPR: '9'
+  sigma_XPR: '5'
+  number_of_clusters: '12'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: '11'
+  cluster_ASD_deg: 1.8, see note 8
+  cluster_ASA_deg: '8'
+  cluster_ZSA_deg: '3'
+  per_cluster_shadowing_std_zeta_db: '4'
+  corr_distance_DS_m: '10'
+  corr_distance_ASD_m: '11'
+  corr_distance_ASA_m: '17'
+  corr_distance_SF_m: '7'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '25'
+  corr_distance_ZSD_m: '25'
+- scenario: RMa
+  condition: LOS
+  mu_lgDS: '-7.49'
+  sigma_lgDS: '0.55'
+  mu_lgASD: '0.90'
+  sigma_lgASD: '0.38'
+  mu_lgASA: '1.52'
+  sigma_lgASA: '0.24'
+  mu_lgZSA: '0.47'
+  sigma_lgZSA: '0.40'
+  sigma_SF: See Table 7.4.1-1
+  mu_K: '7'
+  sigma_K: '4'
+  corr_ASD_DS: '0'
+  corr_ASA_DS: '0'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '0'
+  corr_DS_SF: '-0.5'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: '0'
+  corr_ASA_K: '0'
+  corr_DS_K: '0'
+  corr_SF_K: '0'
+  corr_ZSD_SF: '0.01'
+  corr_ZSA_SF: '-0.17'
+  corr_ZSD_K: '0'
+  corr_ZSA_K: '-0.02'
+  corr_ZSD_DS: '-0.05'
+  corr_ZSA_DS: '0.27'
+  corr_ZSD_ASD: '0.73'
+  corr_ZSA_ASD: '-0.14'
+  corr_ZSD_ASA: '-0.20'
+  corr_ZSA_ASA: '0.24'
+  corr_ZSD_ZSA: '-0.07'
+  delay_scaling_parameter_r_tau: '3.8'
+  mu_XPR: '12'
+  sigma_XPR: '4'
+  number_of_clusters: '11'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: N/A
+  cluster_ASD_deg: '2'
+  cluster_ASA_deg: '3'
+  cluster_ZSA_deg: '3'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '50'
+  corr_distance_ASD_m: '25'
+  corr_distance_ASA_m: '35'
+  corr_distance_SF_m: '37'
+  corr_distance_K_m: '40'
+  corr_distance_ZSA_m: '15'
+  corr_distance_ZSD_m: '15'
+- scenario: RMa
+  condition: NLOS
+  mu_lgDS: '-7.43'
+  sigma_lgDS: '0.48'
+  mu_lgASD: '0.95'
+  sigma_lgASD: '0.45'
+  mu_lgASA: '1.52'
+  sigma_lgASA: '0.13'
+  mu_lgZSA: '0.58'
+  sigma_lgZSA: '0.37'
+  sigma_SF: See Table 7.4.1-1
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '-0.4'
+  corr_ASA_DS: '0'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '0.6'
+  corr_DS_SF: '-0.5'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '-0.04'
+  corr_ZSA_SF: '-0.25'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.10'
+  corr_ZSA_DS: '-0.40'
+  corr_ZSD_ASD: '0.42'
+  corr_ZSA_ASD: '-0.27'
+  corr_ZSD_ASA: '-0.18'
+  corr_ZSA_ASA: '0.26'
+  corr_ZSD_ZSA: '-0.27'
+  delay_scaling_parameter_r_tau: '1.7'
+  mu_XPR: '7'
+  sigma_XPR: '3'
+  number_of_clusters: '10'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: N/A
+  cluster_ASD_deg: '2'
+  cluster_ASA_deg: '3'
+  cluster_ZSA_deg: '3'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '36'
+  corr_distance_ASD_m: '30'
+  corr_distance_ASA_m: '40'
+  corr_distance_SF_m: '120'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '50'
+  corr_distance_ZSD_m: '50'
+- scenario: RMa
+  condition: O2I
+  mu_lgDS: '-7.47'
+  sigma_lgDS: '0.24'
+  mu_lgASD: '0.67'
+  sigma_lgASD: '0.18'
+  mu_lgASA: '1.66'
+  sigma_lgASA: '0.21'
+  mu_lgZSA: '0.93'
+  sigma_lgZSA: '0.22'
+  sigma_SF: '8'
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0'
+  corr_ASA_DS: '0'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '0'
+  corr_DS_SF: '0'
+  corr_ASD_ASA: '-0.7'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '0'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0.66'
+  corr_ZSA_ASD: '0.47'
+  corr_ZSD_ASA: '-0.55'
+  corr_ZSA_ASA: '-0.22'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '1.7'
+  mu_XPR: '7'
+  sigma_XPR: '3'
+  number_of_clusters: '10'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: N/A
+  cluster_ASD_deg: '2'
+  cluster_ASA_deg: '3'
+  cluster_ZSA_deg: '3'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '36'
+  corr_distance_ASD_m: '30'
+  corr_distance_ASA_m: '40'
+  corr_distance_SF_m: '120'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '50'
+  corr_distance_ZSD_m: '50'
+- scenario: Indoor-Office
+  condition: LOS
+  mu_lgDS: -0.01 log10(1+fc) - 7.692
+  sigma_lgDS: '0.18'
+  mu_lgASD: '1.60'
+  sigma_lgASD: '0.18'
+  mu_lgASA: -0.19 log10(1+fc) + 1.781
+  sigma_lgASA: 0.12 log10(1+fc) + 0.119
+  mu_lgZSA: -0.26 log10(1+fc) + 1.44
+  sigma_lgZSA: -0.04 log10(1+fc) + 0.264
+  sigma_SF: See Table 7.4.1-1
+  mu_K: '7'
+  sigma_K: '4'
+  corr_ASD_DS: '0.6'
+  corr_ASA_DS: '0.8'
+  corr_ASA_SF: –0.5
+  corr_ASD_SF: –0.4
+  corr_DS_SF: –0.8
+  corr_ASD_ASA: '0.4'
+  corr_ASD_K: '0'
+  corr_ASA_K: '0'
+  corr_DS_K: '-0.5'
+  corr_SF_K: '0.5'
+  corr_ZSD_SF: '0.2'
+  corr_ZSA_SF: '0.3'
+  corr_ZSD_K: '0'
+  corr_ZSA_K: '0.1'
+  corr_ZSD_DS: '0.1'
+  corr_ZSA_DS: '0.2'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '0'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0.5'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '3.6'
+  mu_XPR: '11'
+  sigma_XPR: '4'
+  number_of_clusters: '15'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: N/A
+  cluster_ASD_deg: '5'
+  cluster_ASA_deg: '8'
+  cluster_ZSA_deg: '9'
+  per_cluster_shadowing_std_zeta_db: '6'
+  corr_distance_DS_m: '8'
+  corr_distance_ASD_m: '7'
+  corr_distance_ASA_m: '5'
+  corr_distance_SF_m: '10'
+  corr_distance_K_m: '4'
+  corr_distance_ZSA_m: '4'
+  corr_distance_ZSD_m: '4'
+- scenario: Indoor-Office
+  condition: NLOS
+  mu_lgDS: -0.28 log10(1+fc) - 7.173
+  sigma_lgDS: 0.10 log10(1+fc) + 0.055
+  mu_lgASD: '1.62'
+  sigma_lgASD: '0.25'
+  mu_lgASA: -0.11 log10(1+fc) + 1.863
+  sigma_lgASA: 0.12 log10(1+fc) + 0.059
+  mu_lgZSA: -0.15 log10(1+fc) + 1.387
+  sigma_lgZSA: -0.09 log10(1+fc) + 0.746
+  sigma_SF: See Table 7.4.1-1
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0.4'
+  corr_ASA_DS: '0'
+  corr_ASA_SF: –0.4
+  corr_ASD_SF: '0'
+  corr_DS_SF: –0.5
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.27'
+  corr_ZSA_DS: '-0.06'
+  corr_ZSD_ASD: '0.35'
+  corr_ZSA_ASD: '0.23'
+  corr_ZSD_ASA: '-0.08'
+  corr_ZSA_ASA: '0.43'
+  corr_ZSD_ZSA: '0.42'
+  delay_scaling_parameter_r_tau: '3'
+  mu_XPR: '10'
+  sigma_XPR: '4'
+  number_of_clusters: '19'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: N/A
+  cluster_ASD_deg: '5'
+  cluster_ASA_deg: '11'
+  cluster_ZSA_deg: '9'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '5'
+  corr_distance_ASD_m: '3'
+  corr_distance_ASA_m: '3'
+  corr_distance_SF_m: '6'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '4'
+  corr_distance_ZSD_m: '4'
+- scenario: InF
+  condition: LOS
+  mu_lgDS: log10(26(V/S)+14)-9.35
+  sigma_lgDS: '0.15'
+  mu_lgASD: '1.56'
+  sigma_lgASD: '0.25'
+  mu_lgASA: -0.18*log10(1+fc) + 1.78
+  sigma_lgASA: 0.12*log10(1+fc) + 0.2
+  mu_lgZSA: -0.2*log10(1+fc) + 1.5
+  sigma_lgZSA: '0.35'
+  sigma_SF: Specified as part of path loss models
+  mu_K: '7'
+  sigma_K: '8'
+  corr_ASD_DS: '0'
+  corr_ASA_DS: '0'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '0'
+  corr_DS_SF: '0'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: '-0.5'
+  corr_ASA_K: '0'
+  corr_DS_K: '-0.7'
+  corr_SF_K: '0'
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: '0'
+  corr_ZSA_K: '0'
+  corr_ZSD_DS: '0'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0'
+  corr_ZSA_ASD: '0'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '2.7'
+  mu_XPR: '12'
+  sigma_XPR: '6'
+  number_of_clusters: '25'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: N/A
+  cluster_ASD_deg: '5'
+  cluster_ASA_deg: '8'
+  cluster_ZSA_deg: '9'
+  per_cluster_shadowing_std_zeta_db: '4'
+  corr_distance_DS_m: '10'
+  corr_distance_ASD_m: '10'
+  corr_distance_ASA_m: '10'
+  corr_distance_SF_m: '10'
+  corr_distance_K_m: '10'
+  corr_distance_ZSA_m: '10'
+  corr_distance_ZSD_m: '10'
+- scenario: InF
+  condition: NLOS
+  mu_lgDS: log10(30(V/S)+32)-9.44
+  sigma_lgDS: '0.19'
+  mu_lgASD: '1.57'
+  sigma_lgASD: '0.2'
+  mu_lgASA: '1.72'
+  sigma_lgASA: '0.3'
+  mu_lgZSA: -0.13*log10(1+fc) + 1.45
+  sigma_lgZSA: '0.45'
+  sigma_SF: Specified as part of path loss models
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0'
+  corr_ASA_DS: '0'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '0'
+  corr_DS_SF: '0'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '0'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '0'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0'
+  corr_ZSA_ASD: '0'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '3'
+  mu_XPR: '11'
+  sigma_XPR: '6'
+  number_of_clusters: '25'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: N/A
+  cluster_ASD_deg: '5'
+  cluster_ASA_deg: '8'
+  cluster_ZSA_deg: '9'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '10'
+  corr_distance_ASD_m: '10'
+  corr_distance_ASA_m: '10'
+  corr_distance_SF_m: '10'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '10'
+  corr_distance_ZSD_m: '10'
+- scenario: SMa
+  condition: LOS
+  mu_lgDS: –7.42
+  sigma_lgDS: '0.60'
+  mu_lgASD: '0.48'
+  sigma_lgASD: '0.27'
+  mu_lgASA: '1.43'
+  sigma_lgASA: '0.12'
+  mu_lgZSA: '1.18'
+  sigma_lgZSA: '0.05'
+  sigma_SF: See Table 7.4.1-1
+  mu_K: '9'
+  sigma_K: '7'
+  corr_ASD_DS: '0.4'
+  corr_ASA_DS: '0.8'
+  corr_ASA_SF: –0.5
+  corr_ASD_SF: –0.5
+  corr_DS_SF: –0.4
+  corr_ASD_ASA: '0'
+  corr_ASD_K: '0'
+  corr_ASA_K: '-0.2'
+  corr_DS_K: '-0.4'
+  corr_SF_K: '0'
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '-0.8'
+  corr_ZSD_K: '0'
+  corr_ZSA_K: '0'
+  corr_ZSD_DS: '-0.2'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '0'
+  corr_ZSD_ASA: '-0.3'
+  corr_ZSA_ASA: '0.4'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '2.4'
+  mu_XPR: '8'
+  sigma_XPR: '4'
+  number_of_clusters: '15'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: max(0.25, 6.5622 -3.4084 log10(fc))
+  cluster_ASD_deg: '2.08'
+  cluster_ASA_deg: '5'
+  cluster_ZSA_deg: '7'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '6'
+  corr_distance_ASD_m: '15'
+  corr_distance_ASA_m: '20'
+  corr_distance_SF_m: '40'
+  corr_distance_K_m: '10'
+  corr_distance_ZSA_m: '15'
+  corr_distance_ZSD_m: '15'
+- scenario: SMa
+  condition: NLOS
+  mu_lgDS: '-7.20'
+  sigma_lgDS: '0.58'
+  mu_lgASD: '0.51'
+  sigma_lgASD: '0.33'
+  mu_lgASA: '1.63'
+  sigma_lgASA: '0.26'
+  mu_lgZSA: '1.16'
+  sigma_lgZSA: '0.14'
+  sigma_SF: See Table 7.4.1-1
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0'
+  corr_ASA_DS: '0.7'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '-0.4'
+  corr_DS_SF: '-0.13'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '-0.47'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.5'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '-0.1'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0.36'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '1.5'
+  mu_XPR: '4'
+  sigma_XPR: '3'
+  number_of_clusters: '14'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: max(0.25, 6.5622 -3.4084 log10(fc))
+  cluster_ASD_deg: '1.33'
+  cluster_ASA_deg: '10'
+  cluster_ZSA_deg: '7'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '40'
+  corr_distance_ASD_m: '30'
+  corr_distance_ASA_m: '30'
+  corr_distance_SF_m: '50'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '50'
+  corr_distance_ZSD_m: '50'
+- scenario: SMa
+  condition: O2I
+  mu_lgDS: '-7.20'
+  sigma_lgDS: '0.58'
+  mu_lgASD: '0.51'
+  sigma_lgASD: '0.33'
+  mu_lgASA: '1.63'
+  sigma_lgASA: '0.26'
+  mu_lgZSA: '1.16'
+  sigma_lgZSA: '0.14'
+  sigma_SF: '8'
+  mu_K: N/A
+  sigma_K: N/A
+  corr_ASD_DS: '0'
+  corr_ASA_DS: '0.7'
+  corr_ASA_SF: '0'
+  corr_ASD_SF: '-0.4'
+  corr_DS_SF: '-0.13'
+  corr_ASD_ASA: '0'
+  corr_ASD_K: N/A
+  corr_ASA_K: N/A
+  corr_DS_K: N/A
+  corr_SF_K: N/A
+  corr_ZSD_SF: '0'
+  corr_ZSA_SF: '-0.47'
+  corr_ZSD_K: N/A
+  corr_ZSA_K: N/A
+  corr_ZSD_DS: '-0.5'
+  corr_ZSA_DS: '0'
+  corr_ZSD_ASD: '0.5'
+  corr_ZSA_ASD: '-0.1'
+  corr_ZSD_ASA: '0'
+  corr_ZSA_ASA: '0.36'
+  corr_ZSD_ZSA: '0'
+  delay_scaling_parameter_r_tau: '1.5'
+  mu_XPR: '4'
+  sigma_XPR: '3'
+  number_of_clusters: '14'
+  number_of_rays_per_cluster: '20'
+  cluster_DS_ns: max(0.25, 6.5622 -3.4084 log10(fc))
+  cluster_ASD_deg: '1.33'
+  cluster_ASA_deg: '10'
+  cluster_ZSA_deg: '7'
+  per_cluster_shadowing_std_zeta_db: '3'
+  corr_distance_DS_m: '40'
+  corr_distance_ASD_m: '30'
+  corr_distance_ASA_m: '30'
+  corr_distance_SF_m: '50'
+  corr_distance_K_m: N/A
+  corr_distance_ZSA_m: '50'
+  corr_distance_ZSD_m: '50'
+zsd_zod_offset_parameters:
+  UMa:
+    tr_table: 7.5-7
+    note: 'Note: For NLOS ZOD offset: a(fc) = 0.208log10(fc)- 0.782; b(fc) = 25; c(fc) = -0.13log10(fc)+2.03; e(fc) = 7.66log10(fc)-5.96.'
+    entries:
+    - condition: LOS
+      mu_lgZSD: max[-0.5, -2.1(d2D/1000) -0.01 (hUT - 1.5)+0.75]
+      sigma_lgZSD: '0.40'
+      mu_offset_ZOD: '0'
+    - condition: NLOS
+      mu_lgZSD: max[-0.5, -2.1(d2D/1000) -0.01(hUT - 1.5)+0.9]
+      sigma_lgZSD: '0.49'
+      mu_offset_ZOD: e(fc)-10^{a(fc) log10(max(b(fc), d2D)) +c(fc) -0.07(hUT-1.5)}
+  UMi-StreetCanyon:
+    tr_table: 7.5-8
+    note: null
+    entries:
+    - condition: LOS
+      mu_lgZSD: max[-0.21, -14.8(d2D/1000) + 0.01|hUT-hBS| + 0.83]
+      sigma_lgZSD: '0.35'
+      mu_offset_ZOD: '0'
+    - condition: NLOS
+      mu_lgZSD: max[-0.5, -3.1(d2D/1000) + 0.01 max(hUT-hBS,0) +0.2]
+      sigma_lgZSD: '0.35'
+      mu_offset_ZOD: -10^{-1.5log10(max(10, d2D))+3.3}
+  RMa:
+    tr_table: 7.5-9
+    note: null
+    entries:
+    - condition: LOS
+      mu_lgZSD: max[-1, -0.17(d2D/1000) -0.01(hUT - 1.5) + 0.22]
+      sigma_lgZSD: '0.34'
+      mu_offset_ZOD: '0'
+    - condition: NLOS
+      mu_lgZSD: max[-1, -0.19(d2D/1000) -0.01(hUT - 1.5) + 0.28]
+      sigma_lgZSD: '0.30'
+      mu_offset_ZOD: arctan((35 - 3.5)/d2D) -arctan((35 - 1.5)/d2D)
+    - condition: O2I
+      mu_lgZSD: max[-1, -0.19(d2D/1000) -0.01(hUT - 1.5) + 0.28]
+      sigma_lgZSD: '0.30'
+      mu_offset_ZOD: arctan((35 - 3.5)/d2D) -arctan((35 - 1.5)/d2D)
+  Indoor-Office:
+    tr_table: 7.5-10
+    note: null
+    entries:
+    - condition: LOS
+      mu_lgZSD: -1.43 log10(1+ fc)+2.228
+      sigma_lgZSD: 0.13 log10(1+fc)+0.30
+      mu_offset_ZOD: '0'
+    - condition: NLOS
+      mu_lgZSD: '1.08'
+      sigma_lgZSD: '0.36'
+      mu_offset_ZOD: '0'
+  InF:
+    tr_table: 7.5-11
+    note: null
+    entries:
+    - condition: LOS
+      mu_lgZSD: '1.35'
+      sigma_lgZSD: '0.35'
+      mu_offset_ZOD: '0'
+    - condition: NLOS
+      mu_lgZSD: '1.2'
+      sigma_lgZSD: '0.55'
+      mu_offset_ZOD: '0'
+  SMa:
+    tr_table: 7.5-12
+    note: null
+    entries:
+    - condition: LOS
+      mu_lgZSD: '0.14'
+      sigma_lgZSD: '0.16'
+      mu_offset_ZOD: '0'
+    - condition: NLOS
+      mu_lgZSD: '0.14'
+      sigma_lgZSD: '0.16'
+      mu_offset_ZOD: = 3.5
+    - condition: O2I
+      mu_lgZSD: '0.14'
+      sigma_lgZSD: '0.16'
+      mu_offset_ZOD: = 3.5

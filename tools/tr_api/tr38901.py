@@ -16,8 +16,18 @@ Python API for TR 38.901's processed sections.
 
     autocorr = tr38901.section("7.4").shadow_fading_autocorrelation
 
+    lsp = tr38901.section("7.5").channel_model_parameters(scenario="UMa", condition="NLOS")
+    lsp.mu_lgDS                     # carrier-frequency-dependent formula, as a string
+
+    zsd = tr38901.section("7.5").zsd_zod_offset(scenario="UMa", condition="NLOS")
+
+    notations = tr38901.section("7.5").notations   # Table 7.5-1
+
 `section()` is cached per (section_id, version) -- repeated calls don't
-re-read or re-validate the YAML.
+re-read or re-validate the YAML. It's a genuine dispatcher, not a
+single-shape assumption: each registered section id maps to its own data
+file, Pydantic model, and accessor class, since §7.4 and §7.5 don't share a
+data shape and future sections won't necessarily either.
 """
 from functools import lru_cache
 from pathlib import Path
@@ -26,22 +36,24 @@ from typing import Optional
 import yaml
 
 from .models import (
+    ChannelModelParameterEntry,
     LosProbabilityEntry,
     O2IPenetrationLoss,
     PathlossEntry,
+    RayOffsetAngle,
+    ScalingFactorEntry,
     Section74Data,
+    Section75Data,
     ShadowFadingAutocorrelation,
+    SubClusterInfo,
+    NotationEntry,
+    ZsdZodOffsetEntry,
 )
 
 DEFAULT_VERSION = "v19.4.0"
 
 # This file lives at tools/tr_api/tr38901.py; the repo root is two levels up.
 _REPO_ROOT = Path(__file__).resolve().parents[2]
-
-# Maps a processed section id to its data file, relative to TR-38.901/<version>/.
-_SECTION_DATA_PATHS = {
-    "7.4": "07-channel-models/7.4-pathloss.yaml",
-}
 
 
 class SectionNotFoundError(LookupError):
@@ -52,8 +64,8 @@ class ScenarioNotFoundError(LookupError):
     """Raised when a lookup's scenario/condition/variant doesn't match any entry."""
 
 
-class Section:
-    """A single processed TR 38.901 section's structured data (e.g. clause "7.4")."""
+class Section74:
+    """TR 38.901 §7.4 (Pathloss, LOS probability and penetration modelling)."""
 
     def __init__(self, section_id: str, version: str, data: Section74Data):
         self.section_id = section_id
@@ -89,20 +101,86 @@ class Section:
         return self._data.shadow_fading_autocorrelation
 
 
+class Section75:
+    """TR 38.901 §7.5 (Fast fading model)."""
+
+    def __init__(self, section_id: str, version: str, data: Section75Data):
+        self.section_id = section_id
+        self.version = version
+        self._data = data
+
+    def channel_model_parameters(self, *, scenario: str, condition: str) -> ChannelModelParameterEntry:
+        for entry in self._data.channel_model_parameters:
+            if entry.scenario == scenario and entry.condition == condition:
+                return entry
+        available = [(e.scenario, e.condition) for e in self._data.channel_model_parameters]
+        raise ScenarioNotFoundError(
+            f"No channel model parameter entry for scenario={scenario!r}, condition={condition!r} "
+            f"in TR 38.901 §{self.section_id} ({self.version}). Available (scenario, condition): {available}"
+        )
+
+    def zsd_zod_offset(self, *, scenario: str, condition: str) -> ZsdZodOffsetEntry:
+        table = self._data.zsd_zod_offset_parameters.get(scenario)
+        if table is None:
+            raise ScenarioNotFoundError(
+                f"No ZSD/ZOD offset table for scenario={scenario!r} in TR 38.901 §{self.section_id} "
+                f"({self.version}). Available scenarios: {sorted(self._data.zsd_zod_offset_parameters)}"
+            )
+        for entry in table.entries:
+            if entry.condition == condition:
+                return entry
+        available = [e.condition for e in table.entries]
+        raise ScenarioNotFoundError(
+            f"No ZSD/ZOD offset entry for scenario={scenario!r}, condition={condition!r} in TR 38.901 "
+            f"§{self.section_id} ({self.version}). Available conditions for {scenario!r}: {available}"
+        )
+
+    @property
+    def notations(self) -> list[NotationEntry]:
+        return self._data.notations
+
+    @property
+    def scaling_factors_aoa_aod_generation(self) -> list[ScalingFactorEntry]:
+        return self._data.scaling_factors_aoa_aod_generation
+
+    @property
+    def scaling_factors_zoa_zod_generation(self) -> list[ScalingFactorEntry]:
+        return self._data.scaling_factors_zoa_zod_generation
+
+    @property
+    def ray_offset_angles(self) -> list[RayOffsetAngle]:
+        return self._data.ray_offset_angles
+
+    @property
+    def sub_cluster_info(self) -> list[SubClusterInfo]:
+        return self._data.sub_cluster_info
+
+
+# Registry: section id -> (YAML path relative to TR-38.901/<version>/, the
+# Pydantic model that validates the whole file, the accessor class wrapping
+# it). Adding a processed section means adding one line here, not touching
+# the dispatch logic in section() below.
+_SECTION_REGISTRY = {
+    "7.4": ("07-channel-models/7.4-pathloss.yaml", Section74Data, Section74),
+    "7.5": ("07-channel-models/7.5-fast-fading.yaml", Section75Data, Section75),
+}
+
+
 @lru_cache(maxsize=None)
-def section(section_id: str, version: str = DEFAULT_VERSION) -> Section:
+def section(section_id: str, version: str = DEFAULT_VERSION):
     """Load and validate a processed TR 38.901 section's data."""
-    if section_id not in _SECTION_DATA_PATHS:
+    if section_id not in _SECTION_REGISTRY:
         raise SectionNotFoundError(
             f"No data available for TR 38.901 section {section_id!r}. "
-            f"Processed sections: {sorted(_SECTION_DATA_PATHS)}"
+            f"Processed sections: {sorted(_SECTION_REGISTRY)}"
         )
-    yaml_path = _REPO_ROOT / "TR-38.901" / version / _SECTION_DATA_PATHS[section_id]
+    rel_path, model_cls, accessor_cls = _SECTION_REGISTRY[section_id]
+    yaml_path = _REPO_ROOT / "TR-38.901" / version / rel_path
     if not yaml_path.is_file():
         raise SectionNotFoundError(
             f"No data file for TR 38.901 §{section_id} version {version!r} -- expected {yaml_path}"
         )
     with open(yaml_path) as f:
         raw = yaml.safe_load(f)
-    data = Section74Data(**raw)
-    return Section(section_id, version, data)
+    data = model_cls(**raw)
+    return accessor_cls(section_id, version, data)

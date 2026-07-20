@@ -1,0 +1,4 @@
+condition,mu_lgZSD,sigma_lgZSD,mu_offset_ZOD
+LOS,0.14,0.16,0
+NLOS,0.14,0.16,= 3.5
+O2I,0.14,0.16,= 3.5

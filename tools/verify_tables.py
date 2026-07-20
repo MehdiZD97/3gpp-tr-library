@@ -36,7 +36,7 @@ from pydantic import ValidationError
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from section_utils import REPO_ROOT, discover_section_md_files, read_csv_rows, split_front_matter  # noqa: E402
-from tr_api.models import Section74Data  # noqa: E402
+from tr_api.models import ChannelModelParameterEntry, Section74Data, Section75Data  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -286,6 +286,188 @@ def verify_section_7_4():
 
 
 # ---------------------------------------------------------------------------
+# §7.5-specific table configuration
+#
+# Every §7.5 CSV/YAML shape turned out to fit the existing verify_table()
+# checker -- including Table 7.5-6, the master large-scale-parameter table
+# that docs/phase-plans/phase-4-tasks.md flagged as a likely "cross-
+# correlation matrix" shape needing a third checker. It didn't, because the
+# YAML/CSV represent it as one row per (scenario, condition) with 49 named
+# fields -- a list-of-entities shape, same as Table 7.4.1-1 -- rather than
+# as a literal 2D matrix. That's a deliberate design choice (it's also the
+# more useful shape for tr_api: one call returns every parameter for a given
+# scenario/condition), not an accident that happened to dodge the need for
+# new tooling. The only place the "matrix" shape actually shows up is the
+# *inline Markdown* table, which transposes to parameter-rows x
+# scenario-columns to stay readable -- that comparison is bespoke (see
+# tests/test_cross_format_consistency.py), not a verify_tables.py checker.
+# ---------------------------------------------------------------------------
+SECTION_7_5_DIR = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models")
+SECTION_7_5_YAML_PATH = os.path.join(SECTION_7_5_DIR, "7.5-fast-fading.yaml")
+SECTION_7_5_TABLES_DIR = os.path.join(SECTION_7_5_DIR, "tables")
+
+# Human-readable row labels for Table 7.5-6's 49 parameter fields, in the
+# TR's own row order -- the source of truth for the *transposed* inline
+# Markdown table in 7.5-fast-fading.md (parameter rows x scenario/condition
+# columns; see that file's own note on why it's transposed relative to the
+# CSV). Lives here, not just in the extraction script that generated the
+# committed files, so tests/test_cross_format_consistency_7_5.py can
+# reproduce the mapping without depending on gitignored _scratch/ content.
+PARAM_LABELS = {
+    "mu_lgDS": "Delay spread (DS): mean of log10(DS/1s)",
+    "sigma_lgDS": "Delay spread (DS): std of log10(DS/1s)",
+    "mu_lgASD": "AOD spread (ASD): mean of log10(ASD/1deg)",
+    "sigma_lgASD": "AOD spread (ASD): std of log10(ASD/1deg)",
+    "mu_lgASA": "AOA spread (ASA): mean of log10(ASA/1deg)",
+    "sigma_lgASA": "AOA spread (ASA): std of log10(ASA/1deg)",
+    "mu_lgZSA": "ZOA spread (ZSA): mean of log10(ZSA/1deg)",
+    "sigma_lgZSA": "ZOA spread (ZSA): std of log10(ZSA/1deg)",
+    "sigma_SF": "Shadow fading (SF) std [dB]",
+    "mu_K": "K-factor (K) mean [dB]",
+    "sigma_K": "K-factor (K) std [dB]",
+    "corr_ASD_DS": "Cross-correlation: ASD vs DS",
+    "corr_ASA_DS": "Cross-correlation: ASA vs DS",
+    "corr_ASA_SF": "Cross-correlation: ASA vs SF",
+    "corr_ASD_SF": "Cross-correlation: ASD vs SF",
+    "corr_DS_SF": "Cross-correlation: DS vs SF",
+    "corr_ASD_ASA": "Cross-correlation: ASD vs ASA",
+    "corr_ASD_K": "Cross-correlation: ASD vs K",
+    "corr_ASA_K": "Cross-correlation: ASA vs K",
+    "corr_DS_K": "Cross-correlation: DS vs K",
+    "corr_SF_K": "Cross-correlation: SF vs K",
+    "corr_ZSD_SF": "Cross-correlation: ZSD vs SF",
+    "corr_ZSA_SF": "Cross-correlation: ZSA vs SF",
+    "corr_ZSD_K": "Cross-correlation: ZSD vs K",
+    "corr_ZSA_K": "Cross-correlation: ZSA vs K",
+    "corr_ZSD_DS": "Cross-correlation: ZSD vs DS",
+    "corr_ZSA_DS": "Cross-correlation: ZSA vs DS",
+    "corr_ZSD_ASD": "Cross-correlation: ZSD vs ASD",
+    "corr_ZSA_ASD": "Cross-correlation: ZSA vs ASD",
+    "corr_ZSD_ASA": "Cross-correlation: ZSD vs ASA",
+    "corr_ZSA_ASA": "Cross-correlation: ZSA vs ASA",
+    "corr_ZSD_ZSA": "Cross-correlation: ZSD vs ZSA",
+    "delay_scaling_parameter_r_tau": "Delay scaling parameter r_tau",
+    "mu_XPR": "XPR mean [dB]",
+    "sigma_XPR": "XPR std [dB]",
+    "number_of_clusters": "Number of clusters N",
+    "number_of_rays_per_cluster": "Number of rays per cluster M",
+    "cluster_DS_ns": "Cluster DS (c_DS) [ns]",
+    "cluster_ASD_deg": "Cluster ASD (c_ASD) [deg]",
+    "cluster_ASA_deg": "Cluster ASA (c_ASA) [deg]",
+    "cluster_ZSA_deg": "Cluster ZSA (c_ZSA) [deg]",
+    "per_cluster_shadowing_std_zeta_db": "Per-cluster shadowing std zeta [dB]",
+    "corr_distance_DS_m": "Correlation distance (horizontal plane): DS [m]",
+    "corr_distance_ASD_m": "Correlation distance (horizontal plane): ASD [m]",
+    "corr_distance_ASA_m": "Correlation distance (horizontal plane): ASA [m]",
+    "corr_distance_SF_m": "Correlation distance (horizontal plane): SF [m]",
+    "corr_distance_K_m": "Correlation distance (horizontal plane): K [m]",
+    "corr_distance_ZSA_m": "Correlation distance (horizontal plane): ZSA [m]",
+    "corr_distance_ZSD_m": "Correlation distance (horizontal plane): ZSD [m]",
+}
+
+_CHANNEL_MODEL_PARAM_FIELDS = [
+    f for f in ChannelModelParameterEntry.model_fields if f not in ("scenario", "condition")
+]
+assert set(_CHANNEL_MODEL_PARAM_FIELDS) == set(PARAM_LABELS), "PARAM_LABELS drifted from ChannelModelParameterEntry"
+
+_ZSD_ZOD_SCENARIO_TABLES = {
+    "UMa": "7.5-7", "UMi-StreetCanyon": "7.5-8", "RMa": "7.5-9",
+    "Indoor-Office": "7.5-10", "InF": "7.5-11", "SMa": "7.5-12",
+}
+
+
+def verify_section_7_5():
+    errors = []
+
+    with open(SECTION_7_5_YAML_PATH) as f:
+        data = yaml.safe_load(f)
+
+    try:
+        validated = Section75Data(**data)
+    except ValidationError as exc:
+        errors.append(f"{SECTION_7_5_YAML_PATH}: schema validation failed:\n{exc}")
+        return errors
+
+    errors += verify_table(
+        # Keyed on "notation", not "parameter": Table 7.5-1 legitimately
+        # repeats the same prose label for two pairs of rows (the Rx/Tx
+        # field-pattern entries differ only by their theta/phi notation,
+        # e.g. two rows both labelled "Receive antenna element u field
+        # pattern..." for F_rx,u,theta and F_rx,u,phi) -- "parameter" alone
+        # isn't a unique key here, confirmed directly against the source.
+        os.path.join(SECTION_7_5_TABLES_DIR, "table-7.5-1.csv"),
+        data["notations"], key_fields=("notation",),
+        field_map={"parameter": ("parameter", identity)},
+    )
+    errors += verify_table(
+        os.path.join(SECTION_7_5_TABLES_DIR, "table-7.5-2.csv"),
+        data["scaling_factors_aoa_aod_generation"], key_fields=("num_clusters",),
+        field_map={"c_phi_nlos": ("c_phi_nlos", lambda v: str(v))},
+        key_normalizer=lambda k: (int(k[0]),),
+    )
+    errors += verify_table(
+        os.path.join(SECTION_7_5_TABLES_DIR, "table-7.5-3.csv"),
+        data["ray_offset_angles"], key_fields=("ray_numbers",),
+        field_map={"offset_angle": ("offset_angle", lambda v: str(v))},
+    )
+    errors += verify_table(
+        os.path.join(SECTION_7_5_TABLES_DIR, "table-7.5-4.csv"),
+        data["scaling_factors_zoa_zod_generation"], key_fields=("num_clusters",),
+        field_map={"c_theta_nlos": ("c_theta_nlos", lambda v: str(v))},
+        key_normalizer=lambda k: (int(k[0]),),
+    )
+    errors += verify_table(
+        os.path.join(SECTION_7_5_TABLES_DIR, "table-7.5-5.csv"),
+        data["sub_cluster_info"], key_fields=("sub_cluster",),
+        field_map={
+            "mapping_to_rays": ("mapping_to_rays", identity),
+            "power_fraction": ("power_fraction", identity),
+            "delay_offset": ("delay_offset", identity),
+        },
+        key_normalizer=lambda k: (int(k[0]),),
+    )
+    errors += verify_table(
+        os.path.join(SECTION_7_5_TABLES_DIR, "table-7.5-6.csv"),
+        data["channel_model_parameters"], key_fields=("scenario", "condition"),
+        field_map={f: (f, identity) for f in _CHANNEL_MODEL_PARAM_FIELDS},
+    )
+    for scenario, tr_number in _ZSD_ZOD_SCENARIO_TABLES.items():
+        errors += verify_table(
+            os.path.join(SECTION_7_5_TABLES_DIR, f"table-{tr_number}.csv"),
+            data["zsd_zod_offset_parameters"][scenario]["entries"], key_fields=("condition",),
+            field_map={
+                "mu_lgZSD": ("mu_lgZSD", identity),
+                "sigma_lgZSD": ("sigma_lgZSD", identity),
+                "mu_offset_ZOD": ("mu_offset_ZOD", identity),
+            },
+        )
+
+    if os.path.isfile(SOURCE_HTML):
+        # Every field on every channel_model_parameters entry, cross-checked
+        # against the tag-stripped HTML the same way §7.4's pathloss table
+        # is -- confirmed clean (0/826 missing) during Phase 4's extraction.
+        # Unlike §7.4.2, direct inspection of this region found no
+        # OLE/.wmz-only cells among the *table* data (a handful exist in the
+        # 12-step procedure's standalone equations, which aren't YAML data
+        # and so aren't cross-checked here), so nothing is excluded.
+        formulas = [
+            getattr(entry, f) for entry in validated.channel_model_parameters for f in _CHANNEL_MODEL_PARAM_FIELDS
+        ]
+        mismatches = check_formulas_against_html(
+            SOURCE_HTML,
+            start_text="The radio channel realizations are created",
+            end_text="7.6.0",
+            formulas=formulas,
+        )
+        for formula, missing in mismatches:
+            errors.append(f"formula cross-check: numbers {missing} from {formula!r} not found in HTML export")
+    else:
+        print(f"  (skipping HTML formula cross-check: {SOURCE_HTML} not present locally)")
+
+    return errors
+
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 def main():
@@ -304,6 +486,8 @@ def main():
 
         if section == "7.4":
             errors = verify_section_7_4()
+        elif section == "7.5":
+            errors = verify_section_7_5()
         else:
             errors = [f"{path}: no verify_tables.py checker registered for section {section!r} yet"]
 
