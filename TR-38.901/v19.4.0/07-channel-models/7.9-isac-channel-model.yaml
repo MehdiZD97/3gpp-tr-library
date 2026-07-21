@@ -1,0 +1,915 @@
+sensing_scenarios:
+- scenario_type: UAV
+  parameter: Applicable communication scenarios
+  value: "UMi, UMa, RMa, SMa \nUMi-AV, UMa-AV, RMa-AV [36.777]"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: STX/SRX Locations
+  value: 'STX/SRX locations are selected among the TRPs and UEs locations in the corresponding communication scenarios.
+
+    see note 1'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: LOS/NLOS
+  value: LOS and NLOS
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Outdoor/indoor
+  value: Outdoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: 3D mobility
+  value: "Horizontal velocity: uniform distribution between 0 and 180km/h, if horizontal velocity is not fixed to 0. \n\nVertical velocity: 0km/h, optional {20, 40} km/h\nsee note 2 and 3"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: 3D distribution
+  value: "Horizontal plane: \nOption A: N targets uniformly distributed within one cell. \nOption B: N targets uniformly distributed per cell. \nOption C: N targets uniformly distributed within an area not necessarily determined by cell boundaries.\nN = {1, 2, 3, 4, 5}\nsee note 4\n\nVertical plane: \nOption A: Uniform between 1.5m and 300m.\nOption B: Fixed height value chosen from {25, 50, 100, 200, 300} m assuming vertical velocity is equal to 0."
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Orientation
+  value: Random in horizontal domain
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Physical characteristics (e.g., size)
+  value: "Size:\nOption 1: 1.6m x 1.5m x 0.7m \nOption 2: 0.3m x 0.4m x 0.2m"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: Min distances based on min TRP/UE distances defined in TR36.777.
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option 1: At least larger than the physical size of a target
+
+    Option 2: 10 meters'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Applicable communication scenarios
+  value: "Highway, Urban Grid. \nUMi, UMa, RMa, SMa"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Sensing transmitters and receivers properties
+  value: "STX/SRX locations are selected among the TRPs and UEs (e.g., VRU, vehicle, RSU-type UEs) locations in the corresponding communication scenario. \nAdditional option: ISD between TRPs of Urban Grid is 250m"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: LOS/NLOS
+  value: LOS and NLOS (including NLOSv)
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Outdoor/indoor
+  value: Outdoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Mobility (horizontal plane only)
+  value: Based on TR37.885 mobility for urban grid or highway scenario
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Distribution (horizontal)
+  value: Based on dropping in TR37.885 per urban grid or highway communication scenario
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Orientation
+  value: Lane direction in horizontal plane
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Physical characteristics (e.g., size)
+  value: "Type 1/2 (passenger vehicle) \nType 3 (truck/bus) \nVehicle type distribution per TR 37.885"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: 'For Highway, Urban Grid
+
+    - Min distances based on min TRP/UE distances defined in TR37.885
+
+    For UMi, UMa, RMa, SMa
+
+    - Min distances based on min TRP/UE distances defined in TR38.901'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 10 m.'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Environment Objects, e.g., types, characteristics, mobility, distribution, etc.
+  value: 'Type-2 EO for Urban Grid
+
+    - up to 4 walls modelled as Type-2 EO, per building of size 413m x 230m x 20m.'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Human
+  parameter: Applicable communication scenarios
+  value: null
+  indoor_value: "Indoor office, indoor factory \nIndoor room [TR38.808]"
+  outdoor_value: UMi, UMa, RMa, SMa
+- scenario_type: Human
+  parameter: STX/SRX Locations
+  value: null
+  indoor_value: STX/SRX locations are selected among the TRPs and UE locations in the corresponding communication scenario
+  outdoor_value: STX/SRX locations are selected among the TRPs and UE locations in the corresponding communication scenario
+- scenario_type: Human
+  parameter: STX/SRX Mobility for UEs
+  value: null
+  indoor_value: 'Option 1: 0km/h
+
+    Option 2: 3km/h
+
+    Option 3: Uniform distribution between 0km/h and 3km/h'
+  outdoor_value: 'Option 1: 0km/h
+
+    Option 2: 3km/h
+
+    Option 3: Uniform distribution between 0km/h and 10km/h'
+- scenario_type: Human
+  parameter: LOS/NLOS
+  value: null
+  indoor_value: LOS and NLOS
+  outdoor_value: LOS and NLOS
+- scenario_type: Human
+  parameter: Outdoor/indoor
+  value: null
+  indoor_value: Indoor
+  outdoor_value: Outdoor
+- scenario_type: Human
+  parameter: 3D mobility
+  value: null
+  indoor_value: "Option 1: 0km/h\nOption 2: 3km/h\nOption 3: Uniform distribution between 0km/h and 3km/h \n(horizontal plane with random direction straight-line trajectory)"
+  outdoor_value: "Option 1: 0km/h\nOption 2: 3km/h\nOption 3: Uniform distribution between 0km/h and 10km/h \n(horizontal plane with random direction straight-line trajectory)"
+- scenario_type: Human
+  parameter: 3D distribution
+  value: null
+  indoor_value: 'N targets uniformly distributed over the horizontal area of the convex hull of the TRP deployment
+
+    see note 1'
+  outdoor_value: "Option A: N targets uniformly distributed within one cell. \nOption B: N targets uniformly distributed per cell. \nOption C: N targets uniformly distributed within an area not necessarily determined by cell boundaries. \nsee note 1"
+- scenario_type: Human
+  parameter: Orientation
+  value: null
+  indoor_value: Random over the horizontal area
+  outdoor_value: Random over the horizontal area
+- scenario_type: Human
+  parameter: Physical characteristics (e.g., size)
+  value: null
+  indoor_value: 'Size (Length x Width x Height):
+
+    Child: 0.2m x 0.3m x 1m
+
+    Adult Pedestrian: 0.5m x 0.5m x 1.75m'
+  outdoor_value: 'Size (Length x Width x Height):
+
+    Child: 0.2m x 0.3m x 1m
+
+    Adult Pedestrian: 0.5m x 0.5m x 1.75m'
+- scenario_type: Human
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: null
+  indoor_value: "For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 0 m \nFor UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+  outdoor_value: "For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distances between STX/SRX and the sensing target are 10 m for UMi scenarios and 35 m for UMa scenarios \nFor UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+- scenario_type: Human
+  parameter: Minimum 3D distance between sensing targets
+  value: null
+  indoor_value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 1m'
+  outdoor_value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 1m'
+- scenario_type: AGV
+  parameter: Applicable communication scenarios
+  value: InF (Table 7.8-7)
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Sensing transmitters and receivers properties
+  value: 'STX/SRX location are selected among the TRPs and UEs location in the corresponding communication scenario
+
+
+    STX/SRX Mobility for UEs
+
+    Option 1: 0 km/h
+
+    Option 2: 3km/h
+
+    Option 3: Uniform distribution between 0km/h and 3km/h'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: LOS/NLOS
+  value: LOS and NLOS
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Outdoor/indoor
+  value: Indoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: 3D mobility
+  value: "Horizontal velocity with random straight-line trajectory \nOption 1: Uniform distribution in the range of up to 30 km/h\nOption 2: Fixed velocities {3, 10} km/h"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: 3D distribution
+  value: 'Option A: Uniformly distributed in the convex hull of the horizontal BS deployment
+
+    Option B: Uniformly distributed in horizontal plane'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Orientation
+  value: Horizontal plane only
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Physical characteristics (e.g., size)
+  value: 'Size
+
+    Option 1: 0.5m x 1.0m x 0.5m
+
+    Option 2: 1.5 m x 3.0m x 1.5 m'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: Min distances based on min TRP/UE distances defined in TR38.901
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option A: At least larger than the physical size of a target
+
+    Option B: Fixed value, 5m'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Applicable communication scenarios
+  value: 'Highway, Urban grid, HST (High Speed Train, TR 38.802)
+
+    UMi, UMa, RMa, SMa'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: STX/SRX Locations
+  value: 'STX/SRX locations are selected among the TRPs and UEs (e.g., VRU, vehicle, RSU-type UEs) locations in the corresponding communication scenarios.
+
+    Additional option: ISD between TRPs of Urban Grid is 250 m'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: LOS/NLOS
+  value: LOS and NLOS
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Outdoor/indoor
+  value: Outdoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: 3D mobility
+  value: 'Horizontal velocity: up to 10 km/h for humans and animals'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: 3D distribution
+  value: Uniformly distributed in horizontal plane
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Orientation
+  value: Random distribution in horizontal plane
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Physical characteristics (e.g., size)
+  value: "For human/pedestrians: Child: 0.2m x 0.3m x 1m\nAdult: 0.5m x 0.5m x 1.75m \nFor animals: Size: 1.5m x 0.5m x 1 m"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: "For Highway, Urban Grid, HST \n- Min. distance is based on min TRP/UE distances defined in TR37.885 and TR38.802\nFor UMi, UMa, RMa, SMa\n- Min distances based on min TRP/UE distances defined in TR38.901"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 10 m.'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Environment objects, e.g., types, characteristics, mobility, distribution, etc.
+  value: 'Type-2 EO for Urban Grid
+
+    - up to 4 walls modelled as Type-2 EO, per building of size 413m x 230m x 20m.'
+  indoor_value: null
+  outdoor_value: null
+rcs_model_1:
+- sensing_target: UAV with small size
+  lg_sigma_m_dbsm: '-12.81'
+  sigma_sigmaS_db: '3.74'
+- sensing_target: Human with RCS model 1
+  lg_sigma_m_dbsm: '-1.37'
+  sigma_sigmaS_db: '3.94'
+rcs_model_2:
+- target: UAV with large size
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '7.13'
+  theta_center_deg: '90'
+  theta_3db_deg: '8.68'
+  g_max: '7.43'
+  sigma_max: '14.30'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[45,135)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '10.09'
+  theta_center_deg: '90'
+  theta_3db_deg: '11.43'
+  g_max: '3.99'
+  sigma_max: '10.86'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[135,225)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '7.13'
+  theta_center_deg: '90'
+  theta_3db_deg: '8.68'
+  g_max: '7.43'
+  sigma_max: '14.30'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[225,315)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '14.19'
+  theta_center_deg: '90'
+  theta_3db_deg: '16.53'
+  g_max: '1.02'
+  sigma_max: '7.89'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[-45,45)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Bottom
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '180'
+  theta_3db_deg: '4.93'
+  g_max: '13.55'
+  sigma_max: '20.42'
+  range_theta_deg: '[135,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0'
+  theta_3db_deg: '4.93'
+  g_max: '13.55'
+  sigma_max: '20.42'
+  range_theta_deg: '[0,45)'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: Human with RCS model 2
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '216.65'
+  theta_center_deg: '90'
+  theta_3db_deg: '55.7'
+  g_max: '2.14'
+  sigma_max: '7.7'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[-90, 90)'
+  lg_sigma_m_dbsm: '-1.37'
+  sigma_sigmaS_db: '3.94'
+- target: Human with RCS model 2
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '216.65'
+  theta_center_deg: '90'
+  theta_3db_deg: '55.7'
+  g_max: '2.14'
+  sigma_max: '7.7'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[90,270)'
+  lg_sigma_m_dbsm: '-1.37'
+  sigma_sigmaS_db: '3.94'
+- target: Vehicle with single scattering point
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.75'
+  sigma_max: '13.68'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[45,135)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '36.32'
+  theta_center_deg: '79.65'
+  theta_3db_deg: '36.73'
+  g_max: '14.56'
+  sigma_max: '7.50'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[135,225)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.75'
+  sigma_max: '13.68'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[225,315)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '40.54'
+  theta_center_deg: '71.75'
+  theta_3db_deg: '29.13'
+  g_max: '15.52'
+  sigma_max: '8.45'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[-45, 45)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0.00'
+  theta_3db_deg: '18.13'
+  g_max: '21.26'
+  sigma_max: '14.19'
+  range_theta_deg: '[0,30)'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.60'
+  sigma_max: '20.52'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '36.32'
+  theta_center_deg: '79.65'
+  theta_3db_deg: '36.73'
+  g_max: '13.90'
+  sigma_max: '13.82'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.60'
+  sigma_max: '20.52'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '40.54'
+  theta_center_deg: '71.75'
+  theta_3db_deg: '29.13'
+  g_max: '14.99'
+  sigma_max: '14.91'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0.00'
+  theta_3db_deg: '18.13'
+  g_max: '21.12'
+  sigma_max: '21.05'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: AGV with single scattering point
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '13.68'
+  theta_center_deg: '90'
+  theta_3db_deg: '13.68'
+  g_max: '13.02'
+  sigma_max: '23.29'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[-45,45)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.33'
+  sigma_max: '17.60'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[45,135)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '12.49'
+  theta_center_deg: '90'
+  theta_3db_deg: '11.89'
+  g_max: '11.01'
+  sigma_max: '21.28'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[135,225)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.33'
+  sigma_max: '17.60'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[225,315)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0'
+  theta_3db_deg: '11.44'
+  g_max: '11.79'
+  sigma_max: '22.06'
+  range_theta_deg: '[0,30)'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '13.68'
+  theta_center_deg: '90'
+  theta_3db_deg: '13.68'
+  g_max: '13.00'
+  sigma_max: '30.26'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.27'
+  sigma_max: '24.53'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '12.49'
+  theta_center_deg: '90'
+  theta_3db_deg: '11.89'
+  g_max: '10.98'
+  sigma_max: '28.24'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.27'
+  sigma_max: '24.53'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0'
+  theta_3db_deg: '11.44'
+  g_max: '11.77'
+  sigma_max: '29.03'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+rcs_model_2_k_parameters:
+- target: UAV with large size
+  k1: '6.05'
+  k2: '1.33'
+- target: Human with RCS model 2
+  k1: '0.5714'
+  k2: '0.1'
+- target: Vehicle with single/multiple SPSTs
+  k1: '6'
+  k2: '1.65'
+- target: AGV with single/multiple SPSTs
+  k1: '12'
+  k2: '1.45'
+xpr:
+- target: UAV
+  mu_xpr_db: '13.75'
+  sigma_xpr_db: '7.07'
+- target: Human
+  mu_xpr_db: '19.81'
+  sigma_xpr_db: '4.25'
+- target: Vehicle
+  mu_xpr_db: '21.12'
+  sigma_xpr_db: '6.88'
+- target: AGV
+  mu_xpr_db: '9.60'
+  sigma_xpr_db: '6.85'
+reference_channel_models:
+- case: '1'
+  tx: TRP
+  rx: TRP
+  reference_tr: "For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF\n- TRP-TRP link of scenario UMi, UMa, InH, and InF following the option based on TR 38.901 defined in Clause A.3 of TR 38.858\n - For InF, hUT is changed to the same height as the BS\n- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hUT=35m (see note 1)\nFor sensing scenario Highway \n- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hUT=35m for FR1(see note 1)\n- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2\nFor sensing scenario Urban grid\n- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858\nFor sensing scenario HST\n- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hUT=35m for FR1 (see note 1)\n- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2"
+- case: '2'
+  tx: TRP
+  rx: terrestrial UE
+  reference_tr: "For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF\n- TRP-UE link of scenario UMi, UMa, RMa, InH, and InF in Clause 7 of TR 38.901\nFor sensing scenario Highway and Urban grid\n- P2B link of scenario Highway and Urban grid in Clause 6 of TR 37.885 \nFor sensing scenario HST\n- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 for FR1 and TRP-UE link of scenario UMa in Clause 7 of TR 38.901 for FR2"
+- case: '3'
+  tx: TRP
+  rx: vehicle UE
+  reference_tr: "For sensing scenario Highway and Urban grid \n- V2B link of scenario Highway and Urban grid in Clause 6 of TR 37.885\nFor sensing scenario UMi, UMa, and RMa\n- TRP-UE link of scenario UMi, UMa, and RMa in Clause 7 of TR 38.901"
+- case: '4'
+  tx: TRP
+  rx: aerial UE
+  reference_tr: "For sensing scenario UMa-AV, UMi-AV, and RMa-AV \n- TRP-aerial UE link of scenario UMa-AV, UMi-AV, and RMa-AV in Clause Annex A and B of TR 36.777 for FR1\n- Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2"
+- case: '5'
+  tx: terrestrial UE
+  rx: terrestrial UE
+  reference_tr: 'For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF
+
+    - UE-UE link of scenario UMi, UMa, InH, and InF following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+
+    - TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m (see note 2)
+
+    For sensing scenario Highway and Urban grid
+
+    - P2P link in Clause 6 of TR 37.885
+
+    For sensing scenario HST
+
+    - TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hBS=1.5m for FR1
+
+    - UE-UE link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2'
+- case: '6'
+  tx: terrestrial UE
+  rx: vehicle UE
+  reference_tr: 'For sensing scenario UMi, UMa, RMa
+
+    - UE-UE link of scenario UMi, UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+
+    - TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m
+
+    For sensing scenario Highway and Urban grid
+
+    - V2P link in Clause 6 of TR 37.885'
+- case: '7'
+  tx: terrestrial UE
+  rx: aerial UE
+  reference_tr: 'For sensing scenario UMi-AV, UMa-AV, and RMa-AV
+
+    - TRP-aerial UE link of UMi-AV in Annex A and B of TR 36.777 by setting hBS=1.5m for FR1
+
+    - Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2
+
+    - The corresponding parameter values in FR2 are used'
+- case: '8'
+  tx: vehicle UE
+  rx: vehicle UE
+  reference_tr: "For sensing scenario Highway and Urban grid \n- V2V link of scenario Highway and Urban grid in Clause 6 of TR 37.885 \nFor sensing scenario UMi, UMa, and RMa\n- UE-UE link of scenario UMi, UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858\n- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m"
+- case: '9'
+  tx: aerial UE
+  rx: aerial UE
+  reference_tr: 'For sensing scenario UMi-AV, UMa-AV, RMa-AV
+
+    - TRP-aerial UE link of UMi-AV in Annex A and B of TR 36.777 by setting height of TRP equal to the height of the first aerial UE for FR1 (see note 4)
+
+    - Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2
+
+    - The corresponding parameter values in FR2 are used'
+- case: '10'
+  tx: TRP
+  rx: RSU-type UE
+  reference_tr: 'Highway and Urban grid
+
+    - B2R link in Clause 6 of TR 37.885'
+- case: '11'
+  tx: RSU-type UE
+  rx: terrestrial UE
+  reference_tr: 'Highway and Urban grid
+
+    - V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m'
+- case: '12'
+  tx: RSU-type UE
+  rx: RSU-type UE
+  reference_tr: 'Highway and Urban grid
+
+    - V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m'
+- case: '13'
+  tx: RSU-type UE
+  rx: vehicle UE
+  reference_tr: 'Highway and Urban grid
+
+    - V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m'
+target_channel_links:
+- stx_srx: TRP
+  target: UAV
+  case: 'Case 4: TRP-Aerial UE link'
+- stx_srx: TRP
+  target: Human
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  target: Vehicle
+  case: 'Case 3: TRP-Vehicle UE link'
+- stx_srx: TRP
+  target: AGV
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  target: Object (Hazard)
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  target: UAV
+  case: 'Case 7: terrestrial UE - Aerial UE link'
+- stx_srx: Terrestrial UE
+  target: Human
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  target: Vehicle
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Terrestrial UE
+  target: AGV
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  target: Object (Hazard)
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Vehicle UE
+  target: Human
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Vehicle UE
+  target: Vehicle
+  case: 'Case 8: Vehicle UE - Vehicle UE link'
+- stx_srx: Vehicle UE
+  target: Object (Hazard)
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Aerial UE
+  target: UAV
+  case: 'Case 9: Aerial UE - Aerial UE link'
+- stx_srx: AGV UE
+  target: AGV
+  case: 'Case 5: terrestrial UE - terrestrial UE link'
+- stx_srx: RSU-type UE
+  target: Human
+  case: 'Case 11: RSU-type UE - terrestrial UE link'
+- stx_srx: RSU-type UE
+  target: Vehicle
+  case: 'Case 13: RSU-type UE - vehicle UE link'
+- stx_srx: RSU-type UE
+  target: Object (Hazard)
+  case: 'Case 11: RSU-type UE - terrestrial UE link'
+background_channel_links:
+- stx_srx: TRP
+  srx_stx: TRP
+  case: 'Case 1: TRP-TRP link'
+- stx_srx: TRP
+  srx_stx: Terrestrial UE
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  srx_stx: Vehicle UE
+  case: 'Case 3: TRP-Vehicle UE link'
+- stx_srx: TRP
+  srx_stx: Aerial UE
+  case: 'Case 4: TRP-Aerial UE link'
+- stx_srx: TRP
+  srx_stx: AGV UE
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  srx_stx: RSU-type UE
+  case: 'Case 10: TRP - RSU-type UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: Terrestrial UE
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: Vehicle UE
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: Aerial UE
+  case: 'Case 7: terrestrial UE - Aerial UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: AGV UE
+  case: 'Case 5: terrestrial UE - terrestrial UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: RSU-type UE
+  case: 'Case 11: RSU-type UE - terrestrial UE link'
+- stx_srx: Vehicle UE
+  srx_stx: Vehicle UE
+  case: 'Case 8: Vehicle UE - Vehicle UE link'
+- stx_srx: Vehicle UE
+  srx_stx: RSU-type UE
+  case: 'Case 13: RSU-type UE - vehicle UE link'
+- stx_srx: Aerial UE
+  srx_stx: Aerial UE
+  case: 'Case 9: Aerial UE - Aerial UE link'
+- stx_srx: AGV UE
+  srx_stx: AGV UE
+  case: 'Case 5: terrestrial UE - terrestrial UE link'
+- stx_srx: RSU-type UE
+  srx_stx: RSU-type UE
+  case: 'Case 12: RSU-type UE – RSU-type UE link'
+los_condition_determination:
+- case: '7'
+  reference_scenario: UMi in Table 7.4.2-1 in TR 38.901 for sensing scenario UMi-AV/UMa-AV/RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 1.5m <= hUT <= 22.5m; Sensing scenario RMa-AV: 1.5m <= hUT <= 10m'
+- case: '7'
+  reference_scenario: UMi-AV in Table B-1 in TR 36.777 for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for sensing scenario RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 22.5m < hUT <= 300m; Sensing scenario RMa-AV: 10m < hUT <= 300m'
+- case: '9'
+  reference_scenario: UMi in Table 7.4.2-1 in TR 38.901 for sensing scenario UMi-AV/UMa-AV/RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 1.5m <= hUT1, hUT2 <= 22.5m; Sensing scenario RMa-AV: 1.5m <= hUT1, hUT2 <= 10m'
+- case: '9'
+  reference_scenario: UMi-AV in Table B-1 in TR 36.777 for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for sensing scenario RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 22.5m < max(hUT1, hUT2) <= 300m, 1.5m <= min(hUT1, hUT2) <= 22.5m; Sensing scenario RMa-AV: 10m < max(hUT1, hUT2) <= 300m, 1.5m <= min(hUT1, hUT2) <= 10m'
+- case: '9'
+  reference_scenario: UMa-AV in Table B-1 in TR 36.777 for aerial UE height in range (22.5m, 100m] for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for aerial UE height in range (10m, 40m] for sensing scenario RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 22.5m < hUT1, hUT2 <= 100m; Sensing scenario RMa-AV: 10m < hUT1, hUT2 <= 40m'
+- case: '9'
+  reference_scenario: LOS probability is 100%
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 100m < max(hUT1, hUT2) <= 300m, 22.5m < min(hUT1, hUT2) <= 100m; Sensing scenario RMa-AV: 40m < max(hUT1, hUT2) <= 300m, 10m < min(hUT1, hUT2) <= 40m'

@@ -13,6 +13,8 @@ SECTION_7_4_MD = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-mod
 SECTION_7_4_YAML = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "7.4-pathloss.yaml")
 SECTION_7_5_MD = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "7.5-fast-fading.md")
 SECTION_7_5_YAML = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "7.5-fast-fading.yaml")
+SECTION_7_9_MD = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "7.9-isac-channel-model.md")
+SECTION_7_9_YAML = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "7.9-isac-channel-model.yaml")
 TABLES_DIR = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "tables")
 
 ANNEX_B_MD = os.path.join(REPO_ROOT, "TR-36.777", "v15.0.0", "annex-b-channel-modelling", "B-channel-modelling.md")
@@ -173,6 +175,44 @@ def table_7_5_6_rows():
 
 @pytest.fixture(scope="session", params=["7.5-7", "7.5-8", "7.5-9", "7.5-10", "7.5-11", "7.5-12"])
 def zsd_zod_table_rows(request):
+    return request.param, read_csv_rows(os.path.join(TABLES_DIR, f"table-{request.param}.csv"))
+
+
+# --- TR 38.901 §7.9 (Channel model(s) for ISAC) fixtures (core 7.9.0-7.9.3) ---
+@pytest.fixture(scope="session")
+def section_7_9_md_path():
+    return SECTION_7_9_MD
+
+
+@pytest.fixture(scope="session")
+def section_7_9_raw_text():
+    with open(SECTION_7_9_MD) as f:
+        return f.read()
+
+
+@pytest.fixture(scope="session")
+def section_7_9_front_matter(section_7_9_raw_text):
+    fm_text, _ = split_front_matter(section_7_9_raw_text)
+    return yaml.safe_load(fm_text)
+
+
+@pytest.fixture(scope="session")
+def section_7_9_yaml_path():
+    return SECTION_7_9_YAML
+
+
+@pytest.fixture(scope="session")
+def section_7_9_yaml_data():
+    with open(SECTION_7_9_YAML) as f:
+        return yaml.safe_load(f)
+
+
+@pytest.fixture(scope="session", params=[
+    "7.9.1-1", "7.9.1-2", "7.9.1-3", "7.9.1-4", "7.9.1-5",
+    "7.9.2.1-1", "7.9.2.1-2", "7.9.2.1-3", "7.9.2.1-4", "7.9.2.1-5", "7.9.2.1-6", "7.9.2.1-7",
+    "7.9.2.2-1", "7.9.3-1", "7.9.3-2", "7.9.3-3", "7.9.3-4", "7.9.3-5",
+])
+def section_7_9_table_rows(request):
     return request.param, read_csv_rows(os.path.join(TABLES_DIR, f"table-{request.param}.csv"))
 
 

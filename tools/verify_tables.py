@@ -36,7 +36,7 @@ from pydantic import ValidationError
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from section_utils import REPO_ROOT, discover_section_md_files, read_csv_rows, split_front_matter  # noqa: E402
-from tr_api.models import AnnexBData, ChannelModelParameterEntry, Section74Data, Section75Data  # noqa: E402
+from tr_api.models import AnnexBData, ChannelModelParameterEntry, Section74Data, Section75Data, Section79Data  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -570,6 +570,154 @@ def verify_annex_b():
 
 
 # ---------------------------------------------------------------------------
+# TR 38.901 section 7.9 (Channel model(s) for ISAC) -- core sub-clauses
+# 7.9.0-7.9.3 only (7.9.4-7.9.6 deferred). Every one of the 18 CSV/YAML pairs
+# fits the existing verify_table() list-of-entities checker -- no new checker
+# shape needed (same outcome as §7.5 and Annex B). The shared-list tables
+# (sensing_scenarios across 5 CSVs, rcs_model_2 across 6, los_condition across
+# 2) are filtered per CSV, the same pattern as §7.5's per-scenario ZSD/ZOD
+# tables and Annex B's Alternative 1/2 tables.
+#
+# Unlike TR 36.777 (image-embedded) and like §7.4.1/§7.5's big table, §7.9 is
+# modern OMML text, so the HTML formula cross-check *applies* here: every
+# distinctive decimal in the RCS/XPR tables is re-checked against the
+# tag-stripped HTML export. rcs_model_2_k_parameters has no CSV (it's from the
+# bullet list under Eq. 7.9.2-3, not a numbered TR table), so it's YAML-only,
+# validated by the Pydantic model and covered by tests, not by verify_table().
+# ---------------------------------------------------------------------------
+SECTION_7_9_DIR = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models")
+SECTION_7_9_YAML_PATH = os.path.join(SECTION_7_9_DIR, "7.9-isac-channel-model.yaml")
+SECTION_7_9_TABLES_DIR = os.path.join(SECTION_7_9_DIR, "tables")
+
+# Scenario family -> (CSV table number, is the two-value Human table?)
+_SCENARIO_TABLES = {
+    "UAV": ("7.9.1-1", False),
+    "Automotive": ("7.9.1-2", False),
+    "Human": ("7.9.1-3", True),
+    "AGV": ("7.9.1-4", False),
+    "Objects-creating-hazards": ("7.9.1-5", False),
+}
+# RCS model 2 target -> CSV table number
+_RCS2_TABLES = {
+    "UAV with large size": "7.9.2.1-2",
+    "Human with RCS model 2": "7.9.2.1-3",
+    "Vehicle with single scattering point": "7.9.2.1-4",
+    "Vehicle with multiple scattering points": "7.9.2.1-5",
+    "AGV with single scattering point": "7.9.2.1-6",
+    "AGV with multiple scattering points": "7.9.2.1-7",
+}
+_RCS2_FIELDS = ("phi_center_deg", "phi_3db_deg", "theta_center_deg", "theta_3db_deg",
+                "g_max", "sigma_max", "range_theta_deg", "range_phi_deg",
+                "lg_sigma_m_dbsm", "sigma_sigmaS_db")
+
+
+def verify_section_7_9():
+    errors = []
+
+    with open(SECTION_7_9_YAML_PATH) as f:
+        data = yaml.safe_load(f)
+
+    try:
+        Section79Data(**data)
+    except ValidationError as exc:
+        errors.append(f"{SECTION_7_9_YAML_PATH}: schema validation failed:\n{exc}")
+        return errors
+
+    # 7.9.1 scenario tables (one CSV per family; Human has indoor/outdoor columns)
+    for stype, (tnum, is_human) in _SCENARIO_TABLES.items():
+        rows = [e for e in data["sensing_scenarios"] if e["scenario_type"] == stype]
+        field_map = (
+            {"indoor_value": ("indoor_value", identity), "outdoor_value": ("outdoor_value", identity)}
+            if is_human else {"value": ("value", identity)}
+        )
+        errors += verify_table(
+            os.path.join(SECTION_7_9_TABLES_DIR, f"table-{tnum}.csv"),
+            rows, key_fields=("parameter",), field_map=field_map,
+        )
+
+    # 7.9.2.1-1 RCS model 1
+    errors += verify_table(
+        os.path.join(SECTION_7_9_TABLES_DIR, "table-7.9.2.1-1.csv"),
+        data["rcs_model_1"], key_fields=("sensing_target",),
+        field_map={"lg_sigma_m_dbsm": ("lg_sigma_m_dbsm", identity), "sigma_sigmaS_db": ("sigma_sigmaS_db", identity)},
+    )
+
+    # 7.9.2.1-2..7 RCS model 2 (one CSV per target)
+    for target, tnum in _RCS2_TABLES.items():
+        rows = [e for e in data["rcs_model_2"] if e["target"] == target]
+        errors += verify_table(
+            os.path.join(SECTION_7_9_TABLES_DIR, f"table-{tnum}.csv"),
+            rows, key_fields=("scattering_point",),
+            field_map={f: (f, identity) for f in _RCS2_FIELDS},
+        )
+
+    # 7.9.2.2-1 XPR
+    errors += verify_table(
+        os.path.join(SECTION_7_9_TABLES_DIR, "table-7.9.2.2-1.csv"),
+        data["xpr"], key_fields=("target",),
+        field_map={"mu_xpr_db": ("mu_xpr_db", identity), "sigma_xpr_db": ("sigma_xpr_db", identity)},
+    )
+
+    # 7.9.3-1 reference channel models
+    errors += verify_table(
+        os.path.join(SECTION_7_9_TABLES_DIR, "table-7.9.3-1.csv"),
+        data["reference_channel_models"], key_fields=("case",),
+        field_map={"tx": ("tx", identity), "rx": ("rx", identity), "reference_tr": ("reference_tr", identity)},
+    )
+    # 7.9.3-2 target channel links
+    errors += verify_table(
+        os.path.join(SECTION_7_9_TABLES_DIR, "table-7.9.3-2.csv"),
+        data["target_channel_links"], key_fields=("stx_srx", "target"),
+        field_map={"case": ("case", identity)},
+    )
+    # 7.9.3-3 background channel links
+    errors += verify_table(
+        os.path.join(SECTION_7_9_TABLES_DIR, "table-7.9.3-3.csv"),
+        data["background_channel_links"], key_fields=("stx_srx", "srx_stx"),
+        field_map={"case": ("case", identity)},
+    )
+    # 7.9.3-4/5 LOS condition determination (one CSV per case)
+    for case, tnum in [("7", "7.9.3-4"), ("9", "7.9.3-5")]:
+        rows = [e for e in data["los_condition_determination"] if e["case"] == case]
+        errors += verify_table(
+            os.path.join(SECTION_7_9_TABLES_DIR, f"table-{tnum}.csv"),
+            rows, key_fields=("reference_scenario",),
+            field_map={"applicability_range": ("applicability_range", identity)},
+        )
+
+    if os.path.isfile(SOURCE_HTML):
+        # §7.9's RCS/XPR tables are OMML text (confirmed: 332 m:oMath / 1 OLE
+        # across the clause), so -- unlike TR 36.777 -- the HTML export is a
+        # real third source. Cross-check every *distinctive decimal* value
+        # (bare small integers and angle-range brackets are excluded: they'd
+        # match trivially and add no signal) from rcs_model_1/rcs_model_2/xpr
+        # against the tag-stripped HTML for the RCS-tables render region.
+        if html_region_has_text_formulas(SOURCE_HTML, "Parameters on RCS for the STs", "Channel model for STX-ST"):
+            decimals = set()
+            for e in data["rcs_model_1"]:
+                decimals |= {e["lg_sigma_m_dbsm"], e["sigma_sigmaS_db"]}
+            for e in data["rcs_model_2"]:
+                decimals |= {e[f] for f in _RCS2_FIELDS if "." in str(e[f])}
+            for e in data["xpr"]:
+                decimals |= {e["mu_xpr_db"], e["sigma_xpr_db"]}
+            distinctive = [v for v in decimals if "." in str(v)]
+            mismatches = check_formulas_against_html(
+                SOURCE_HTML,
+                start_text="Parameters on RCS for the STs",
+                end_text="Channel model for STX-ST",
+                formulas=distinctive,
+            )
+            for value, missing in mismatches:
+                errors.append(f"RCS/XPR value cross-check: numbers {missing} from {value!r} not found in HTML export")
+        else:
+            print("  (unexpected: §7.9 HTML region has no OMML text -- RCS/XPR cross-check skipped)")
+    else:
+        print(f"  (skipping HTML formula cross-check: {SOURCE_HTML} not present locally)")
+
+    return errors
+
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 def main():
@@ -585,6 +733,7 @@ def main():
     checkers = {
         ("TR 38.901", "7.4"): verify_section_7_4,
         ("TR 38.901", "7.5"): verify_section_7_5,
+        ("TR 38.901", "7.9"): verify_section_7_9,
         ("TR 36.777", "Annex B"): verify_annex_b,
     }
 

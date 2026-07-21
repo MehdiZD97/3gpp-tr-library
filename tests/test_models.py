@@ -12,8 +12,12 @@ from tr_api.models import (
     Alternative1DesiredParametersEntry,
     Alternative2ModifiedParameterEntry,
     ChannelModelParameterEntry,
+    LosConditionEntry,
     PathlossDeltaEntry,
     PathlossEntry,
+    RcsModel2Entry,
+    SensingScenarioParameter,
+    XprEntry,
     ZsdZodOffsetEntry,
 )
 
@@ -165,3 +169,58 @@ def test_alternative_2_entry_invalid_parameter_rejected():
         Alternative2ModifiedParameterEntry(
             scenario="UMa-AV", parameter="NOTAPARAM", condition="LOS", mu="x", sigma="y",
         )
+
+
+# --- TR 38.901 §7.9 (ISAC) models ---
+def _valid_rcs2_kwargs(**overrides):
+    kwargs = dict(
+        target="Vehicle with single scattering point", scattering_point="Front",
+        phi_center_deg="0", phi_3db_deg="40.54", theta_center_deg="71.75", theta_3db_deg="29.13",
+        g_max="15.52", sigma_max="8.45", range_theta_deg="[30,180]", range_phi_deg="[-45, 45)",
+        lg_sigma_m_dbsm="11.25", sigma_sigmaS_db="3.41",
+    )
+    kwargs.update(overrides)
+    return kwargs
+
+
+def test_valid_rcs_model_2_entry_validates():
+    entry = RcsModel2Entry(**_valid_rcs2_kwargs())
+    assert entry.scattering_point == "Front"
+    assert entry.phi_3db_deg == "40.54"
+    assert entry.range_phi_deg == "[-45, 45)"
+
+
+def test_rcs_model_2_entry_missing_field_rejected():
+    kwargs = _valid_rcs2_kwargs()
+    del kwargs["g_max"]
+    with pytest.raises(ValidationError):
+        RcsModel2Entry(**kwargs)
+
+
+def test_valid_sensing_scenario_single_and_human():
+    single = SensingScenarioParameter(scenario_type="UAV", parameter="LOS/NLOS", value="LOS and NLOS")
+    assert single.value == "LOS and NLOS" and single.indoor_value is None
+    human = SensingScenarioParameter(
+        scenario_type="Human", parameter="Outdoor/indoor", indoor_value="Indoor", outdoor_value="Outdoor",
+    )
+    assert human.value is None and human.indoor_value == "Indoor"
+
+
+def test_sensing_scenario_invalid_family_rejected():
+    with pytest.raises(ValidationError):
+        SensingScenarioParameter(scenario_type="Spaceship", parameter="x", value="y")
+
+
+def test_valid_xpr_entry_validates():
+    entry = XprEntry(target="UAV", mu_xpr_db="13.75", sigma_xpr_db="7.07")
+    assert entry.mu_xpr_db == "13.75"
+
+
+def test_los_condition_entry_invalid_case_rejected():
+    with pytest.raises(ValidationError):
+        LosConditionEntry(case="8", reference_scenario="x", applicability_range="y")
+
+
+def test_valid_los_condition_entry():
+    entry = LosConditionEntry(case="9", reference_scenario="LOS probability is 100%", applicability_range="...")
+    assert entry.case == "9"

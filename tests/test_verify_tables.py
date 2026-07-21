@@ -115,3 +115,16 @@ def test_html_region_check_matches_real_tr36777_when_present():
 
         pytest.skip("TR 36.777 HTML not present locally (gitignored)")
     assert html_region_has_text_formulas(html, "Channel modelling details", "Calibration results and RSRP") is False
+
+
+def test_section_7_9_html_region_is_omml_text_when_present():
+    # The mirror of the TR 36.777 case: §7.9 (Rel-19, 2026) renders equations
+    # as OMML *text*, so the RCS/XPR HTML cross-check in verify_section_7_9()
+    # *applies* here rather than skipping. Confirm the helper agrees, using the
+    # same region markers verify_section_7_9() uses.
+    html = os.path.join(REPO_ROOT, "references", "3gpp-tr38901", "v19.4.0", "38901-j40.html")
+    if not os.path.isfile(html):
+        import pytest
+
+        pytest.skip("TR 38.901 HTML not present locally (gitignored)")
+    assert html_region_has_text_formulas(html, "Parameters on RCS for the STs", "Channel model for STX-ST") is True

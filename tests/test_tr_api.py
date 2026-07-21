@@ -49,7 +49,7 @@ def test_section_lookup_for_unprocessed_section_raises_informative_error():
         tr38901.section("7.6")
     message = str(exc_info.value)
     assert "7.6" in message
-    assert "7.4" in message and "7.5" in message  # lists what *is* processed
+    assert "7.4" in message and "7.5" in message and "7.9" in message  # lists what *is* processed
 
 
 def test_section_lookup_for_unknown_version_raises_informative_error():
@@ -97,6 +97,58 @@ def test_both_sections_usable_from_same_import():
     lsp = tr38901.section("7.5").channel_model_parameters(scenario="RMa", condition="LOS")
     assert type(pathloss).__name__ == "PathlossEntry"
     assert type(lsp).__name__ == "ChannelModelParameterEntry"
+
+
+# ---------------------------------------------------------------------------
+# TR 38.901 §7.9 (Channel model(s) for ISAC) -- the third §-section, registered
+# via the same one-line _SECTION_REGISTRY + shared TRLoader (no loader change).
+# ---------------------------------------------------------------------------
+def test_known_good_rcs_model_2_lookup_returns_expected_typed_value():
+    entry = tr38901.section("7.9").rcs_model_2(
+        target="Vehicle with single scattering point", scattering_point="Front"
+    )
+    assert entry.phi_3db_deg == "40.54"
+    assert entry.lg_sigma_m_dbsm == "11.25"
+    assert type(entry).__name__ == "RcsModel2Entry"
+
+
+def test_rcs_model_1_and_xpr_lookups():
+    assert tr38901.section("7.9").rcs_model_1(target="UAV with small size").lg_sigma_m_dbsm == "-12.81"
+    assert tr38901.section("7.9").xpr(target="Vehicle").mu_xpr_db == "21.12"
+
+
+def test_reference_channel_model_and_los_condition_lookups():
+    assert tr38901.section("7.9").reference_channel_model(case="4").rx == "aerial UE"
+    rows = tr38901.section("7.9").los_condition(case="9")
+    assert isinstance(rows, list) and len(rows) == 4
+
+
+def test_section_7_9_small_table_accessors():
+    section = tr38901.section("7.9")
+    assert len(section.sensing_scenarios) == 53
+    assert len(section.rcs_model_2_k_parameters) == 4
+    assert len(section.target_channel_links) == 18
+    assert len(section.background_channel_links) == 16
+
+
+def test_rcs_model_2_lookup_for_missing_target_raises_informative_error():
+    with pytest.raises(ScenarioNotFoundError) as exc_info:
+        tr38901.section("7.9").rcs_model_2(target="Spaceship", scattering_point="Front")
+    message = str(exc_info.value)
+    assert "Spaceship" in message and "Available" in message
+
+
+def test_los_condition_for_missing_case_raises_informative_error():
+    with pytest.raises(ScenarioNotFoundError) as exc_info:
+        tr38901.section("7.9").los_condition(case="42")
+    assert "42" in str(exc_info.value)
+
+
+def test_all_three_sections_usable_from_same_import():
+    # §7.4/§7.5's surfaces must survive §7.9's registry addition unchanged.
+    assert type(tr38901.section("7.4").pathloss(scenario="RMa", condition="LOS")).__name__ == "PathlossEntry"
+    assert type(tr38901.section("7.5").channel_model_parameters(scenario="RMa", condition="LOS")).__name__ == "ChannelModelParameterEntry"
+    assert type(tr38901.section("7.9").xpr(target="UAV")).__name__ == "XprEntry"
 
 
 # ---------------------------------------------------------------------------

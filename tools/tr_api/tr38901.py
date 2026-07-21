@@ -23,6 +23,12 @@ Python API for TR 38.901's processed sections.
 
     notations = tr38901.section("7.5").notations   # Table 7.5-1
 
+    isac = tr38901.section("7.9")                     # Channel model(s) for ISAC (Rel-19)
+    isac.rcs_model_2(target="Vehicle with single scattering point", scattering_point="Front")
+    isac.xpr(target="UAV").mu_xpr_db                  # "13.75"
+    isac.reference_channel_model(case="4").reference_tr
+    isac.los_condition(case="9")                      # list of Table 7.9.3-5 rows
+
 `section()` is cached per (section_id, version) via the shared TRLoader --
 repeated calls don't re-read or re-validate the YAML. Each registered
 section id maps to its own data file, Pydantic model, and accessor class:
@@ -38,23 +44,36 @@ from typing import Optional
 # Re-exported for backwards compatibility: callers import these from here.
 from ._loader import ScenarioNotFoundError, SectionNotFoundError, TRLoader
 from .models import (
+    BackgroundChannelLinkEntry,
     ChannelModelParameterEntry,
+    LosConditionEntry,
     LosProbabilityEntry,
     NotationEntry,
     O2IPenetrationLoss,
     PathlossEntry,
     RayOffsetAngle,
+    RcsModel1Entry,
+    RcsModel2Entry,
+    RcsModel2KParameter,
+    ReferenceChannelModelEntry,
     ScalingFactorEntry,
     Section74Data,
     Section75Data,
+    Section79Data,
+    SensingScenarioParameter,
     ShadowFadingAutocorrelation,
     SubClusterInfo,
+    TargetChannelLinkEntry,
+    XprEntry,
     ZsdZodOffsetEntry,
 )
 
 DEFAULT_VERSION = "v19.4.0"
 
-__all__ = ["section", "Section74", "Section75", "ScenarioNotFoundError", "SectionNotFoundError", "DEFAULT_VERSION"]
+__all__ = [
+    "section", "Section74", "Section75", "Section79",
+    "ScenarioNotFoundError", "SectionNotFoundError", "DEFAULT_VERSION",
+]
 
 
 class Section74:
@@ -149,12 +168,94 @@ class Section75:
         return self._data.sub_cluster_info
 
 
+class Section79:
+    """TR 38.901 §7.9 (Channel model(s) for ISAC).
+
+    Covers the processed core sub-clauses 7.9.0-7.9.3 (scenarios, physical
+    object / RCS model, reference channel model mapping). 7.9.4 (fast fading),
+    7.9.5 (additional components) and 7.9.6 (calibration) are not processed
+    yet -- a follow-up session will add them.
+    """
+
+    def __init__(self, section_id: str, version: str, data: Section79Data):
+        self.section_id = section_id
+        self.version = version
+        self._data = data
+
+    def rcs_model_1(self, *, target: str) -> RcsModel1Entry:
+        for entry in self._data.rcs_model_1:
+            if entry.sensing_target == target:
+                return entry
+        available = [e.sensing_target for e in self._data.rcs_model_1]
+        raise ScenarioNotFoundError(
+            f"No RCS model 1 entry for target={target!r} in TR 38.901 §{self.section_id} "
+            f"({self.version}). Available targets: {available}"
+        )
+
+    def rcs_model_2(self, *, target: str, scattering_point: str) -> RcsModel2Entry:
+        for entry in self._data.rcs_model_2:
+            if entry.target == target and entry.scattering_point == scattering_point:
+                return entry
+        available = [(e.target, e.scattering_point) for e in self._data.rcs_model_2]
+        raise ScenarioNotFoundError(
+            f"No RCS model 2 entry for target={target!r}, scattering_point={scattering_point!r} "
+            f"in TR 38.901 §{self.section_id} ({self.version}). Available (target, scattering_point): {available}"
+        )
+
+    def xpr(self, *, target: str) -> XprEntry:
+        for entry in self._data.xpr:
+            if entry.target == target:
+                return entry
+        available = [e.target for e in self._data.xpr]
+        raise ScenarioNotFoundError(
+            f"No XPR entry for target={target!r} in TR 38.901 §{self.section_id} "
+            f"({self.version}). Available targets: {available}"
+        )
+
+    def reference_channel_model(self, *, case: str) -> ReferenceChannelModelEntry:
+        for entry in self._data.reference_channel_models:
+            if entry.case == str(case):
+                return entry
+        available = [e.case for e in self._data.reference_channel_models]
+        raise ScenarioNotFoundError(
+            f"No reference channel model for case={case!r} in TR 38.901 §{self.section_id} "
+            f"({self.version}). Available cases: {available}"
+        )
+
+    def los_condition(self, *, case: str) -> list[LosConditionEntry]:
+        matches = [e for e in self._data.los_condition_determination if e.case == str(case)]
+        if not matches:
+            available = sorted({e.case for e in self._data.los_condition_determination})
+            raise ScenarioNotFoundError(
+                f"No LOS condition rows for case={case!r} in TR 38.901 §{self.section_id} "
+                f"({self.version}). Available cases: {available}"
+            )
+        return matches
+
+    @property
+    def sensing_scenarios(self) -> list[SensingScenarioParameter]:
+        return self._data.sensing_scenarios
+
+    @property
+    def rcs_model_2_k_parameters(self) -> list[RcsModel2KParameter]:
+        return self._data.rcs_model_2_k_parameters
+
+    @property
+    def target_channel_links(self) -> list[TargetChannelLinkEntry]:
+        return self._data.target_channel_links
+
+    @property
+    def background_channel_links(self) -> list[BackgroundChannelLinkEntry]:
+        return self._data.background_channel_links
+
+
 # Registry: section id -> (YAML path relative to TR-38.901/<version>/, the
 # Pydantic model that validates the whole file, the accessor class wrapping
 # it). Adding a processed section means adding one line here.
 _SECTION_REGISTRY = {
     "7.4": ("07-channel-models/7.4-pathloss.yaml", Section74Data, Section74),
     "7.5": ("07-channel-models/7.5-fast-fading.yaml", Section75Data, Section75),
+    "7.9": ("07-channel-models/7.9-isac-channel-model.yaml", Section79Data, Section79),
 }
 
 _loader = TRLoader("TR-38.901", "TR 38.901", DEFAULT_VERSION, _SECTION_REGISTRY)

@@ -316,3 +316,135 @@ class AnnexBData(BaseModel):
     fast_fading_model_selection: List[FastFadingModelSelectionEntry]
     alternative_1_desired_parameters: List[Alternative1DesiredParametersEntry]
     alternative_2_modified_parameters: List[Alternative2ModifiedParameterEntry]
+
+
+# ---------------------------------------------------------------------------
+# TR 38.901 section 7.9 (Channel model(s) for ISAC) -- the Rel-19 Integrated
+# Sensing and Communication channel model. These models cover the *core*
+# processed sub-clauses (7.9.0-7.9.3): scenarios, the physical-object/RCS
+# model, and the reference-channel-model mapping. 7.9.4 (fast fading),
+# 7.9.5 (additional components), and 7.9.6 (calibration) are deferred to a
+# follow-up "Phase 7 continued" session and have no models here yet.
+#
+# Every field is `str`, like §7.5/Annex B: the RCS tables mix bare numbers,
+# "-" placeholders, and angle-range brackets ("[45,135)"), and the scenario
+# tables carry multi-line descriptive values -- none of it is uniformly
+# float-typed. Named for what they actually are (RCS, XPR, sensing scenarios,
+# reference-channel links), not contorted onto §7.4/§7.5 shapes -- the section
+# is a genuinely new data shape (this matters for Phase 8's introspection
+# layer, which will have to generalize over it).
+# ---------------------------------------------------------------------------
+class SensingScenarioParameter(BaseModel):
+    """One evaluation-parameter row of a §7.9.1 scenario table (7.9.1-1..5).
+
+    Single-value tables (UAV/Automotive/AGV/Objects) fill `value`; the Human
+    table (7.9.1-3) splits into `indoor_value`/`outdoor_value` instead.
+    """
+
+    scenario_type: Literal["UAV", "Automotive", "Human", "AGV", "Objects-creating-hazards"]
+    parameter: str
+    value: Optional[str] = None
+    indoor_value: Optional[str] = None
+    outdoor_value: Optional[str] = None
+
+
+class RcsModel1Entry(BaseModel):
+    """One row of Table 7.9.2.1-1 (angular-independent monostatic RCS: UAV small / human)."""
+
+    sensing_target: str
+    lg_sigma_m_dbsm: str
+    sigma_sigmaS_db: str
+
+
+class RcsModel2Entry(BaseModel):
+    """One scattering-point row of an RCS model 2 table (Tables 7.9.2.1-2..7).
+
+    `target` distinguishes the six tables (UAV-large / human / vehicle- and
+    AGV-single/multiple); `scattering_point` is the aspect (Front/Left/...).
+    """
+
+    target: str
+    scattering_point: str
+    phi_center_deg: str
+    phi_3db_deg: str
+    theta_center_deg: str
+    theta_3db_deg: str
+    g_max: str
+    sigma_max: str
+    range_theta_deg: str
+    range_phi_deg: str
+    lg_sigma_m_dbsm: str
+    sigma_sigmaS_db: str
+
+
+class RcsModel2KParameter(BaseModel):
+    """The (k1, k2) shape parameters for RCS model 2, per target (from Eq. 7.9.2-3).
+
+    Not a numbered TR table -- these live in the bullet list under the
+    equation -- so there is no CSV for this key, only YAML + the section .md.
+    """
+
+    target: str
+    k1: str
+    k2: str
+
+
+class XprEntry(BaseModel):
+    """One row of Table 7.9.2.2-1 (cross-polarization ratio, per target type)."""
+
+    target: str
+    mu_xpr_db: str
+    sigma_xpr_db: str
+
+
+class ReferenceChannelModelEntry(BaseModel):
+    """One Case (1-13) row of Table 7.9.3-1: the reference TR(s) for a Tx/Rx pair."""
+
+    case: str
+    tx: str
+    rx: str
+    reference_tr: str
+
+
+class TargetChannelLinkEntry(BaseModel):
+    """One (STX/SRX, target) row of Table 7.9.3-2: which Case defines the ST link."""
+
+    stx_srx: str
+    target: str
+    case: str
+
+
+class BackgroundChannelLinkEntry(BaseModel):
+    """One (STX/SRX, SRX/STX) row of Table 7.9.3-3: which Case defines the background link."""
+
+    stx_srx: str
+    srx_stx: str
+    case: str
+
+
+class LosConditionEntry(BaseModel):
+    """One row of Table 7.9.3-4 (Case 7) or 7.9.3-5 (Case 9), distinguished by `case`.
+
+    `applicability_range` is the aerial-UE height condition -- OMML in the docx
+    that python-docx drops, so it's PDF-visual-primary (see the section .md's
+    verification note); `reference_scenario` is two-source (docx + PDF).
+    """
+
+    case: Literal["7", "9"]
+    reference_scenario: str
+    applicability_range: str
+
+
+class Section79Data(BaseModel):
+    """The full validated shape of a `7.9-isac-channel-model.yaml`-style file
+    (core sub-clauses 7.9.0-7.9.3 only; 7.9.4-7.9.6 deferred)."""
+
+    sensing_scenarios: List[SensingScenarioParameter]
+    rcs_model_1: List[RcsModel1Entry]
+    rcs_model_2: List[RcsModel2Entry]
+    rcs_model_2_k_parameters: List[RcsModel2KParameter]
+    xpr: List[XprEntry]
+    reference_channel_models: List[ReferenceChannelModelEntry]
+    target_channel_links: List[TargetChannelLinkEntry]
+    background_channel_links: List[BackgroundChannelLinkEntry]
+    los_condition_determination: List[LosConditionEntry]

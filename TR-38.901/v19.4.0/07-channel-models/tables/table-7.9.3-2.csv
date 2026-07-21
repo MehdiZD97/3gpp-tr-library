@@ -1,0 +1,19 @@
+stx_srx,target,case
+TRP,UAV,Case 4: TRP-Aerial UE link
+TRP,Human,Case 2: TRP- terrestrial UE link
+TRP,Vehicle,Case 3: TRP-Vehicle UE link
+TRP,AGV,Case 2: TRP- terrestrial UE link
+TRP,Object (Hazard),Case 2: TRP- terrestrial UE link
+Terrestrial UE,UAV,Case 7: terrestrial UE - Aerial UE link
+Terrestrial UE,Human,Case 5: terrestrial UE- terrestrial UE link
+Terrestrial UE,Vehicle,Case 6: terrestrial UE - Vehicle UE link
+Terrestrial UE,AGV,Case 5: terrestrial UE- terrestrial UE link
+Terrestrial UE,Object (Hazard),Case 5: terrestrial UE- terrestrial UE link
+Vehicle UE,Human,Case 6: terrestrial UE - Vehicle UE link
+Vehicle UE,Vehicle,Case 8: Vehicle UE - Vehicle UE link
+Vehicle UE,Object (Hazard),Case 6: terrestrial UE - Vehicle UE link
+Aerial UE,UAV,Case 9: Aerial UE - Aerial UE link
+AGV UE,AGV,Case 5: terrestrial UE - terrestrial UE link
+RSU-type UE,Human,Case 11: RSU-type UE - terrestrial UE link
+RSU-type UE,Vehicle,Case 13: RSU-type UE - vehicle UE link
+RSU-type UE,Object (Hazard),Case 11: RSU-type UE - terrestrial UE link

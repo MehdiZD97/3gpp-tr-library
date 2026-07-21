@@ -1,0 +1,28 @@
+parameter,value
+Applicable communication scenarios,"UMi, UMa, RMa, SMa 
+UMi-AV, UMa-AV, RMa-AV [36.777]"
+STX/SRX Locations,"STX/SRX locations are selected among the TRPs and UEs locations in the corresponding communication scenarios.
+see note 1"
+LOS/NLOS,LOS and NLOS
+Outdoor/indoor,Outdoor
+3D mobility,"Horizontal velocity: uniform distribution between 0 and 180km/h, if horizontal velocity is not fixed to 0. 
+
+Vertical velocity: 0km/h, optional {20, 40} km/h
+see note 2 and 3"
+3D distribution,"Horizontal plane: 
+Option A: N targets uniformly distributed within one cell. 
+Option B: N targets uniformly distributed per cell. 
+Option C: N targets uniformly distributed within an area not necessarily determined by cell boundaries.
+N = {1, 2, 3, 4, 5}
+see note 4
+
+Vertical plane: 
+Option A: Uniform between 1.5m and 300m.
+Option B: Fixed height value chosen from {25, 50, 100, 200, 300} m assuming vertical velocity is equal to 0."
+Orientation,Random in horizontal domain
+"Physical characteristics (e.g., size)","Size:
+Option 1: 1.6m x 1.5m x 0.7m 
+Option 2: 0.3m x 0.4m x 0.2m"
+Minimum 3D distances between STX/SRX and sensing target,Min distances based on min TRP/UE distances defined in TR36.777.
+Minimum 3D distance between sensing targets,"Option 1: At least larger than the physical size of a target
+Option 2: 10 meters"
