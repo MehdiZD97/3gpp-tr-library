@@ -77,7 +77,7 @@ def test_delta_tables_have_terrestrial_baseline_and_aerial_rows(annex_b_yaml_dat
 # referencing baseline formulas by name. This repo has processed those very
 # TR 38.901 sections (§7.4, §7.5), so we can verify the baselines Annex B
 # names actually exist in the committed TR-38.901 data -- a consistency
-# check the repo is uniquely positioned to do (finding 2 in the phase plan).
+# check the repo is uniquely positioned to do.
 # ---------------------------------------------------------------------------
 def _load_tr38901(section_file):
     path = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", section_file)

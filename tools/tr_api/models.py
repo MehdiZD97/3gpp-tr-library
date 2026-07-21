@@ -146,9 +146,10 @@ class SubClusterInfo(BaseModel):
 class ChannelModelParameterEntry(BaseModel):
     """
     One scenario/condition column of Table 7.5-6 -- the master large-scale
-    parameter table. Field names match the YAML/CSV keys; see
-    `docs/phase-plans/phase-4-tasks.md` and `7.5-fast-fading.md`'s own note
-    on why almost everything here is `str` rather than `float`.
+    parameter table. Field names match the YAML/CSV keys. Almost everything
+    here is `str` rather than `float` because many of the table's cells are
+    carrier-frequency-dependent formulas or "N/A", not bare numbers (see
+    `7.5-fast-fading.md`'s own note).
     """
 
     scenario: str

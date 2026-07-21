@@ -1,18 +1,16 @@
 """
 Genuine automated drift detection for formula *content* (test_source_reparse.py
-covers structure). Promoted from the ad hoc cross-check first done in
-_scratch/extract_full.py during Phase 2: tag-strip the HTML export's OMML
-equation markup and confirm every numeric constant in the committed pathloss
-formulas is still present.
+covers structure): tag-strip the HTML export's OMML equation markup and
+confirm every numeric constant in the committed pathloss formulas is still
+present.
 
 Scoped to Table 7.4.1-1 (`pathloss`) only -- confirmed by direct inspection
 that its formulas are uniformly genuine OMML text in the HTML (0 OLEObject /
 324 m:oMath in that region), unlike Table 7.4.2-1 (`los_probability`), which
 mixes text-recoverable and image-embedded (OLEObject/.wmz) equations. See
-`tools/verify_tables.py`'s comment on this for the full reasoning, and
-CLAUDE.md / the Phase 3 completion report for the finding that three
-los_probability entries currently have single-source (PDF visual) coverage
-only.
+`tools/verify_tables.py`'s comment on this for the full reasoning; those
+three image-embedded los_probability entries currently have single-source
+(PDF visual) coverage only.
 
 Skips cleanly if the (gitignored, not-committed) reference source isn't
 present, since references/ is never available in a fresh clone or CI.

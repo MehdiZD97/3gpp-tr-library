@@ -13,4 +13,4 @@
 
 ## Role in this repo
 
-Reference/verification material for ISAC calibration parameters, relevant when processing TR 36.777 Annex B. Contains the moderator's summary document plus the large-scale and full-scale calibration result spreadsheets submitted by participating companies (25+), organized by target/scenario (AGV, automotive, EO, human indoor/outdoor, UAV, spatial consistency). Treated as reference-only rather than a target for the `TR-<number>/` structured extraction pipeline — see `CLAUDE.md` for the open question on whether this ever gets its own structured treatment.
+Reference material only: ISAC calibration results, kept alongside the processed TRs but not run through the structured `TR-<number>/` extraction pipeline. Contains the moderator's summary document plus the large-scale and full-scale calibration result spreadsheets submitted by participating companies (25+), organized by target/scenario (AGV, automotive, EO, human indoor/outdoor, UAV, spatial consistency).

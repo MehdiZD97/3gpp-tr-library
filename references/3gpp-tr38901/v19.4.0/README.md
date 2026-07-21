@@ -11,4 +11,4 @@
 
 ## Role in this repo
 
-This is the core document for the library. It's the primary source for the channel-modeling sections being processed first — §7.4 (path loss), §7.5 (fast fading), and §7.6 (spatial consistency) — prioritized for ongoing CORDIS research needs.
+The core document for the library and its primary focus. Processed so far: §7.4 (pathloss, LOS probability, penetration) and §7.5 (fast fading); §7.6 (spatial consistency) is planned. See `INDEX.md` at the repo root for live status.

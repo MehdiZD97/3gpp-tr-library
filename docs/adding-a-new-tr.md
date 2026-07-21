@@ -115,8 +115,8 @@ The TR-agnostic load/validate/cache machinery lives in
 
 Then expose the module in `tools/tr_api/__init__.py` and add a usage block to
 `tools/tr_api/README.md`. **Do not break existing import paths** (e.g.
-`from tr_api import tr38901`) — CORDIS code may already use them; confirm with
-`tests/test_tr_api.py` after any loader change.
+`from tr_api import tr38901`) — downstream simulation code may already depend
+on them; confirm with `tests/test_tr_api.py` after any loader change.
 
 ## 7. `tools/verify_tables.py`
 
@@ -152,6 +152,6 @@ Then expose the module in `tools/tr_api/__init__.py` and add a usage block to
 ## 9. Finish
 
 Update `INDEX.md` (a new row; confirm the format handles a lettered annex /
-second TR cleanly), update `CLAUDE.md`'s phase status and directory layout,
-and — per the repo rules — **do not commit**; report what you'd commit and
-wait for the go-ahead.
+second TR cleanly), then open a pull request against `main` describing what
+you added and which source format(s) you verified it against (see
+[`CONTRIBUTING.md`](CONTRIBUTING.md)). Keep the PR scoped to one TR/section.

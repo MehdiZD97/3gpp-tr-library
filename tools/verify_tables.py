@@ -10,15 +10,15 @@ Two generic checkers cover the real data shapes found in this repo so far:
   a single YAML dict (e.g. Table 7.4.3-3).
 
 These are deliberately two functions, not one contorted abstraction --
-`o2i_penetration_loss` alone has four different sub-shapes (see
-`docs/phase-plans/phase-3-tasks.md`), and forcing all of them through one
-generic shape would be a worse abstraction than two honest ones.
+`o2i_penetration_loss` alone has four different sub-shapes, and forcing all
+of them through one generic shape would be a worse abstraction than two
+honest ones.
 
-Also home to `check_formulas_against_html()`, the promoted version of the
-HTML-based formula cross-check first proven ad hoc in
-`_scratch/extract_full.py` during Phase 2 (see CLAUDE.md's references/
-notes on why the HTML export -- not just the docx -- is needed for formula
-content).
+Also home to `check_formulas_against_html()`, the HTML-based formula
+cross-check. For TR 38.901 the docx's formula-bearing table cells return
+empty text (they're embedded equation objects), but the HTML export carries
+the same equations as recoverable OMML text -- so the HTML is a genuine
+second source for formula content, not just a structural tiebreaker.
 
 CLI usage: `python tools/verify_tables.py` discovers every processed
 section, validates its YAML against the Pydantic models in
@@ -288,11 +288,9 @@ def verify_section_7_4():
         # los_probability would produce misleading passes (a formula's
         # digits coincidentally appearing elsewhere in the region) as often
         # as real signal, so it's intentionally excluded here rather than
-        # reported as a blanket pass/fail. See CLAUDE.md's references/ notes
-        # and the Phase 3 completion report for the full finding -- those
-        # three entries currently have single-source (PDF visual) coverage
-        # only, which is a real gap flagged for Mehdi to decide on, not
-        # something this tool silently papers over.
+        # reported as a blanket pass/fail -- those three entries currently
+        # have single-source (PDF visual) coverage only, a real gap this
+        # tool doesn't silently paper over.
         mismatches = check_formulas_against_html(
             SOURCE_HTML,
             start_text="Pathloss, LOS probability and penetration modelling",
@@ -312,8 +310,8 @@ def verify_section_7_4():
 #
 # Every §7.5 CSV/YAML shape turned out to fit the existing verify_table()
 # checker -- including Table 7.5-6, the master large-scale-parameter table
-# that docs/phase-plans/phase-4-tasks.md flagged as a likely "cross-
-# correlation matrix" shape needing a third checker. It didn't, because the
+# that looked at first like a "cross-correlation matrix" shape needing a
+# third checker. It didn't, because the
 # YAML/CSV represent it as one row per (scenario, condition) with 49 named
 # fields -- a list-of-entities shape, same as Table 7.4.1-1 -- rather than
 # as a literal 2D matrix. That's a deliberate design choice (it's also the

@@ -3,9 +3,9 @@ Regression guard for §7.5's parameter values. The expected values below were
 manually cross-verified against the rendered PDF (visual read) and, for
 Table 7.5-6, an automated numeric cross-check against the HTML export's
 tag-stripped text (0 of 826 checked field values missing -- see the
-section's `verified_against` front matter field and CLAUDE.md's Phase 4
-notes). This test's job is to catch *future* drift from these
-already-verified numbers, not to re-derive them.
+section's `verified_against` front matter field). This test's job is to
+catch *future* drift from these already-verified numbers, not to re-derive
+them.
 
 Table 7.5-6 has 16 scenario/condition entries x 49 parameter fields --
 too much to usefully hardcode in full here (that would just duplicate the

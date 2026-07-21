@@ -11,4 +11,4 @@
 
 ## Role in this repo
 
-Processed specifically for **Annex B (Channel modelling details)**, needed for ISAC-related research. Cross-verified where relevant against the calibration data in `references/3gpp-R1-2509126/`.
+Processed for **Annex B (Channel modelling details)** — the aerial-UE (drone) channel model, expressed as height-dependent modifications to TR 38.901's UMa/UMi/RMa models. Note: reference "[4]" throughout Annex B is TR 38.901 **V14.0.0** (2017), an earlier version than the v19.4.0 processed elsewhere in this repo.
