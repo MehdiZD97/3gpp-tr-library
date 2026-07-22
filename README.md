@@ -1,7 +1,15 @@
+<div align="center">
+
 # 3gpp-tr-library
 
 [![CI](https://github.com/MehdiZD97/3gpp-tr-library/actions/workflows/ci.yml/badge.svg)](https://github.com/MehdiZD97/3gpp-tr-library/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![3GPP](https://img.shields.io/badge/Standard-3GPP-006699?style=flat&logo=bookstack)
+![Python](https://img.shields.io/badge/python-3.8+-blue.svg?logo=python&logoColor=white)
+![Last Commit](https://img.shields.io/github/last-commit/MehdiZD97/3gpp-tr-library)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
+
+</div>
 
 **Hand-verified, section-level 3GPP Technical Reports as queryable Markdown + CSV/YAML — and a typed Python API to pull channel-model parameters straight into simulation code.**
 
