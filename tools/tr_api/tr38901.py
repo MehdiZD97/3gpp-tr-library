@@ -75,14 +75,32 @@ from .models import (
 
 DEFAULT_VERSION = "v19.4.0"
 
+# The access verb / unit noun for this TR, read by tr_api.introspect so both
+# TR 38.901's numbered sections and TR 36.777's lettered annexes are described
+# uniformly.
+UNIT_KIND = "section"
+
 __all__ = [
     "section", "Section74", "Section75", "Section79",
+    "list_sections", "describe", "UNIT_KIND",
     "ScenarioNotFoundError", "SectionNotFoundError", "DEFAULT_VERSION",
 ]
 
 
 class Section74:
     """TR 38.901 §7.4 (Pathloss, LOS probability and penetration modelling)."""
+
+    # Minimal explicit metadata the introspection layer (tr_api.introspect)
+    # can't derive from a signature alone: for each lookup method, the data
+    # attribute it queries and how each keyword arg maps to an entry field
+    # (so "what values are available" can be listed). Method names, args,
+    # return types and docs still come from runtime inspection -- this only
+    # fills the field/data-attribute gap. Keep in sync with the methods below
+    # (tests/test_introspect.py's drift guard enforces it).
+    _QUERYABLE = {
+        "pathloss": ("pathloss", {"scenario": "scenario", "condition": "condition", "variant": "variant"}),
+        "los_probability": ("los_probability", {"scenario": "scenario"}),
+    }
 
     def __init__(self, section_id: str, version: str, data: Section74Data):
         self.section_id = section_id
@@ -120,6 +138,15 @@ class Section74:
 
 class Section75:
     """TR 38.901 §7.5 (Fast fading model)."""
+
+    # See Section74._QUERYABLE. zsd_zod_offset reads a Dict[scenario -> table],
+    # not a flat list -- "@keys" tells the introspection layer the `scenario`
+    # arg's available values are that dict's keys (the `condition` arg's come
+    # from the tables' entries).
+    _QUERYABLE = {
+        "channel_model_parameters": ("channel_model_parameters", {"scenario": "scenario", "condition": "condition"}),
+        "zsd_zod_offset": ("zsd_zod_offset_parameters", {"scenario": "@keys", "condition": "condition"}),
+    }
 
     def __init__(self, section_id: str, version: str, data: Section75Data):
         self.section_id = section_id
@@ -183,6 +210,19 @@ class Section79:
     fast-fading equations (7.9.4/7.9.5) live as LaTeX in the section .md, not
     here (procedural, per the §7.5 precedent).
     """
+
+    # See Section74._QUERYABLE. Note rcs_model_1's `target` arg maps to the
+    # `sensing_target` field (arg name != field name), which is exactly why
+    # this mapping can't be inferred from the signature alone.
+    _QUERYABLE = {
+        "rcs_model_1": ("rcs_model_1", {"target": "sensing_target"}),
+        "rcs_model_2": ("rcs_model_2", {"target": "target", "scattering_point": "scattering_point"}),
+        "xpr": ("xpr", {"target": "target"}),
+        "reference_channel_model": ("reference_channel_models", {"case": "case"}),
+        "los_condition": ("los_condition_determination", {"case": "case"}),
+        "background_channel_params": ("background_channel_params", {"sensing_mode": "sensing_mode", "scenario": "scenario"}),
+        "calibration": ("calibration_assumptions", {"table": "table"}),
+    }
 
     def __init__(self, section_id: str, version: str, data: Section79Data):
         self.section_id = section_id
@@ -298,3 +338,21 @@ _loader = TRLoader("TR-38.901", "TR 38.901", DEFAULT_VERSION, _SECTION_REGISTRY)
 def section(section_id: str, version: str = None):
     """Load and validate a processed TR 38.901 section's data (cached per id+version)."""
     return _loader.load(section_id, version)
+
+
+def list_sections(*, detail: bool = False, with_values: bool = False, version: str = None):
+    """Discover the processed TR 38.901 sections (real id + title).
+
+    detail=True also reports each section's callable surface; with_values=True
+    additionally lists the scenarios/targets/... actually available. Returns
+    `introspect.UnitInfo` objects. See `describe()` for a single section.
+    """
+    from . import introspect
+    return introspect.list_units(_loader, UNIT_KIND, "tr38901", detail=detail, with_values=with_values, version=version)
+
+
+def describe(section_id: str, *, with_values: bool = True, version: str = None):
+    """Describe one section's callable surface: methods, their keyword args and
+    available values, properties, and return types. Returns `introspect.UnitInfo`."""
+    from . import introspect
+    return introspect.describe_unit(_loader, UNIT_KIND, "tr38901", section_id, with_values=with_values, version=version)

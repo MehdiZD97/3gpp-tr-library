@@ -13,6 +13,9 @@ dependencies = [
     "pyyaml",
 ]
 
+[project.scripts]
+tr-api = "tr_api.cli:main"
+
 [tool.setuptools]
 packages = ["tr_api"]
 package-dir = {"tr_api" = "."}

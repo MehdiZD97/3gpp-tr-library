@@ -42,11 +42,32 @@ from .models import (
 
 DEFAULT_VERSION = "v15.0.0"
 
-__all__ = ["annex", "AnnexB", "ScenarioNotFoundError", "SectionNotFoundError", "DEFAULT_VERSION"]
+# The access verb / unit noun for this TR (a lettered annex, not a numbered
+# clause), read by tr_api.introspect so it's described as first-class as
+# TR 38.901's sections.
+UNIT_KIND = "annex"
+
+__all__ = [
+    "annex", "AnnexB", "list_annexes", "describe", "UNIT_KIND",
+    "ScenarioNotFoundError", "SectionNotFoundError", "DEFAULT_VERSION",
+]
 
 
 class AnnexB:
     """TR 36.777 Annex B (Channel modelling details) -- the aerial-UE channel model."""
+
+    # Minimal explicit metadata for the introspection layer (see
+    # Section74._QUERYABLE in tr38901.py): per lookup method, the data
+    # attribute queried and each keyword arg's underlying entry field.
+    _QUERYABLE = {
+        "los_probability": ("los_probability", {"scenario": "scenario"}),
+        "pathloss": ("pathloss", {"scenario": "scenario", "condition": "condition"}),
+        "shadow_fading_std": ("shadow_fading_std", {"scenario": "scenario", "condition": "condition"}),
+        "fast_fading_model_selection": ("fast_fading_model_selection", {"scenario": "scenario"}),
+        "alternative_1": ("alternative_1_desired_parameters", {"scenario": "scenario", "condition": "condition"}),
+        "alternative_2": ("alternative_2_modified_parameters",
+                          {"scenario": "scenario", "parameter": "parameter", "condition": "condition"}),
+    }
 
     def __init__(self, annex_id: str, version: str, data: AnnexBData):
         self.annex_id = annex_id
@@ -114,3 +135,17 @@ _loader = TRLoader("TR-36.777", "TR 36.777", DEFAULT_VERSION, _ANNEX_REGISTRY)
 def annex(annex_id: str, version: str = None) -> AnnexB:
     """Load and validate a processed TR 36.777 annex's data (cached per id+version)."""
     return _loader.load(annex_id, version)
+
+
+def list_annexes(*, detail: bool = False, with_values: bool = False, version: str = None):
+    """Discover the processed TR 36.777 annexes (real id + title) -- the annex
+    parallel to tr38901.list_sections(). Returns `introspect.UnitInfo` objects."""
+    from . import introspect
+    return introspect.list_units(_loader, UNIT_KIND, "tr36777", detail=detail, with_values=with_values, version=version)
+
+
+def describe(annex_id: str, *, with_values: bool = True, version: str = None):
+    """Describe one annex's callable surface: methods, their keyword args and
+    available values, and return types. Returns `introspect.UnitInfo`."""
+    from . import introspect
+    return introspect.describe_unit(_loader, UNIT_KIND, "tr36777", annex_id, with_values=with_values, version=version)

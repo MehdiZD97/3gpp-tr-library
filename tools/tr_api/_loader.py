@@ -12,12 +12,15 @@ Factoring this out is the Phase 5 generalization: before a second TR
 existed, this logic lived inline in `tr38901.py` with `"TR-38.901"` and
 `"v19.4.0"` hardcoded. Nothing here knows about a specific TR.
 """
+import re
 from pathlib import Path
 
 import yaml
 
 # This file lives at tools/tr_api/_loader.py; the repo root is two levels up.
 _REPO_ROOT = Path(__file__).resolve().parents[2]
+
+_FRONT_MATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 
 
 class SectionNotFoundError(LookupError):
@@ -68,3 +71,34 @@ class TRLoader:
         accessor = accessor_cls(section_id, version, model_cls(**raw))
         self._cache[cache_key] = accessor
         return accessor
+
+    def accessor_class(self, section_id):
+        """The accessor class registered for a section/annex id (no data loaded)."""
+        if section_id not in self.registry:
+            raise SectionNotFoundError(
+                f"No data available for {self.tr_label} section {section_id!r}. "
+                f"Processed: {sorted(self.registry)}"
+            )
+        return self.registry[section_id][2]
+
+    def front_matter(self, section_id, version=None):
+        """The parsed YAML front matter of a section/annex's `.md` file.
+
+        The registry knows only the `.yaml` data path; the human-readable
+        `title` (and the real clause/annex identifier) live in the sibling
+        `.md`'s front matter, which is the single authoritative source for
+        those -- so the introspection layer reads them from here rather than
+        duplicating titles into the registry. Returns {} if the .md is absent.
+        """
+        version = version or self.default_version
+        if section_id not in self.registry:
+            raise SectionNotFoundError(
+                f"No data available for {self.tr_label} section {section_id!r}. "
+                f"Processed: {sorted(self.registry)}"
+            )
+        rel_path = self.registry[section_id][0]
+        md_path = self.repo_root / self.tr_dir / version / Path(rel_path).with_suffix(".md")
+        if not md_path.is_file():
+            return {}
+        match = _FRONT_MATTER_RE.match(md_path.read_text())
+        return yaml.safe_load(match.group(1)) if match else {}

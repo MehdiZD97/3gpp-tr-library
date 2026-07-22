@@ -41,7 +41,18 @@ lsp.mu_lgDS                  # carrier-frequency-dependent delay-spread mean
 tr36777.annex("B").pathloss(scenario="RMa-AV", condition="LOS")
 ```
 
-Lookups return typed models (never a bare dict or `None`); an unknown scenario/section raises an error that lists what *is* available. Full API, install instructions, and organization are in **[tools/tr_api/README.md](tools/tr_api/README.md)**.
+Lookups return typed models (never a bare dict or `None`); an unknown scenario/section raises an error that lists what *is* available.
+
+**Don't know the section or parameter names?** The API is self-describing, and installing it also installs a `tr-api` command that discovers everything for you — no prior knowledge, no reading source:
+
+```console
+$ tr-api list                       # every TR and its processed sections/annexes
+$ tr-api describe tr38901 7.9        # a section's parameters, their args, and available values
+$ tr-api get tr38901 7.4 pathloss --scenario UMi-StreetCanyon --condition NLOS
+$ tr-api dump tr38901 7.5 channel_model_parameters --format csv > lsp.csv   # or --format json | jq
+```
+
+Full API, the introspection layer, the CLI, install instructions, and organization are in **[tools/tr_api/README.md](tools/tr_api/README.md)**.
 
 ## Repository layout
 
