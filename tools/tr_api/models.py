@@ -435,9 +435,57 @@ class LosConditionEntry(BaseModel):
     applicability_range: str
 
 
+# --- 7.9.4 (Fast fading model) / 7.9.5 (Additional components) / 7.9.6
+# (Calibration) -- added in the "Phase 7 continued" session. The 32 numbered
+# equations of 7.9.4/7.9.5 live only as LaTeX in the section .md (procedural,
+# per the §7.5 precedent -- not queryable data), so there are no models for
+# them; these three cover the queryable tables of the continuation. ---
+class BackgroundChannelParamEntry(BaseModel):
+    """One (sensing_mode, scenario) row of a §7.9.4.2 background-channel table.
+
+    The six fields are the shape-rate Gamma-distribution parameters for the RP
+    distance and height (Tables 7.9.4.2-1 / 7.9.4.2-2 Part-1/2). For the
+    terrestrial-UT tables they're numeric; for Part-2 (aerial UE) they're
+    height-dependent formulas (str with `h` = aerial-UE height), so every field
+    is `str`.
+    """
+
+    sensing_mode: str
+    scenario: str
+    alpha_d: str
+    beta_d: str
+    c_d: str
+    alpha_h: str
+    beta_h: str
+    c_h: str
+
+
+class SpatialConsistencyCorrelationEntry(BaseModel):
+    """One row of Table 7.9.5.1-1 (parameter -> Link-correlated / All-correlated)."""
+
+    parameter: str
+    correlation_type: str
+
+
+class CalibrationAssumption(BaseModel):
+    """One (table, parameter) row of a §7.9.6 calibration table (7.9.6.1-1..4,
+    7.9.6.2-1..4, 7.9.6.3-1/2). `table` distinguishes the ten tables; single-
+    value tables fill `value`, the Human tables split into indoor/outdoor."""
+
+    table: str
+    parameter: str
+    value: Optional[str] = None
+    indoor_value: Optional[str] = None
+    outdoor_value: Optional[str] = None
+
+
 class Section79Data(BaseModel):
-    """The full validated shape of a `7.9-isac-channel-model.yaml`-style file
-    (core sub-clauses 7.9.0-7.9.3 only; 7.9.4-7.9.6 deferred)."""
+    """The full validated shape of a `7.9-isac-channel-model.yaml`-style file.
+
+    Covers the full clause: the core 7.9.0-7.9.3 keys plus the 7.9.4 (fast
+    fading), 7.9.5 (additional components) and 7.9.6 (calibration) tables added
+    in the "Phase 7 continued" session.
+    """
 
     sensing_scenarios: List[SensingScenarioParameter]
     rcs_model_1: List[RcsModel1Entry]
@@ -448,3 +496,6 @@ class Section79Data(BaseModel):
     target_channel_links: List[TargetChannelLinkEntry]
     background_channel_links: List[BackgroundChannelLinkEntry]
     los_condition_determination: List[LosConditionEntry]
+    background_channel_params: List[BackgroundChannelParamEntry]
+    spatial_consistency_correlation: List[SpatialConsistencyCorrelationEntry]
+    calibration_assumptions: List[CalibrationAssumption]

@@ -1,0 +1,35 @@
+parameter,value
+Scenario,"Urban grid, Indoor office"
+Cell layout,"Urban grid: ISD = 500m, the same layout with 37.885
+Indoor office: Office size (WxLxH): 120mx50mx3m, ISD=20m (refer to TR 38.901)"
+Sensing mode,TRP- pedestrian UE bistatic in urban grid and TRP-UE bistatic in indoor office
+Polarized antenna model,Model-2 in clause 7.3.2 in TR 38.901
+Scattering point,Single point
+Calibration link and calibration method,"- Calibration link: same target associated to different UT as following figure
+
+- Calibration method
+Step1: In single drop simulation, drop one Target and multiple UTs.
+Step2: Generate the channel of each link based on Target level spatial consistency method.
+Step3: Determine Target-UT groups based on the distance between UTs.
+Step4: Bin all the link pairs into certain distance groups, e.g.,
+ - 0m <= the location distance of link pair < 1m -> 0m group
+ - 1m <= the location distance of link pair < 2m -> 1m group
+ - 2m <= the location distance of link pair < 3m -> 2m group
+ - 3m <= the location distance of link pair < 4m -> 3m group
+ …
+ - (N)m <= the location distance of pair < (N+1)m -> (N)m group (see note 2)
+Step5: Calculate the correlation coefficient metric of each distance groups.
+Step6: Draw the x-y cure, where x=0, …, N, y= correlation coefficient metric related to (x)m group"
+ST and UT distribution,"- Urban grid
+one target is uniformly dropped within the center grid in the outside lane with length of 433m, 
+the UT is distributed by a uniform distribution distance of [0,1]m in the walk road where is in the same street with the target. 
+As following figure.
+
+see note 3
+ 
+- Indoor office
+1 Target is uniform dropped in office region
+10 UTs are dropped uniformly per cell, i.e., totally 120 UTs are uniformly dropped in office region."
+Metrics,"Cross-correlation coefficient of delay for the third cluster of channel between link pairs.
+Cross-correlation coefficient of AOA (for UT) for the third cluster of channel between link pairs.
+Cross-correlation coefficient of LOS/NLOS status of channel between link pairs(only for indoor office scenario)."

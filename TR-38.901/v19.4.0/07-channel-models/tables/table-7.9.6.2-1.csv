@@ -1,0 +1,22 @@
+parameter,value
+Scenario,UMa-AV
+Sensing mode,"TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic"
+Target type,UAV of small size (0.3m x 0.4m x 0.2m)
+RCS for each scattering point,"Component sigma_M: -12.81 dBsm
+Component sigma_D: 0 dB
+Component sigma_S: 3.74 dB for standard deviation
+The same values are used for monostatic RCS and bistatic RCS"
+Fast fading model,TR 36.777 Annex B.1.3
+"(mu, std) for XPR of target","Mean 13.75 dB, deviation 7.07 dB"
+The power threshold for path dropping after concatenation for target channel,-40 dB
+Coupling loss for target channel,"By definition, need to consider all direct and indirect paths. The following parameters are included in the calculation:
+- power scaling factor (pathloss, shadow fading, and RCS component included)
+- for small scale RCS / and power of rays in Tx-target/target-Rx links (), STX/SRX antenna pattern, 3 polarization matrixes, i.e.,"
+Absolute delay,The model of UMa scenario defined in Table 7.6.9-1 is reused for UMa-AV for all sensing modes.
+Metrics,"Coupling loss for target channel 
+Coupling loss for background channel (in case of monostatic sensing, this is the linear sum of coupling losses between STX/SRX and all reference points)
+See note.
+
+CDF of Delay Spread and Angle Spread (ASD, ZSD, ASA, ZSA). For monostatic sensing mode: delay spread and angle spread of the background channel is calculated separately for each reference point.
+Definition of Delay Spread is similar to the definition of angle spread in Annex A of TR 25.996, 
+Definition of Angle Spread can ref to Annex A of TR 25.996."

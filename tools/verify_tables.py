@@ -685,6 +685,36 @@ def verify_section_7_9():
             field_map={"applicability_range": ("applicability_range", identity)},
         )
 
+    # --- 7.9.4 / 7.9.5 / 7.9.6 (Phase 7 continued) tables ---
+    _BCP_FIELDS = ("alpha_d", "beta_d", "c_d", "alpha_h", "beta_h", "c_h")
+    for mode, tnum in [("TRP monostatic", "7.9.4.2-1"), ("UT monostatic", "7.9.4.2-2-part1"),
+                       ("UT monostatic (aerial UE)", "7.9.4.2-2-part2")]:
+        rows = [e for e in data["background_channel_params"] if e["sensing_mode"] == mode]
+        errors += verify_table(
+            os.path.join(SECTION_7_9_TABLES_DIR, f"table-{tnum}.csv"),
+            rows, key_fields=("scenario",),
+            field_map={f: (f, identity) for f in _BCP_FIELDS},
+        )
+
+    errors += verify_table(
+        os.path.join(SECTION_7_9_TABLES_DIR, "table-7.9.5.1-1.csv"),
+        data["spatial_consistency_correlation"], key_fields=("parameter",),
+        field_map={"correlation_type": ("correlation_type", identity)},
+    )
+
+    _CALIB_TWO_COL = {"7.9.6.1-2", "7.9.6.2-2"}  # Human tables have indoor/outdoor columns
+    for tnum in ("7.9.6.1-1", "7.9.6.1-2", "7.9.6.1-3", "7.9.6.1-4",
+                 "7.9.6.2-1", "7.9.6.2-2", "7.9.6.2-3", "7.9.6.2-4", "7.9.6.3-1", "7.9.6.3-2"):
+        rows = [e for e in data["calibration_assumptions"] if e["table"] == tnum]
+        field_map = (
+            {"indoor_value": ("indoor_value", identity), "outdoor_value": ("outdoor_value", identity)}
+            if tnum in _CALIB_TWO_COL else {"value": ("value", identity)}
+        )
+        errors += verify_table(
+            os.path.join(SECTION_7_9_TABLES_DIR, f"table-{tnum}.csv"),
+            rows, key_fields=("parameter",), field_map=field_map,
+        )
+
     if os.path.isfile(SOURCE_HTML):
         # §7.9's RCS/XPR tables are OMML text (confirmed: 332 m:oMath / 1 OLE
         # across the clause), so -- unlike TR 36.777 -- the HTML export is a

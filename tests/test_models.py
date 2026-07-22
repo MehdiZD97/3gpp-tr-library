@@ -11,12 +11,15 @@ from pydantic import ValidationError
 from tr_api.models import (
     Alternative1DesiredParametersEntry,
     Alternative2ModifiedParameterEntry,
+    BackgroundChannelParamEntry,
+    CalibrationAssumption,
     ChannelModelParameterEntry,
     LosConditionEntry,
     PathlossDeltaEntry,
     PathlossEntry,
     RcsModel2Entry,
     SensingScenarioParameter,
+    SpatialConsistencyCorrelationEntry,
     XprEntry,
     ZsdZodOffsetEntry,
 )
@@ -224,3 +227,43 @@ def test_los_condition_entry_invalid_case_rejected():
 def test_valid_los_condition_entry():
     entry = LosConditionEntry(case="9", reference_scenario="LOS probability is 100%", applicability_range="...")
     assert entry.case == "9"
+
+
+# --- TR 38.901 §7.9.4/7.9.5/7.9.6 (continuation) models ---
+def test_valid_background_channel_param_entry():
+    entry = BackgroundChannelParamEntry(
+        sensing_mode="TRP monostatic", scenario="UMi",
+        alpha_d="6.1996", beta_d="0.1558", c_d="15.2697",
+        alpha_h="12.0487", beta_h="2.3261", c_h="0.0157",
+    )
+    assert entry.alpha_d == "6.1996"
+    # AV entries carry height-dependent formulas in the same str fields.
+    av = BackgroundChannelParamEntry(
+        sensing_mode="UT monostatic (aerial UE)", scenario="UMa-AV",
+        alpha_d="0.83 + 0.00015h", beta_d="1/(536.305 + 1.0279h)", c_d="13.824 + 0.03085h",
+        alpha_h="0.9054 - 0.0001117h", beta_h="1/(38.672 - 0.04658h)", c_h="25.4898 - 0.02398h",
+    )
+    assert "h" in av.beta_d
+
+
+def test_background_channel_param_missing_field_rejected():
+    with pytest.raises(ValidationError):
+        BackgroundChannelParamEntry(sensing_mode="TRP monostatic", scenario="UMi", alpha_d="1")
+
+
+def test_valid_spatial_consistency_entry():
+    entry = SpatialConsistencyCorrelationEntry(parameter="Delays", correlation_type="Link-correlated")
+    assert entry.correlation_type == "Link-correlated"
+
+
+def test_valid_calibration_assumption_single_and_two_column():
+    single = CalibrationAssumption(table="7.9.6.1-1", parameter="Scenario", value="UMa-AV")
+    assert single.value == "UMa-AV" and single.indoor_value is None
+    two = CalibrationAssumption(table="7.9.6.1-2", parameter="UT height",
+                                indoor_value="1m", outdoor_value="1.5m")
+    assert two.value is None and two.indoor_value == "1m"
+
+
+def test_calibration_assumption_missing_table_rejected():
+    with pytest.raises(ValidationError):
+        CalibrationAssumption(parameter="Scenario", value="UMa-AV")

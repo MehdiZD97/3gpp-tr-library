@@ -44,7 +44,7 @@ scaling = tr38901.section("7.5").scaling_factors_aoa_aod_generation       # Tabl
 ray_offsets = tr38901.section("7.5").ray_offset_angles                    # Table 7.5-3
 sub_clusters = tr38901.section("7.5").sub_cluster_info                    # Table 7.5-5
 
-# --- §7.9: Channel model(s) for ISAC (Rel-19), core sub-clauses 7.9.0-7.9.3 ---
+# --- §7.9: Channel model(s) for ISAC (Rel-19), full clause 7.9.0-7.9.6 ---
 isac = tr38901.section("7.9")
 
 # Radar-cross-section models for the sensing targets:
@@ -59,6 +59,11 @@ isac.los_condition(case="9")                                               # lis
 
 isac.sensing_scenarios                                                     # Tables 7.9.1-1..5
 isac.rcs_model_2_k_parameters                                             # (k1, k2) per target, Eq. 7.9.2-3
+
+# Fast-fading background-channel params (7.9.4.2), calibration (7.9.6), spatial consistency (7.9.5.1):
+isac.background_channel_params(sensing_mode="TRP monostatic", scenario="UMi")   # Tables 7.9.4.2-1/2
+isac.calibration(table="7.9.6.1-1")                                        # list of Table 7.9.6.1-1 rows
+isac.spatial_consistency_correlation                                       # Table 7.9.5.1-1
 ```
 
 ```python
@@ -81,11 +86,11 @@ b.alternative_1(scenario="RMa-AV", condition="LOS").desired_k_db          # Tabl
 b.alternative_2(scenario="UMa-AV", parameter="DS", condition="NLOS").mu   # Table B.1.2-2
 ```
 
-`section()` / `annex()` default to each TR's latest processed version (`v19.4.0` for TR 38.901, `v15.0.0` for TR 36.777) and accept an explicit `version=` keyword otherwise. (§7.9 exposes only the processed core sub-clauses 7.9.0-7.9.3; its fast-fading procedure, additional components, and calibration tables — 7.9.4-7.9.6 — are deferred to a follow-up session.) Each id resolves to its own YAML file, Pydantic model, and accessor class (see each module's `_SECTION_REGISTRY` / `_ANNEX_REGISTRY`) rather than assuming every section shares one shape. A lookup for a scenario/condition/variant that doesn't exist raises `ScenarioNotFoundError` with the list of what *is* available; an unprocessed section/annex or version raises `SectionNotFoundError`, listing what's actually processed -- neither returns `None` or a bare `KeyError`.
+`section()` / `annex()` default to each TR's latest processed version (`v19.4.0` for TR 38.901, `v15.0.0` for TR 36.777) and accept an explicit `version=` keyword otherwise. (§7.9 covers the full ISAC clause 7.9.0-7.9.6; its 32 target/background fast-fading equations live as LaTeX in the section `.md` rather than the queryable surface, per the §7.5 precedent for procedural equations.) Each id resolves to its own YAML file, Pydantic model, and accessor class (see each module's `_SECTION_REGISTRY` / `_ANNEX_REGISTRY`) rather than assuming every section shares one shape. A lookup for a scenario/condition/variant that doesn't exist raises `ScenarioNotFoundError` with the list of what *is* available; an unprocessed section/annex or version raises `SectionNotFoundError`, listing what's actually processed -- neither returns `None` or a bare `KeyError`.
 
 ## Organization
 
-- `tr_api.models` — the Pydantic models. `PathlossEntry` is TR-agnostic (see `schemas/pathloss.yaml`); everything else is named for what it actually is: `LosProbabilityEntry` / `O2IPenetrationLoss` (+ sub-models) / `ShadowFadingAutocorrelation` (TR 38.901 §7.4), `ChannelModelParameterEntry` / `ZsdZodOffsetEntry` / `NotationEntry` / `ScalingFactorEntry` / `RayOffsetAngle` / `SubClusterInfo` (TR 38.901 §7.5), `SensingScenarioParameter` / `RcsModel1Entry` / `RcsModel2Entry` / `RcsModel2KParameter` / `XprEntry` / `ReferenceChannelModelEntry` / `TargetChannelLinkEntry` / `BackgroundChannelLinkEntry` / `LosConditionEntry` (TR 38.901 §7.9), and `PathlossDeltaEntry` / `LosProbabilityDeltaEntry` / `ShadowFadingDeltaEntry` / `FastFadingModelSelectionEntry` / `Alternative1DesiredParametersEntry` / `Alternative2ModifiedParameterEntry` (TR 36.777 Annex B).
+- `tr_api.models` — the Pydantic models. `PathlossEntry` is TR-agnostic (see `schemas/pathloss.yaml`); everything else is named for what it actually is: `LosProbabilityEntry` / `O2IPenetrationLoss` (+ sub-models) / `ShadowFadingAutocorrelation` (TR 38.901 §7.4), `ChannelModelParameterEntry` / `ZsdZodOffsetEntry` / `NotationEntry` / `ScalingFactorEntry` / `RayOffsetAngle` / `SubClusterInfo` (TR 38.901 §7.5), `SensingScenarioParameter` / `RcsModel1Entry` / `RcsModel2Entry` / `RcsModel2KParameter` / `XprEntry` / `ReferenceChannelModelEntry` / `TargetChannelLinkEntry` / `BackgroundChannelLinkEntry` / `LosConditionEntry` / `BackgroundChannelParamEntry` / `SpatialConsistencyCorrelationEntry` / `CalibrationAssumption` (TR 38.901 §7.9), and `PathlossDeltaEntry` / `LosProbabilityDeltaEntry` / `ShadowFadingDeltaEntry` / `FastFadingModelSelectionEntry` / `Alternative1DesiredParametersEntry` / `Alternative2ModifiedParameterEntry` (TR 36.777 Annex B).
 - `tr_api._loader` — the TR-agnostic load/validate/cache machinery (`TRLoader`, `SectionNotFoundError`, `ScenarioNotFoundError`), shared by every per-TR module.
 - `tr_api.tr38901` — TR 38.901's surface (`section()`, `Section74`, `Section75`, `Section79`).
 - `tr_api.tr36777` — TR 36.777's surface (`annex()`, `AnnexB`).

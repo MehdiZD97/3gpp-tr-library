@@ -23,11 +23,13 @@ Python API for TR 38.901's processed sections.
 
     notations = tr38901.section("7.5").notations   # Table 7.5-1
 
-    isac = tr38901.section("7.9")                     # Channel model(s) for ISAC (Rel-19)
+    isac = tr38901.section("7.9")                     # Channel model(s) for ISAC (Rel-19), full 7.9.0-7.9.6
     isac.rcs_model_2(target="Vehicle with single scattering point", scattering_point="Front")
     isac.xpr(target="UAV").mu_xpr_db                  # "13.75"
     isac.reference_channel_model(case="4").reference_tr
     isac.los_condition(case="9")                      # list of Table 7.9.3-5 rows
+    isac.background_channel_params(sensing_mode="TRP monostatic", scenario="UMi")   # Table 7.9.4.2-1
+    isac.calibration(table="7.9.6.1-1")               # list of Table 7.9.6.1-1 rows
 
 `section()` is cached per (section_id, version) via the shared TRLoader --
 repeated calls don't re-read or re-validate the YAML. Each registered
@@ -45,6 +47,8 @@ from typing import Optional
 from ._loader import ScenarioNotFoundError, SectionNotFoundError, TRLoader
 from .models import (
     BackgroundChannelLinkEntry,
+    BackgroundChannelParamEntry,
+    CalibrationAssumption,
     ChannelModelParameterEntry,
     LosConditionEntry,
     LosProbabilityEntry,
@@ -62,6 +66,7 @@ from .models import (
     Section79Data,
     SensingScenarioParameter,
     ShadowFadingAutocorrelation,
+    SpatialConsistencyCorrelationEntry,
     SubClusterInfo,
     TargetChannelLinkEntry,
     XprEntry,
@@ -169,12 +174,14 @@ class Section75:
 
 
 class Section79:
-    """TR 38.901 §7.9 (Channel model(s) for ISAC).
+    """TR 38.901 §7.9 (Channel model(s) for ISAC) -- the full clause 7.9.0-7.9.6.
 
-    Covers the processed core sub-clauses 7.9.0-7.9.3 (scenarios, physical
-    object / RCS model, reference channel model mapping). 7.9.4 (fast fading),
-    7.9.5 (additional components) and 7.9.6 (calibration) are not processed
-    yet -- a follow-up session will add them.
+    Covers scenarios (7.9.1), the physical-object / RCS model (7.9.2), the
+    reference-channel-model mapping (7.9.3), the fast-fading background-channel
+    parameters (7.9.4.2), spatial-consistency correlation (7.9.5.1), and the
+    calibration "simulation assumptions" tables (7.9.6). The 32 target/background
+    fast-fading equations (7.9.4/7.9.5) live as LaTeX in the section .md, not
+    here (procedural, per the §7.5 precedent).
     """
 
     def __init__(self, section_id: str, version: str, data: Section79Data):
@@ -247,6 +254,33 @@ class Section79:
     @property
     def background_channel_links(self) -> list[BackgroundChannelLinkEntry]:
         return self._data.background_channel_links
+
+    # --- 7.9.4 / 7.9.5 / 7.9.6 (Phase 7 continued) ---
+    def background_channel_params(self, *, sensing_mode: str, scenario: str) -> BackgroundChannelParamEntry:
+        """§7.9.4.2 background-channel Gamma-distribution params (Tables 7.9.4.2-1/2)."""
+        for entry in self._data.background_channel_params:
+            if entry.sensing_mode == sensing_mode and entry.scenario == scenario:
+                return entry
+        available = [(e.sensing_mode, e.scenario) for e in self._data.background_channel_params]
+        raise ScenarioNotFoundError(
+            f"No background channel params for sensing_mode={sensing_mode!r}, scenario={scenario!r} "
+            f"in TR 38.901 §{self.section_id} ({self.version}). Available (sensing_mode, scenario): {available}"
+        )
+
+    def calibration(self, *, table: str) -> list[CalibrationAssumption]:
+        """§7.9.6 calibration assumptions for one table id (e.g. '7.9.6.1-1')."""
+        matches = [e for e in self._data.calibration_assumptions if e.table == table]
+        if not matches:
+            available = sorted({e.table for e in self._data.calibration_assumptions})
+            raise ScenarioNotFoundError(
+                f"No calibration assumptions for table={table!r} in TR 38.901 §{self.section_id} "
+                f"({self.version}). Available tables: {available}"
+            )
+        return matches
+
+    @property
+    def spatial_consistency_correlation(self) -> list[SpatialConsistencyCorrelationEntry]:
+        return self._data.spatial_consistency_correlation
 
 
 # Registry: section id -> (YAML path relative to TR-38.901/<version>/, the

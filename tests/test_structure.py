@@ -134,9 +134,12 @@ def test_section_7_9_section_field_is_string(section_7_9_front_matter):
 
 def test_section_7_9_yaml_has_expected_top_level_keys(section_7_9_yaml_data):
     for key in (
+        # core 7.9.0-7.9.3
         "sensing_scenarios", "rcs_model_1", "rcs_model_2", "rcs_model_2_k_parameters",
         "xpr", "reference_channel_models", "target_channel_links",
         "background_channel_links", "los_condition_determination",
+        # continuation 7.9.4-7.9.6
+        "background_channel_params", "spatial_consistency_correlation", "calibration_assumptions",
     ):
         assert key in section_7_9_yaml_data
 

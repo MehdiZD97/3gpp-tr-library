@@ -92,3 +92,38 @@ def test_all_five_equations_present_in_markdown(section_7_9_raw_text):
     # A couple of distinctive equation fragments to guard against a blanked $$ block.
     assert r"\mu_{\sigma_{S\_dB}}" in section_7_9_raw_text
     assert "CPM_{sp,i}" in section_7_9_raw_text
+
+
+# ---------------------------------------------------------------------------
+# 7.9.4 / 7.9.5 / 7.9.6 (continuation)
+# ---------------------------------------------------------------------------
+BCP_ORDER = ["scenario", "alpha_d", "beta_d", "c_d", "alpha_h", "beta_h", "c_h"]
+
+
+def test_background_channel_rows_present_in_markdown(section_7_9_raw_text, section_7_9_yaml_data):
+    for e in section_7_9_yaml_data["background_channel_params"]:
+        row = _md_row([e[f] for f in BCP_ORDER])
+        assert row in section_7_9_raw_text, f"missing background-channel row in .md ({e['sensing_mode']}/{e['scenario']})"
+
+
+def test_spatial_consistency_rows_present_in_markdown(section_7_9_raw_text, section_7_9_yaml_data):
+    for e in section_7_9_yaml_data["spatial_consistency_correlation"]:
+        assert _md_row([e["parameter"], e["correlation_type"]]) in section_7_9_raw_text
+
+
+def test_calibration_parameter_labels_present_in_markdown(section_7_9_raw_text, section_7_9_yaml_data):
+    for e in section_7_9_yaml_data["calibration_assumptions"]:
+        assert f"| {e['parameter']} |" in section_7_9_raw_text, f"missing calibration parameter row: {e['parameter']}"
+
+
+def test_continuation_equations_present_in_markdown(section_7_9_raw_text):
+    for n in range(1, 17):  # 7.9.4-1 .. 7.9.4-16
+        assert f"<!-- Eq. 7.9.4-{n} -->" in section_7_9_raw_text, f"missing equation comment 7.9.4-{n}"
+    for n in range(1, 15):  # 7.9.5-1 .. 7.9.5-14
+        assert f"<!-- Eq. 7.9.5-{n} -->" in section_7_9_raw_text, f"missing equation comment 7.9.5-{n}"
+    # 7.9.5-15 is split into a/b in the source.
+    assert "<!-- Eq. 7.9.5-15a -->" in section_7_9_raw_text
+    assert "<!-- Eq. 7.9.5-15b -->" in section_7_9_raw_text
+    # Distinctive fragments guarding against blanked $$ blocks.
+    assert "H_{u,s}^{ISAC}" in section_7_9_raw_text     # Eq. 7.9.4-16
+    assert "CPM_{EO}" in section_7_9_raw_text            # Eq. 7.9.5-10

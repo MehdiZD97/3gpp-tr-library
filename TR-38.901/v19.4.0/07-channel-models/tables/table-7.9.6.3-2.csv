@@ -1,0 +1,26 @@
+parameter,value
+Scenario,Urban grid
+Cell layout,"For FR1: ISD = 500m, the layout is defined as below:
+The BSs are placed at the top of buildings at one corner. Specifically, the road grids shall be shifted by () m in horizontal plane, or the BSs are shifted by ()m in horizontal plane equivalently.
+
+For FR2 ISD=250m, the cell layout is as that specified in Table 7.9.6.1-3"
+Sensing mode,"TRP- pedestrian UE bistatic
+TRP- RSU type UE bistatic 
+TRP monostatic
+TRP-TRP bistatic
+RSU type UE - RSU type UE bistatic (optional)"
+EO deployment,9 buildings with size 413m x 230m x 20m illustrated by the green blocks as in the figure shown in the row of cell layout.
+ST distribution,one target is uniformly distributed (across multiple drops) within the center of the outside lane of the grid.
+UT distribution,"- For pedestrian UT
+ - Pedestrian type UE, the dropping using equally spaced along the sidewalk with a fixed inter-pedestrian X m dropped per TR37.885.
+ - Total number of pedestrian UEs is 16 in the centre grid.
+ - Pedestrian UE is in the middle of the sidewalk
+ - The inter-pedestrian UE distance (m) (i.e., X) is calculated by ‘A/(16*N)’, where ‘A’ is the total length of sidewalk where the pedestrian UEs are dropped under the assumption of ‘N’ road grids (i.e., ‘{(250m – 17m) + (433m – 17m)} * 2 * N’). 
+ - N=1;
+- For RSU type UT
+ - The dropping is at the center of intersection per TR37.885."
+EM-parameters,Refer to the row for concrete in Table 7.6.8-1
+Metrics,"CDF curves:
+- Full coupling loss: calculate the coupling loss for each Tx-EO-ST-LOS-Rx and Tx-LOS-ST-EO-Rx rays.
+- CDF of the Delay.
+- CDF of the AoA, AoD, ZoA, ZoD."

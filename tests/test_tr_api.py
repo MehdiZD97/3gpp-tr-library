@@ -151,6 +151,41 @@ def test_all_three_sections_usable_from_same_import():
     assert type(tr38901.section("7.9").xpr(target="UAV")).__name__ == "XprEntry"
 
 
+# --- §7.9.4/7.9.5/7.9.6 (continuation) accessor surface ---
+def test_background_channel_params_lookup():
+    entry = tr38901.section("7.9").background_channel_params(sensing_mode="TRP monostatic", scenario="UMi")
+    assert entry.alpha_d == "6.1996"
+    assert type(entry).__name__ == "BackgroundChannelParamEntry"
+    av = tr38901.section("7.9").background_channel_params(
+        sensing_mode="UT monostatic (aerial UE)", scenario="RMa-AV")
+    assert "h" in av.c_d  # height-dependent formula
+
+
+def test_background_channel_params_missing_raises_informative_error():
+    with pytest.raises(ScenarioNotFoundError) as exc_info:
+        tr38901.section("7.9").background_channel_params(sensing_mode="TRP monostatic", scenario="Mars")
+    assert "Mars" in str(exc_info.value) and "Available" in str(exc_info.value)
+
+
+def test_calibration_lookup_returns_table_rows():
+    rows = tr38901.section("7.9").calibration(table="7.9.6.1-1")
+    assert len(rows) == 21
+    assert all(type(r).__name__ == "CalibrationAssumption" for r in rows)
+    assert any(r.parameter == "Scenario" and r.value == "UMa-AV" for r in rows)
+
+
+def test_calibration_missing_table_raises_informative_error():
+    with pytest.raises(ScenarioNotFoundError) as exc_info:
+        tr38901.section("7.9").calibration(table="7.9.6.9-9")
+    assert "7.9.6.9-9" in str(exc_info.value)
+
+
+def test_spatial_consistency_correlation_property():
+    scc = tr38901.section("7.9").spatial_consistency_correlation
+    assert len(scc) == 12
+    assert any(e.parameter == "Delays" and e.correlation_type == "Link-correlated" for e in scc)
+
+
 # ---------------------------------------------------------------------------
 # TR 36.777 Annex B -- the second TR, accessed via annex() rather than
 # section(). Exercises the shared-loader generalization from a caller's view.

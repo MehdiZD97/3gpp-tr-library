@@ -1,0 +1,17 @@
+parameter,value
+Scenario,"InF: 18 TRPs per the big hall: L = 300 m x W = 150 m
+
+- X-axis is pointing down to the floor
+- The antenna array is mounted in the Y-Z plane with boresight along the X-axis
+- The X-axis/Y-axis/Z-axis refer to LCS
+- 8 m for high BS scenario"
+Sensing mode,"TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic"
+Target type,Option 1: 0.5m x 1.0m x 0.5m
+BS Tx power,"FR1: 24dBm
+FR2: 23dBm"
+UT height,1.5m
+UT Distribution,"Per Table 7.8-7 Indoor Factory.
+Number of UTs: 30"
+Sensing target distribution,"100% indoor, 1 target uniformly distributed (across multiple drops) over the convex hull of the TRP deployment"
+Component sigma_M of the RCS for each scattering point,"-4.25 dBsm
+see note"

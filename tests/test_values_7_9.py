@@ -255,6 +255,75 @@ def test_r1_calibration_folders_cover_section_7_9_target_families():
         assert token in joined, f"expected an R1-2509126 folder for §7.9 target family {token!r}"
 
 
+# ---------------------------------------------------------------------------
+# 7.9.4 / 7.9.5 / 7.9.6 (continuation) values
+# ---------------------------------------------------------------------------
+def test_background_channel_params_cover_three_sensing_modes(section_7_9_yaml_data):
+    modes = {e["sensing_mode"] for e in section_7_9_yaml_data["background_channel_params"]}
+    assert modes == {"TRP monostatic", "UT monostatic", "UT monostatic (aerial UE)"}
+
+
+def test_background_channel_params_terrestrial_numeric_samples(section_7_9_yaml_data):
+    by_key = {(e["sensing_mode"], e["scenario"]): e for e in section_7_9_yaml_data["background_channel_params"]}
+    # Table 7.9.4.2-1 (TRP monostatic), UMi column
+    assert by_key[("TRP monostatic", "UMi")]["alpha_d"] == "6.1996"
+    assert by_key[("TRP monostatic", "UMi")]["c_h"] == "0.0157"
+    # Table 7.9.4.2-2 Part-1 (UT monostatic), Indoor Factory column
+    assert by_key[("UT monostatic", "Indoor Factory")]["c_h"] == "-16.921515"
+
+
+def test_background_channel_params_av_are_height_formulas(section_7_9_yaml_data):
+    # Table 7.9.4.2-2 Part-2 -- aerial-UE values are height-dependent formulas.
+    av = [e for e in section_7_9_yaml_data["background_channel_params"]
+          if e["sensing_mode"] == "UT monostatic (aerial UE)"]
+    assert {e["scenario"] for e in av} == {"UMi-AV", "UMa-AV", "RMa-AV"}
+    for e in av:
+        assert "h" in e["beta_d"]  # a function of aerial-UE height h
+    uma = next(e for e in av if e["scenario"] == "UMa-AV")
+    assert uma["beta_d"] == "1/(536.305 + 1.0279h)"
+
+
+def test_spatial_consistency_correlation_types(section_7_9_yaml_data):
+    scc = {e["parameter"]: e["correlation_type"] for e in section_7_9_yaml_data["spatial_consistency_correlation"]}
+    assert scc["Delays"] == "Link-correlated"
+    assert scc["O2I penetration loss"] == "All-correlated"
+    assert set(scc.values()) == {"Link-correlated", "All-correlated"}
+
+
+def test_calibration_covers_all_ten_tables(section_7_9_yaml_data):
+    tables = {e["table"] for e in section_7_9_yaml_data["calibration_assumptions"]}
+    expected = {f"7.9.6.{a}-{b}" for a, b in
+                [(1, 1), (1, 2), (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (2, 4), (3, 1), (3, 2)]}
+    assert tables == expected
+
+
+def test_calibration_dropped_omml_symbols_patched(section_7_9_yaml_data):
+    calib = section_7_9_yaml_data["calibration_assumptions"]
+    # sigma_M was dropped by python-docx from the RCS-component label; patched from PDF.
+    assert any(e["parameter"] == "Component sigma_M of the RCS for each scattering point" for e in calib)
+    # mu was dropped from the XPR label.
+    assert any(e["parameter"] == "(mu, std) for XPR of target" for e in calib)
+    # The 7.9.6.2-1 RCS breakdown carries all three components.
+    rcs = next(e for e in calib if e["table"] == "7.9.6.2-1" and e["parameter"].startswith("RCS"))
+    assert "sigma_M" in rcs["value"] and "sigma_D" in rcs["value"] and "sigma_S" in rcs["value"]
+
+
+def test_calibration_rcs_and_xpr_reuse_section_7_9_2_values(section_7_9_yaml_data):
+    # The R1-2509126 calibration inputs reuse §7.9.2's RCS/XPR values. Confirm
+    # the calibration tables' RCS-component and XPR numbers match the processed
+    # rcs_model_1 / xpr data -- the numeric correspondence the calibration
+    # tables make explicit (the spreadsheets themselves hold output CDFs).
+    rcs1 = {e["sensing_target"]: e["lg_sigma_m_dbsm"] for e in section_7_9_yaml_data["rcs_model_1"]}
+    xpr = {e["target"]: (e["mu_xpr_db"], e["sigma_xpr_db"]) for e in section_7_9_yaml_data["xpr"]}
+    calib = section_7_9_yaml_data["calibration_assumptions"]
+    # UAV large-scale calibration (7.9.6.1-1) RCS component = UAV-small RCS model 1 value.
+    uav_rcs = next(e for e in calib if e["table"] == "7.9.6.1-1" and e["parameter"].startswith("Component sigma_M"))
+    assert rcs1["UAV with small size"] in uav_rcs["value"]  # -12.81
+    # UAV full-calibration (7.9.6.2-1) XPR mean/dev = xpr UAV values.
+    uav_xpr = next(e for e in calib if e["table"] == "7.9.6.2-1" and "XPR" in e["parameter"])
+    assert xpr["UAV"][0] in uav_xpr["value"] and xpr["UAV"][1] in uav_xpr["value"]  # 13.75, 7.07
+
+
 @pytest.mark.skipif(not os.path.isdir(R1_DIR), reason="references/3gpp-R1-2509126 not present (fresh clone/CI)")
 def test_r1_calibration_uses_section_7_9_target_background_channel_decomposition():
     # §7.9.0/7.9.3/7.9.4.3 decompose the ISAC channel into a *target channel*
