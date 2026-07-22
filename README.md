@@ -17,6 +17,7 @@ Coverage grows opportunistically as research needs demand — not front-to-back 
 |---|---|---|---|
 | **TR 38.901** | v19.4.0 | §7.4 | Pathloss, LOS probability, and O2I (building/car) penetration modelling |
 | **TR 38.901** | v19.4.0 | §7.5 | Fast fading model — the full 12-step channel-coefficient generation procedure + all 12 supporting tables (incl. the 49×16 channel-model-parameter table) |
+| **TR 38.901** | v19.4.0 | §7.9 | Channel model(s) for ISAC (Integrated Sensing and Communication) — the full Rel-19 clause: sensing scenarios, the physical-object/RCS target model, reference-channel mapping, the target/background fast-fading procedure, additional components, and calibration (32 tables, ~37 equations) |
 | **TR 36.777** | v15.0.0 | Annex B | Aerial-UE (drone) channel model for RMa-AV/UMa-AV/UMi-AV — height-dependent deltas to TR 38.901's terrestrial models |
 
 See **[INDEX.md](INDEX.md)** for the live, section-by-section status table.
@@ -54,13 +55,17 @@ $ tr-api dump tr38901 7.5 channel_model_parameters --format csv > lsp.csv   # or
 
 Full API, the introspection layer, the CLI, install instructions, and organization are in **[tools/tr_api/README.md](tools/tr_api/README.md)**.
 
+## Why three formats
+
+Each processed section ships in **three coordinated, mutually-verified formats**. That's the point, not incidental packaging — each exists because a different consumer needs the *same* verified numbers in a different shape, and the origin problem (PDF extractors and LLMs mangling merged cells and image-rendered equations) is exactly what makes a single format insufficient:
+
+- **`.md` — for humans and for RAG.** A section is a self-contained unit: front-matter scaffolding (TR, version, clause, `depends_on`, `verified_against`), paraphrased prose, inline tables, and equations as LaTeX. That's what you read to understand the model — and, because it's one coherent chunk with metadata, what an LLM can ingest *whole* for retrieval-augmented generation without the table-mangling that wrecks raw-PDF ingestion.
+- **`.csv` — for spreadsheets, pandas, and diffing.** One file per *real* TR table, named with the TR's own table number (`table-7.9.2.1-2.csv`, not a made-up scheme), so it maps straight back to the source document. Load it in pandas, open it in a spreadsheet, or `git diff` it across TR versions — tabular workflows want a table, not prose.
+- **`.yaml` + the typed API — for simulation code.** Queryable parameters validated against Pydantic models, so version-pinned 3GPP values flow into your simulator through `tr_api` (or the `tr-api` CLI) with no hand-transcription step — the transcription step being precisely where errors creep into research code.
+
+**The same parameter, three ways.** Take the UAV cross-polarization ratio (§7.9, Table 7.9.2.2-1): the `.md` shows a row `| UAV | 13.75 | 7.07 |` under the XPR equations; `tables/table-7.9.2.2-1.csv` has `UAV,13.75,7.07`; the `.yaml` has `- {target: UAV, mu_xpr_db: "13.75", sigma_xpr_db: "7.07"}`, reachable as `tr38901.section("7.9").xpr(target="UAV").mu_xpr_db`. All three are checked against each other on every push (see [How it's verified](#how-its-verified)), so they can't silently drift apart.
+
 ## Repository layout
-
-Each processed section ships in **three coordinated formats** — that triple-format design is the point, not incidental:
-
-- a **`.md`** with paraphrased prose, inline tables, and equations as LaTeX (human-readable);
-- one **`.csv` per real TR table** using the TR's own table numbers (programmatic access);
-- a **`.yaml`** of queryable parameters, validated against Pydantic models.
 
 ```
 3gpp-tr-library/
@@ -113,11 +118,10 @@ This repository redistributes hand-verified structured *extracts*, not the origi
 
 ### Related work
 
-<!-- To be completed by the maintainer: related tools, datasets, and prior work,
-     with framing (complementary vs. comparative) chosen deliberately. This is
-     intentionally left for the author to populate rather than auto-generated. -->
+- **TSpec-LLM** — *An Open-source Comprehensive Dataset of 3GPP Specifications for LLM Understanding* ([dataset](https://huggingface.co/datasets/rasoul-nikbakht/TSpec-LLM)). A broad corpus of 3GPP specification text prepared for large-language-model consumption — retrieval, training, and evaluation across many documents.
+- **3GPP MCP server** ([github.com/edhijlu/3gpp-mcp-server](https://github.com/edhijlu/3gpp-mcp-server)) — a Model Context Protocol server that exposes 3GPP material to LLM clients.
 
-*Related tools and datasets will be listed here.*
+This repository is **complementary** to those efforts rather than a substitute for them. Where a broad-corpus dataset or an MCP bridge optimizes for *coverage* — as much 3GPP text as possible, in an LLM-friendly form — this project optimizes for *depth and correctness on a focused set of high-value TRs*: hand-verified, section-level extracts with queryable **typed** parameters (`tr_api`), the TR's own real table numbers, and cross-format verification against multiple independent source formats before anything is marked `verified`. In short: those provide breadth for language-model workflows; this provides depth and machine-usable, version-pinned parameters for simulation and analysis. The two serve different needs and pair naturally.
 
 ### How to cite this repository
 

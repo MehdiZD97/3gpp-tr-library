@@ -104,3 +104,55 @@ def test_o2i_single_frequency_below_6ghz_values(section_7_4_yaml_data):
 
 def test_shadow_fading_autocorrelation_formula_ref(section_7_4_yaml_data):
     assert section_7_4_yaml_data["shadow_fading_autocorrelation"]["formula_ref"] == "7.4-5"
+
+
+def test_shadow_fading_autocorrelation_formula(section_7_4_yaml_data):
+    autocorr = section_7_4_yaml_data["shadow_fading_autocorrelation"]
+    assert autocorr["formula"] == r"R(\Delta x) = e^{-|\Delta x| / d_{cor}}"
+
+
+# ---------------------------------------------------------------------------
+# Every LOS-probability entry's formula, pinned by its distinctive constants.
+# (Pinning the constants rather than the whole LaTeX string catches value drift
+#  without a long, transcription-error-prone literal.) The RMa/Indoor-Mixed/
+#  Indoor-Open entries are the PDF-visual single-source ones -- now recorded in
+#  the section's verification_notes -- so anchoring their constants matters most.
+# ---------------------------------------------------------------------------
+EXPECTED_LOS_FORMULA_CONSTANTS = {
+    "RMa": ["10m", "1000"],
+    "UMi-StreetCanyon": ["18", "36"],
+    "UMa": ["18", "63", "150", "13m", "23m"],
+    "Indoor-MixedOffice": ["1.2m", "4.7", "6.5m", "32.6", "0.32"],
+    "Indoor-OpenOffice": ["5m", "70.8", "49m", "211.7", "0.54"],
+    "InF-SL, InF-DL, InF-SH, InF-DH": ["d_{clutter}", r"\ln(1-r)", "h_c"],
+    "InF-HH": ["Pr_{LOS} = 1"],
+    "SMa": ["10m", "k_{commercial}", "k_{residential}", "k_{vegetation}", "30m", "20m", "8m", "15m"],
+}
+
+
+def test_every_los_probability_formula_has_expected_constants(section_7_4_yaml_data):
+    by_scenario = {e["scenario"]: e["formula"] for e in section_7_4_yaml_data["los_probability"]}
+    assert set(by_scenario) == set(EXPECTED_LOS_FORMULA_CONSTANTS)
+    for scenario, constants in EXPECTED_LOS_FORMULA_CONSTANTS.items():
+        formula = by_scenario[scenario]
+        for const in constants:
+            assert const in formula, f"{scenario} LOS formula: expected constant {const!r} missing (value drift?)"
+
+
+def test_every_building_model_formula_has_expected_constants(section_7_4_yaml_data):
+    models = {m["model"]: m for m in section_7_4_yaml_data["o2i_penetration_loss"]["building_models"]}
+    # Low-loss: 0.3 glass + 0.7 concrete; High-loss: 0.7 IRR-glass + 0.3 concrete;
+    # Low-loss A: 0.3 glass + 0.7 plywood. PL_in is 0.5 * d_2D-in for all.
+    assert "0.3\\cdot10^{-L_{glass}/10} + 0.7\\cdot10^{-L_{concrete}/10}" in models["Low-loss model"]["pl_tw_formula"]
+    assert "0.7\\cdot10^{-L_{IRRglass}/10} + 0.3\\cdot10^{-L_{concrete}/10}" in models["High-loss model"]["pl_tw_formula"]
+    assert "0.3\\cdot10^{-L_{glass}/10} + 0.7\\cdot10^{-L_{plywood}/10}" in models["Low-loss A model"]["pl_tw_formula"]
+    for m in models.values():
+        assert m["pl_in_formula"] == r"0.5\, d_{2D-in}"
+
+
+def test_every_pathloss_formula_present_and_scenario_tagged(section_7_4_yaml_data):
+    # Each pathloss entry has a non-empty LaTeX formula naming its own scenario's
+    # PL symbol (guards against a blanked or mis-assigned formula cell).
+    for e in section_7_4_yaml_data["pathloss"]:
+        assert e["formula"].strip(), f"{e['scenario']}/{e['condition']}: empty pathloss formula"
+        assert "PL_{" in e["formula"] or "PL'" in e["formula"]

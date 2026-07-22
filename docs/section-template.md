@@ -9,7 +9,14 @@ summary: One-sentence summary of what this section covers.
 depends_on: []              # other section files (by filename stem) this one assumes context from, e.g. ["7.2-coordinate-system"]
 source_pdf: https://www.3gpp.org/ftp/Specs/archive/XX_series/XX.XXX/   # exact link to the source document on 3gpp.org
 status: planned              # planned | in-progress | verified
-verified_against: []         # which references/ formats this was cross-checked against, e.g. ["pdf", "xml"]
+verified_against: []         # which references/ formats this section was cross-checked against, e.g. ["pdf", "xml"]
+# verification_notes:        # OPTIONAL. Per-entry/per-table granularity where a
+#   - applies_to: ...        #   few items are verified at a narrower level than the
+#     verified_against: []   #   section-level `verified_against` implies (e.g. a formula
+#     note: ...              #   that is OMML-dropped and so PDF-visual single-source).
+#                            #   Each item: applies_to (str), verified_against (list of
+#                            #   formats — the ACTUAL formats for this item), note (str).
+#                            #   Omit the field entirely when the section is uniform.
 ---
 
 # X.X Section Title

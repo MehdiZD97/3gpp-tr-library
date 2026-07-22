@@ -12,7 +12,9 @@ Requires tr_api installed (`pip install -e tools/tr_api`).
 import json
 import os
 
-from tr_api import cli, tr36777, tr38901
+import pytest
+from tr_api import cli, introspect, tr36777, tr38901
+from tr_api._loader import ScenarioNotFoundError
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,6 +23,31 @@ def run(argv, capsys):
     code = cli.main(argv)
     captured = capsys.readouterr()
     return code, captured.out, captured.err
+
+
+# --- combinatorial enumeration for the parametrized coverage below ---
+_UNITS = introspect.all_units()
+
+
+def _valid_kwargs(accessor, member):
+    data = getattr(accessor._data, member.data_attribute)
+    if isinstance(data, dict):  # zsd_zod_offset: scenario is a dict key
+        k = sorted(data)[0]
+        entry = data[k].entries[0]
+        return {a.name: (k if a.field == "@keys" else getattr(entry, a.field)) for a in member.args}
+    entry = data[0]
+    return {a.name: getattr(entry, a.field) for a in member.args}
+
+
+def _member_cases():
+    cases = []
+    for unit in introspect.all_units(detail=True, with_values=True):
+        for m in unit.members:
+            cases.append(pytest.param(unit.tr_module, unit.key, m.name, id=f"{unit.tr_module}-{unit.key}-{m.name}"))
+    return cases
+
+
+_MEMBER_CASES = _member_cases()
 
 
 # ---------------------------------------------------------------------------
@@ -143,3 +170,101 @@ def test_unknown_section_exits_nonzero(capsys):
     code, _out, err = run(["describe", "tr38901", "7.6"], capsys)
     assert code == 2
     assert "7.6" in err
+
+
+# ---------------------------------------------------------------------------
+# Combinatorial coverage: describe / get / dump across EVERY unit and member.
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("unit", _UNITS, ids=[f"{u.tr_module}-{u.key}" for u in _UNITS])
+def test_describe_every_unit_exits_zero_and_mentions_title(unit, capsys):
+    code, out, _ = run(["describe", unit.tr_module, unit.key], capsys)
+    assert code == 0
+    assert unit.title in out
+    # every described member name appears in the output
+    for member in introspect.describe(unit.tr_module, unit.key, with_values=False).members:
+        assert member.name in out
+
+
+@pytest.mark.parametrize("tr_module,key,member_name", _MEMBER_CASES)
+def test_get_every_member_matches_direct_api(tr_module, key, member_name, capsys):
+    accessor = introspect.load_accessor(tr_module, key)
+    member = next(m for m in introspect.describe(tr_module, key).members if m.name == member_name)
+    if member.kind == "method":
+        # Drop optional args that are None on this row (e.g. pathloss variant) --
+        # a real user omits them; passing "--variant None" would be a string.
+        kwargs = {k: v for k, v in _valid_kwargs(accessor, member).items() if v is not None}
+        argv = ["get", tr_module, key, member_name]
+        for name, value in kwargs.items():
+            argv += [f"--{name}", str(value)]
+        expected = getattr(accessor, member_name)(**kwargs)
+    else:
+        argv = ["get", tr_module, key, member_name]
+        expected = getattr(accessor, member_name)
+
+    code, out, _ = run(argv, capsys)
+    assert code == 0
+    # Thin-layer proof: every field/value the direct API returns is in the CLI output.
+    entries = expected if isinstance(expected, list) else [expected]
+    for entry in entries:
+        for field, value in entry.model_dump().items():
+            assert f"{field}: {value}" in out, f"{member_name}: '{field}: {value}' missing from get output"
+
+
+@pytest.mark.parametrize("tr_module,key,member_name", _MEMBER_CASES)
+def test_dump_json_every_member_is_clean_and_roundtrips(tr_module, key, member_name, capsys):
+    code, out, err = run(["dump", tr_module, key, member_name, "--format", "json"], capsys)
+    assert code == 0
+    assert err == ""  # stdout-only -> safe to pipe
+    parsed = json.loads(out)  # valid JSON, no stray lines
+    # round-trips to the same jsonable structure the API hands back
+    accessor = introspect.load_accessor(tr_module, key)
+    member = next(m for m in introspect.describe(tr_module, key, with_values=False).members if m.name == member_name)
+    assert parsed == introspect.to_jsonable(introspect.member_data(accessor, member))
+
+
+@pytest.mark.parametrize("tr_module,key,member_name", _MEMBER_CASES)
+def test_dump_csv_every_flat_list_member_parses(tr_module, key, member_name, capsys):
+    import csv
+    import io
+
+    accessor = introspect.load_accessor(tr_module, key)
+    member = next(m for m in introspect.describe(tr_module, key, with_values=False).members if m.name == member_name)
+    data = introspect.member_data(accessor, member)
+    is_flat_list = introspect.to_table(data) is not None
+
+    code, out, err = run(["dump", tr_module, key, member_name, "--format", "csv"], capsys)
+    if is_flat_list:
+        assert code == 0
+        parsed = list(csv.reader(io.StringIO(out)))
+        assert len(parsed) == len(data) + 1  # header + one row per entry
+    else:
+        assert code == 2  # non-tabular -> helpful error, not broken CSV
+        assert out == "" and "json" in err.lower()
+
+
+# ---------------------------------------------------------------------------
+# Error matrix + help + stdout discipline
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize("argv,needle", [
+    (["describe", "trNOPE", "7.4"], "trNOPE"),
+    (["describe", "tr38901", "9.9"], "9.9"),
+    (["get", "tr36777", "Z", "pathloss"], "Z"),
+    (["get", "tr38901", "7.9", "no_such_member"], "no_such_member"),
+    (["get", "tr38901", "7.9", "xpr", "--target", "Spaceship"], "Available"),
+    (["dump", "tr38901", "7.4", "o2i_penetration_loss", "--format", "csv"], "json"),  # nested -> csv unavailable
+])
+def test_bad_input_helpful_and_nonzero_with_clean_stdout(argv, needle, capsys):
+    code, out, err = run(argv, capsys)
+    assert code != 0
+    assert out == ""             # never a partial/broken payload on stdout
+    assert needle in err         # helpful pointer on stderr
+
+
+@pytest.mark.parametrize("argv", [["--help"], ["list", "--help"], ["describe", "--help"],
+                                  ["get", "--help"], ["dump", "--help"]])
+def test_help_exits_zero_and_mentions_subcommands(argv, capsys):
+    with pytest.raises(SystemExit) as exc:
+        cli.main(argv)
+    assert exc.value.code == 0
+    out = capsys.readouterr().out
+    assert "usage" in out.lower()
