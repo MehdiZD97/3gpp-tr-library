@@ -232,6 +232,18 @@ def test_depends_on_is_well_formed_and_targets_exist(section_7_9_front_matter):
 # ---------------------------------------------------------------------------
 R1_DIR = os.path.join(REPO_ROOT, "references", "3gpp-R1-2509126")
 
+# references/ is gitignored *except* each document folder's README.md, so R1_DIR
+# itself exists in CI (holding only the tracked README) while the calibration
+# spreadsheets and their subfolders are absent. So gate on the real content --
+# the .xlsx files -- rather than on the directory's existence, otherwise these
+# structural cross-checks run against nothing and fail in CI instead of skipping.
+_R1_SPREADSHEETS = (
+    glob.glob(os.path.join(R1_DIR, "**", "*.xlsx"), recursive=True)
+    + glob.glob(os.path.join(R1_DIR, "**", "*.XLSX"), recursive=True)
+)
+_R1_PRESENT = bool(_R1_SPREADSHEETS)
+_R1_SKIP_REASON = "references/3gpp-R1-2509126 calibration spreadsheets not present (fresh clone/CI)"
+
 
 def _xlsx_shared_strings(path):
     try:
@@ -244,7 +256,7 @@ def _xlsx_shared_strings(path):
         return []
 
 
-@pytest.mark.skipif(not os.path.isdir(R1_DIR), reason="references/3gpp-R1-2509126 not present (fresh clone/CI)")
+@pytest.mark.skipif(not _R1_PRESENT, reason=_R1_SKIP_REASON)
 def test_r1_calibration_folders_cover_section_7_9_target_families():
     # The R1-2509126 subfolders enumerate exactly the sensing target families
     # §7.9.1 defines (UAV, Automotive/vehicle, Human, AGV) plus EO and spatial
@@ -324,7 +336,7 @@ def test_calibration_rcs_and_xpr_reuse_section_7_9_2_values(section_7_9_yaml_dat
     assert xpr["UAV"][0] in uav_xpr["value"] and xpr["UAV"][1] in uav_xpr["value"]  # 13.75, 7.07
 
 
-@pytest.mark.skipif(not os.path.isdir(R1_DIR), reason="references/3gpp-R1-2509126 not present (fresh clone/CI)")
+@pytest.mark.skipif(not _R1_PRESENT, reason=_R1_SKIP_REASON)
 def test_r1_calibration_uses_section_7_9_target_background_channel_decomposition():
     # §7.9.0/7.9.3/7.9.4.3 decompose the ISAC channel into a *target channel*
     # and a *background channel*, with TRP/UE monostatic/bistatic sensing
@@ -332,8 +344,7 @@ def test_r1_calibration_uses_section_7_9_target_background_channel_decomposition
     # spreadsheet is labelled with that exact vocabulary -- the structural
     # correspondence (the numeric RCS/scenario inputs live in the deferred
     # §7.9.6 calibration tables, not these output-CDF sheets).
-    files = glob.glob(os.path.join(R1_DIR, "**", "*.xlsx"), recursive=True) + \
-        glob.glob(os.path.join(R1_DIR, "**", "*.XLSX"), recursive=True)
+    files = _R1_SPREADSHEETS
     assert files, "expected calibration spreadsheets under references/3gpp-R1-2509126"
     found_target = found_background = found_mode = False
     for f in files:
