@@ -1,0 +1,3 @@
+condition,mu_lgZSD,sigma_lgZSD,mu_offset_ZOD
+LOS,"max[-0.5, -2.1(d2D/1000) -0.01 (hUT - 1.5)+0.75]",0.40,0
+NLOS,"max[-0.5, -2.1(d2D/1000) -0.01(hUT - 1.5)+0.9]",0.49,"e(fc)-10^{a(fc) log10(max(b(fc), d2D)) +c(fc) -0.07(hUT-1.5)}"

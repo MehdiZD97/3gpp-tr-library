@@ -1,0 +1,24 @@
+parameter,indoor_value,outdoor_value
+Scenario,"Indoor office
+12 sectors per 120m * 50m * 3m
+ISD = 20m
+InF-SH
+Hall size: L=300 x W=150 m
+Room height: 10m
+18 BSs on a square lattice with spacing D, located D/2 from the walls.
+- D=50m","UMa (ISD = 500m), UMi (ISD= 200m)"
+Sensing mode,"TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic","TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic"
+Target type,Adult Pedestrian: 0.5m x 0.5m x 1.75m. See note.,Adult Pedestrian: 0.5m x 0.5m x 1.75m. See note.
+BS Tx power,"FR1: 24dBm
+FR2: 23dBm","FR1: 56dBm
+FR2: 41dBm"
+UT height,1m,1.5m
+UT Distribution,"Per Table 7.8-1 Indoor-Office
+Number of UTs: 20","Per Table 7.8-1. 
+Number of UTs/cell: 10"
+Sensing target distribution,"100% indoor, 1 target uniformly distributed (across multiple drops) over the convex hull of the TRP deployment",100% outdoor. 1 target uniformly distributed (across multiple drops) within the center cell.
+Component sigma_M of the RCS for each scattering point,-1.37 dBsm,-1.37 dBsm
+Minimum 3D distances between STX/SRX and sensing target,"For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 0 m 
+For UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)","For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distances between STX/SRX and the sensing target are 10 m for UMi scenarios and 35 m for UMa scenarios 
+For UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+Wrapping Method,N/A,"No wrapping method is used if interference is not modelled, otherwise geographical distance based wrapping"

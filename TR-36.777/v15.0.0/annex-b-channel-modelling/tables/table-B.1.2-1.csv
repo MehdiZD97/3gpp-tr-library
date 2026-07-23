@@ -1,0 +1,12 @@
+scenario,parameter,condition,mu,sigma
+RMa-AV,DS,LOS,0.0549\log_{10}(h_{UT}) - 8.0945,1.1879\exp(-0.0086 h_{UT})
+RMa-AV,DS,NLOS,-1.3465\log_{10}(h_{UT}) - 7.0805,1.5546\exp(0.0043 h_{UT})
+RMa-AV,ASA,LOS,-2.214\log_{10}(h_{UT}) - 1.1645,2.5622\exp(-0.00251 h_{UT})
+RMa-AV,ASA,NLOS,-1.602\log_{10}(h_{UT}) + 1.439,1.5316\exp(-0.0056 h_{UT})
+RMa-AV,ASD,LOS,-1.431\log_{10}(h_{UT}) - 0.89,2.2056\exp(0.0008 h_{UT})
+RMa-AV,ASD,NLOS,-1.4633\log_{10}(h_{UT}) + 0.5212,1.357\exp(0.0018 h_{UT})
+RMa-AV,ZSA,LOS,-0.2409\log_{10}(h_{UT}) - 0.1569,0.7579\exp(-0.0069 h_{UT})
+RMa-AV,ZSA,NLOS,-1.097\log_{10}(h_{UT}) + 0.3287,1.631\exp(-0.0087 h_{UT})
+RMa-AV,ZSD,LOS,0.8105\log_{10}(h_{UT}) - 0.9774,0.7106\exp(-0.0068 h_{UT})
+RMa-AV,ZSD,NLOS,-0.869\log_{10}(h_{UT}) - 1.2355,1.5851\exp(-0.0079 h_{UT})
+RMa-AV,K,LOS,22.55\log_{10}(h_{UT}) - 4.72,6.988\exp(0.01659 h_{UT})

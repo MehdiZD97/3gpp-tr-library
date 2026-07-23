@@ -1,0 +1,12 @@
+scenario,parameter,condition,mu,sigma
+UMa-AV,DS,LOS,-0.31\log_{10}(h_{UT}) - 6.845,0.7294\exp(0.0014 h_{UT})
+UMa-AV,DS,NLOS,0.0965\log_{10}(h_{UT}) - 7.503,0.9745\exp(-0.0045 h_{UT})
+UMa-AV,ASA,LOS,-2.4985\log_{10}(h_{UT}) - 1.602,1.0389\exp(0.0085 h_{UT})
+UMa-AV,ASA,NLOS,-2.266\log_{10}(h_{UT}) - 2.666,1.022\exp(0.009944 h_{UT})
+UMa-AV,ASD,LOS,-0.0135\log_{10}(h_{UT}) + 1.345,1.0188\exp(-0.0001 h_{UT})
+UMa-AV,ASD,NLOS,1.17\log_{10}(h_{UT}) - 0.665,1.2387\exp(-0.0046 h_{UT})
+UMa-AV,ZSA,LOS,-0.2895\log_{10}(h_{UT}) + 0.225,0.9576\exp(-0.0018 h_{UT})
+UMa-AV,ZSA,NLOS,-0.0005\log_{10}(h_{UT}) - 0.4695,1.6237\exp(-0.0076 h_{UT})
+UMa-AV,ZSD,LOS,-0.2975\log_{10}(h_{UT}) - 0.5798,1.0757\exp(0.0059 h_{UT})
+UMa-AV,ZSD,NLOS,0.925\log_{10}(h_{UT}) - 2.725,1.6421\exp(-0.0092 h_{UT})
+UMa-AV,K,LOS,4.217\log_{10}(h_{UT}) + 5.787,8.158\exp(0.0046 h_{UT})

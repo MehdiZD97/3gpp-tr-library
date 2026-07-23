@@ -1,0 +1,17 @@
+stx_srx,srx_stx,case
+TRP,TRP,Case 1: TRP-TRP link
+TRP,Terrestrial UE,Case 2: TRP- terrestrial UE link
+TRP,Vehicle UE,Case 3: TRP-Vehicle UE link
+TRP,Aerial UE,Case 4: TRP-Aerial UE link
+TRP,AGV UE,Case 2: TRP- terrestrial UE link
+TRP,RSU-type UE,Case 10: TRP - RSU-type UE link
+Terrestrial UE,Terrestrial UE,Case 5: terrestrial UE- terrestrial UE link
+Terrestrial UE,Vehicle UE,Case 6: terrestrial UE - Vehicle UE link
+Terrestrial UE,Aerial UE,Case 7: terrestrial UE - Aerial UE link
+Terrestrial UE,AGV UE,Case 5: terrestrial UE - terrestrial UE link
+Terrestrial UE,RSU-type UE,Case 11: RSU-type UE - terrestrial UE link
+Vehicle UE,Vehicle UE,Case 8: Vehicle UE - Vehicle UE link
+Vehicle UE,RSU-type UE,Case 13: RSU-type UE - vehicle UE link
+Aerial UE,Aerial UE,Case 9: Aerial UE - Aerial UE link
+AGV UE,AGV UE,Case 5: terrestrial UE - terrestrial UE link
+RSU-type UE,RSU-type UE,Case 12: RSU-type UE – RSU-type UE link

@@ -1,0 +1,35 @@
+parameter,indoor_value,outdoor_value
+Applicable communication scenarios,"Indoor office, indoor factory 
+Indoor room [TR38.808]","UMi, UMa, RMa, SMa"
+STX/SRX Locations,STX/SRX locations are selected among the TRPs and UE locations in the corresponding communication scenario,STX/SRX locations are selected among the TRPs and UE locations in the corresponding communication scenario
+STX/SRX Mobility for UEs,"Option 1: 0km/h
+Option 2: 3km/h
+Option 3: Uniform distribution between 0km/h and 3km/h","Option 1: 0km/h
+Option 2: 3km/h
+Option 3: Uniform distribution between 0km/h and 10km/h"
+LOS/NLOS,LOS and NLOS,LOS and NLOS
+Outdoor/indoor,Indoor,Outdoor
+3D mobility,"Option 1: 0km/h
+Option 2: 3km/h
+Option 3: Uniform distribution between 0km/h and 3km/h 
+(horizontal plane with random direction straight-line trajectory)","Option 1: 0km/h
+Option 2: 3km/h
+Option 3: Uniform distribution between 0km/h and 10km/h 
+(horizontal plane with random direction straight-line trajectory)"
+3D distribution,"N targets uniformly distributed over the horizontal area of the convex hull of the TRP deployment
+see note 1","Option A: N targets uniformly distributed within one cell. 
+Option B: N targets uniformly distributed per cell. 
+Option C: N targets uniformly distributed within an area not necessarily determined by cell boundaries. 
+see note 1"
+Orientation,Random over the horizontal area,Random over the horizontal area
+"Physical characteristics (e.g., size)","Size (Length x Width x Height):
+Child: 0.2m x 0.3m x 1m
+Adult Pedestrian: 0.5m x 0.5m x 1.75m","Size (Length x Width x Height):
+Child: 0.2m x 0.3m x 1m
+Adult Pedestrian: 0.5m x 0.5m x 1.75m"
+Minimum 3D distances between STX/SRX and sensing target,"For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 0 m 
+For UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)","For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distances between STX/SRX and the sensing target are 10 m for UMi scenarios and 35 m for UMa scenarios 
+For UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+Minimum 3D distance between sensing targets,"Option 1: At least larger than the physical size of a sensing target
+Option 2: Fixed value, 1m","Option 1: At least larger than the physical size of a sensing target
+Option 2: Fixed value, 1m"

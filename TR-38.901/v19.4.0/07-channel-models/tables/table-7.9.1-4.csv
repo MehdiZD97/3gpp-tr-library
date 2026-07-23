@@ -1,0 +1,22 @@
+parameter,value
+Applicable communication scenarios,InF (Table 7.8-7)
+Sensing transmitters and receivers properties,"STX/SRX location are selected among the TRPs and UEs location in the corresponding communication scenario
+
+STX/SRX Mobility for UEs
+Option 1: 0 km/h
+Option 2: 3km/h
+Option 3: Uniform distribution between 0km/h and 3km/h"
+LOS/NLOS,LOS and NLOS
+Outdoor/indoor,Indoor
+3D mobility,"Horizontal velocity with random straight-line trajectory 
+Option 1: Uniform distribution in the range of up to 30 km/h
+Option 2: Fixed velocities {3, 10} km/h"
+3D distribution,"Option A: Uniformly distributed in the convex hull of the horizontal BS deployment
+Option B: Uniformly distributed in horizontal plane"
+Orientation,Horizontal plane only
+"Physical characteristics (e.g., size)","Size
+Option 1: 0.5m x 1.0m x 0.5m
+Option 2: 1.5 m x 3.0m x 1.5 m"
+Minimum 3D distances between STX/SRX and sensing target,Min distances based on min TRP/UE distances defined in TR38.901
+Minimum 3D distance between sensing targets,"Option A: At least larger than the physical size of a target
+Option B: Fixed value, 5m"

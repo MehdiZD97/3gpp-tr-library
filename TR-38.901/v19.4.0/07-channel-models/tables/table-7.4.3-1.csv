@@ -1,0 +1,6 @@
+material,formula,notes
+Standard multi-pane glass,L_{glass} = 2 + 0.2f,NOTE 1
+IRR glass,L_{IRRglass} = 25.4 + 0.11f,NOTE 1; NOTE 2
+Concrete,L_{concrete} = 5 + 4f,NOTE 1
+Plywood,L_{plywood} = 1.03 + 0.17f,NOTE 1
+Wood,L_{wood} = 4.85 + 0.12f,NOTE 1

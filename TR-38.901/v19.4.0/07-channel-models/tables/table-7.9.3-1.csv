@@ -1,0 +1,60 @@
+case,tx,rx,reference_tr
+1,TRP,TRP,"For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF
+- TRP-TRP link of scenario UMi, UMa, InH, and InF following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+ - For InF, hUT is changed to the same height as the BS
+- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hUT=35m (see note 1)
+For sensing scenario Highway 
+- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hUT=35m for FR1(see note 1)
+- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2
+For sensing scenario Urban grid
+- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+For sensing scenario HST
+- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hUT=35m for FR1 (see note 1)
+- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2"
+2,TRP,terrestrial UE,"For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF
+- TRP-UE link of scenario UMi, UMa, RMa, InH, and InF in Clause 7 of TR 38.901
+For sensing scenario Highway and Urban grid
+- P2B link of scenario Highway and Urban grid in Clause 6 of TR 37.885 
+For sensing scenario HST
+- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 for FR1 and TRP-UE link of scenario UMa in Clause 7 of TR 38.901 for FR2"
+3,TRP,vehicle UE,"For sensing scenario Highway and Urban grid 
+- V2B link of scenario Highway and Urban grid in Clause 6 of TR 37.885
+For sensing scenario UMi, UMa, and RMa
+- TRP-UE link of scenario UMi, UMa, and RMa in Clause 7 of TR 38.901"
+4,TRP,aerial UE,"For sensing scenario UMa-AV, UMi-AV, and RMa-AV 
+- TRP-aerial UE link of scenario UMa-AV, UMi-AV, and RMa-AV in Clause Annex A and B of TR 36.777 for FR1
+- Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2"
+5,terrestrial UE,terrestrial UE,"For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF
+- UE-UE link of scenario UMi, UMa, InH, and InF following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m (see note 2)
+For sensing scenario Highway and Urban grid
+- P2P link in Clause 6 of TR 37.885
+For sensing scenario HST
+- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hBS=1.5m for FR1
+- UE-UE link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2"
+6,terrestrial UE,vehicle UE,"For sensing scenario UMi, UMa, RMa
+- UE-UE link of scenario UMi, UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m
+For sensing scenario Highway and Urban grid
+- V2P link in Clause 6 of TR 37.885"
+7,terrestrial UE,aerial UE,"For sensing scenario UMi-AV, UMa-AV, and RMa-AV
+- TRP-aerial UE link of UMi-AV in Annex A and B of TR 36.777 by setting hBS=1.5m for FR1
+- Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2
+- The corresponding parameter values in FR2 are used"
+8,vehicle UE,vehicle UE,"For sensing scenario Highway and Urban grid 
+- V2V link of scenario Highway and Urban grid in Clause 6 of TR 37.885 
+For sensing scenario UMi, UMa, and RMa
+- UE-UE link of scenario UMi, UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m"
+9,aerial UE,aerial UE,"For sensing scenario UMi-AV, UMa-AV, RMa-AV
+- TRP-aerial UE link of UMi-AV in Annex A and B of TR 36.777 by setting height of TRP equal to the height of the first aerial UE for FR1 (see note 4)
+- Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2
+- The corresponding parameter values in FR2 are used"
+10,TRP,RSU-type UE,"Highway and Urban grid
+- B2R link in Clause 6 of TR 37.885"
+11,RSU-type UE,terrestrial UE,"Highway and Urban grid
+- V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m"
+12,RSU-type UE,RSU-type UE,"Highway and Urban grid
+- V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m"
+13,RSU-type UE,vehicle UE,"Highway and Urban grid
+- V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m"

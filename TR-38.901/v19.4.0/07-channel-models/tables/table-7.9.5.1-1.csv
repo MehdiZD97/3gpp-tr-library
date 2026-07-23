@@ -1,0 +1,13 @@
+parameter,correlation_type
+Delays,Link-correlated
+Cluster powers,Link-correlated
+AOA/ZOA/AOD/ZOD offset,Link-correlated
+AOA/ZOA/AOD/ZOD sign,Link-correlated
+Random coupling,Link-correlated
+XPR,Link-correlated
+Initial random phase,Link-correlated
+LOS/NLOS states,Link-correlated
+Blockage (Model A),All-correlated
+O2I penetration loss,All-correlated
+Indoor distance,All-correlated
+Indoor states,All-correlated

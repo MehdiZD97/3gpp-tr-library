@@ -1,0 +1,35 @@
+parameter,value
+Scenario,UMa-AV
+Sensing mode,"TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic"
+Target type,UAV of small size (0.3m x 0.4m x 0.2m)
+Sectorization,Single 360-degree sector can be assumed
+Carrier Frequency,"FR1: 6 GHz
+FR2: 30 GHz"
+BS antenna configurations,Single dual-pol isotropic antenna
+BS Tx power,"FR1: 56dBm
+FR2: 41dBm"
+Bandwidth,"FR1: 100MHz
+FR2: 400MHz"
+BS noise figure,"FR1: 5dB
+FR2: 7dB"
+UT antenna configurations,"Single dual-pol isotropic antenna; (M,N,P,Mg,Ng;Mp,Np) = (1,1,2,1,1;1,1)"
+UT noise figure,"FR1: 9dB
+FR2: 10dB"
+UT height,"1.5m for terrestrial UTs,"
+UT Tx power,23dBm
+UT Distribution,"- The overall number of UTs is 30 uniformly distributed in the center cell. 
+- All of the UTs are either terrestrial UTs or aerial UTs, all outdoors. 
+- Vertical distribution of aerial UE: Fixed height value of 200 m.
+- FR1 is assumed for aerial UE."
+Sensing target distribution,1 target uniformly distributed (across multiple drops) within the center cell. Vertical distribution: Fixed height value of 200 m.
+Component sigma_M of the RCS for each scattering point,-12.81 dBsm
+Minimum 3D distances between STX/SRX and sensing target,10 m
+Wrapping Method,"No wrapping method is used if interference is not modelled, otherwise geographical distance based wrapping"
+Coupling loss for target channel,"power scaling factor (pathloss, shadow fading, and RCS component included):
+L_{TX-SPST-RX} = PL_dB(d1) + PL_dB(d2) + 10lg(c^2/(4*pi*f^2)) - 10lg(sigma_{RCS,A}) + SF_{dB,1} + SF_{dB,2}"
+STX/SRX selection,"Best N = 4 STX-SRX pairs to be selected for the target. 
+
+see note 1"
+Metrics,"Coupling loss for target channel 
+Coupling loss for background channel (in case of monostatic sensing, this is the coupling loss between Tx and one reference point)
+see note 2"

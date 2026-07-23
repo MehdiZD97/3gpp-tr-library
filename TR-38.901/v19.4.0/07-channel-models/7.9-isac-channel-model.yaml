@@ -1,0 +1,1658 @@
+sensing_scenarios:
+- scenario_type: UAV
+  parameter: Applicable communication scenarios
+  value: "UMi, UMa, RMa, SMa \nUMi-AV, UMa-AV, RMa-AV [36.777]"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: STX/SRX Locations
+  value: 'STX/SRX locations are selected among the TRPs and UEs locations in the corresponding communication scenarios.
+
+    see note 1'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: LOS/NLOS
+  value: LOS and NLOS
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Outdoor/indoor
+  value: Outdoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: 3D mobility
+  value: "Horizontal velocity: uniform distribution between 0 and 180km/h, if horizontal velocity is not fixed to 0. \n\nVertical velocity: 0km/h, optional {20, 40} km/h\nsee note 2 and 3"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: 3D distribution
+  value: "Horizontal plane: \nOption A: N targets uniformly distributed within one cell. \nOption B: N targets uniformly distributed per cell. \nOption C: N targets uniformly distributed within an area not necessarily determined by cell boundaries.\nN = {1, 2, 3, 4, 5}\nsee note 4\n\nVertical plane: \nOption A: Uniform between 1.5m and 300m.\nOption B: Fixed height value chosen from {25, 50, 100, 200, 300} m assuming vertical velocity is equal to 0."
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Orientation
+  value: Random in horizontal domain
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Physical characteristics (e.g., size)
+  value: "Size:\nOption 1: 1.6m x 1.5m x 0.7m \nOption 2: 0.3m x 0.4m x 0.2m"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: Min distances based on min TRP/UE distances defined in TR36.777.
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: UAV
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option 1: At least larger than the physical size of a target
+
+    Option 2: 10 meters'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Applicable communication scenarios
+  value: "Highway, Urban Grid. \nUMi, UMa, RMa, SMa"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Sensing transmitters and receivers properties
+  value: "STX/SRX locations are selected among the TRPs and UEs (e.g., VRU, vehicle, RSU-type UEs) locations in the corresponding communication scenario. \nAdditional option: ISD between TRPs of Urban Grid is 250m"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: LOS/NLOS
+  value: LOS and NLOS (including NLOSv)
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Outdoor/indoor
+  value: Outdoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Mobility (horizontal plane only)
+  value: Based on TR37.885 mobility for urban grid or highway scenario
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Distribution (horizontal)
+  value: Based on dropping in TR37.885 per urban grid or highway communication scenario
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Orientation
+  value: Lane direction in horizontal plane
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Physical characteristics (e.g., size)
+  value: "Type 1/2 (passenger vehicle) \nType 3 (truck/bus) \nVehicle type distribution per TR 37.885"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: 'For Highway, Urban Grid
+
+    - Min distances based on min TRP/UE distances defined in TR37.885
+
+    For UMi, UMa, RMa, SMa
+
+    - Min distances based on min TRP/UE distances defined in TR38.901'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 10 m.'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Automotive
+  parameter: Environment Objects, e.g., types, characteristics, mobility, distribution, etc.
+  value: 'Type-2 EO for Urban Grid
+
+    - up to 4 walls modelled as Type-2 EO, per building of size 413m x 230m x 20m.'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Human
+  parameter: Applicable communication scenarios
+  value: null
+  indoor_value: "Indoor office, indoor factory \nIndoor room [TR38.808]"
+  outdoor_value: UMi, UMa, RMa, SMa
+- scenario_type: Human
+  parameter: STX/SRX Locations
+  value: null
+  indoor_value: STX/SRX locations are selected among the TRPs and UE locations in the corresponding communication scenario
+  outdoor_value: STX/SRX locations are selected among the TRPs and UE locations in the corresponding communication scenario
+- scenario_type: Human
+  parameter: STX/SRX Mobility for UEs
+  value: null
+  indoor_value: 'Option 1: 0km/h
+
+    Option 2: 3km/h
+
+    Option 3: Uniform distribution between 0km/h and 3km/h'
+  outdoor_value: 'Option 1: 0km/h
+
+    Option 2: 3km/h
+
+    Option 3: Uniform distribution between 0km/h and 10km/h'
+- scenario_type: Human
+  parameter: LOS/NLOS
+  value: null
+  indoor_value: LOS and NLOS
+  outdoor_value: LOS and NLOS
+- scenario_type: Human
+  parameter: Outdoor/indoor
+  value: null
+  indoor_value: Indoor
+  outdoor_value: Outdoor
+- scenario_type: Human
+  parameter: 3D mobility
+  value: null
+  indoor_value: "Option 1: 0km/h\nOption 2: 3km/h\nOption 3: Uniform distribution between 0km/h and 3km/h \n(horizontal plane with random direction straight-line trajectory)"
+  outdoor_value: "Option 1: 0km/h\nOption 2: 3km/h\nOption 3: Uniform distribution between 0km/h and 10km/h \n(horizontal plane with random direction straight-line trajectory)"
+- scenario_type: Human
+  parameter: 3D distribution
+  value: null
+  indoor_value: 'N targets uniformly distributed over the horizontal area of the convex hull of the TRP deployment
+
+    see note 1'
+  outdoor_value: "Option A: N targets uniformly distributed within one cell. \nOption B: N targets uniformly distributed per cell. \nOption C: N targets uniformly distributed within an area not necessarily determined by cell boundaries. \nsee note 1"
+- scenario_type: Human
+  parameter: Orientation
+  value: null
+  indoor_value: Random over the horizontal area
+  outdoor_value: Random over the horizontal area
+- scenario_type: Human
+  parameter: Physical characteristics (e.g., size)
+  value: null
+  indoor_value: 'Size (Length x Width x Height):
+
+    Child: 0.2m x 0.3m x 1m
+
+    Adult Pedestrian: 0.5m x 0.5m x 1.75m'
+  outdoor_value: 'Size (Length x Width x Height):
+
+    Child: 0.2m x 0.3m x 1m
+
+    Adult Pedestrian: 0.5m x 0.5m x 1.75m'
+- scenario_type: Human
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: null
+  indoor_value: "For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 0 m \nFor UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+  outdoor_value: "For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distances between STX/SRX and the sensing target are 10 m for UMi scenarios and 35 m for UMa scenarios \nFor UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+- scenario_type: Human
+  parameter: Minimum 3D distance between sensing targets
+  value: null
+  indoor_value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 1m'
+  outdoor_value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 1m'
+- scenario_type: AGV
+  parameter: Applicable communication scenarios
+  value: InF (Table 7.8-7)
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Sensing transmitters and receivers properties
+  value: 'STX/SRX location are selected among the TRPs and UEs location in the corresponding communication scenario
+
+
+    STX/SRX Mobility for UEs
+
+    Option 1: 0 km/h
+
+    Option 2: 3km/h
+
+    Option 3: Uniform distribution between 0km/h and 3km/h'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: LOS/NLOS
+  value: LOS and NLOS
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Outdoor/indoor
+  value: Indoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: 3D mobility
+  value: "Horizontal velocity with random straight-line trajectory \nOption 1: Uniform distribution in the range of up to 30 km/h\nOption 2: Fixed velocities {3, 10} km/h"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: 3D distribution
+  value: 'Option A: Uniformly distributed in the convex hull of the horizontal BS deployment
+
+    Option B: Uniformly distributed in horizontal plane'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Orientation
+  value: Horizontal plane only
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Physical characteristics (e.g., size)
+  value: 'Size
+
+    Option 1: 0.5m x 1.0m x 0.5m
+
+    Option 2: 1.5 m x 3.0m x 1.5 m'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: Min distances based on min TRP/UE distances defined in TR38.901
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: AGV
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option A: At least larger than the physical size of a target
+
+    Option B: Fixed value, 5m'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Applicable communication scenarios
+  value: 'Highway, Urban grid, HST (High Speed Train, TR 38.802)
+
+    UMi, UMa, RMa, SMa'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: STX/SRX Locations
+  value: 'STX/SRX locations are selected among the TRPs and UEs (e.g., VRU, vehicle, RSU-type UEs) locations in the corresponding communication scenarios.
+
+    Additional option: ISD between TRPs of Urban Grid is 250 m'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: LOS/NLOS
+  value: LOS and NLOS
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Outdoor/indoor
+  value: Outdoor
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: 3D mobility
+  value: 'Horizontal velocity: up to 10 km/h for humans and animals'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: 3D distribution
+  value: Uniformly distributed in horizontal plane
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Orientation
+  value: Random distribution in horizontal plane
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Physical characteristics (e.g., size)
+  value: "For human/pedestrians: Child: 0.2m x 0.3m x 1m\nAdult: 0.5m x 0.5m x 1.75m \nFor animals: Size: 1.5m x 0.5m x 1 m"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: "For Highway, Urban Grid, HST \n- Min. distance is based on min TRP/UE distances defined in TR37.885 and TR38.802\nFor UMi, UMa, RMa, SMa\n- Min distances based on min TRP/UE distances defined in TR38.901"
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Minimum 3D distance between sensing targets
+  value: 'Option 1: At least larger than the physical size of a sensing target
+
+    Option 2: Fixed value, 10 m.'
+  indoor_value: null
+  outdoor_value: null
+- scenario_type: Objects-creating-hazards
+  parameter: Environment objects, e.g., types, characteristics, mobility, distribution, etc.
+  value: 'Type-2 EO for Urban Grid
+
+    - up to 4 walls modelled as Type-2 EO, per building of size 413m x 230m x 20m.'
+  indoor_value: null
+  outdoor_value: null
+rcs_model_1:
+- sensing_target: UAV with small size
+  lg_sigma_m_dbsm: '-12.81'
+  sigma_sigmaS_db: '3.74'
+- sensing_target: Human with RCS model 1
+  lg_sigma_m_dbsm: '-1.37'
+  sigma_sigmaS_db: '3.94'
+rcs_model_2:
+- target: UAV with large size
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '7.13'
+  theta_center_deg: '90'
+  theta_3db_deg: '8.68'
+  g_max: '7.43'
+  sigma_max: '14.30'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[45,135)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '10.09'
+  theta_center_deg: '90'
+  theta_3db_deg: '11.43'
+  g_max: '3.99'
+  sigma_max: '10.86'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[135,225)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '7.13'
+  theta_center_deg: '90'
+  theta_3db_deg: '8.68'
+  g_max: '7.43'
+  sigma_max: '14.30'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[225,315)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '14.19'
+  theta_center_deg: '90'
+  theta_3db_deg: '16.53'
+  g_max: '1.02'
+  sigma_max: '7.89'
+  range_theta_deg: '[45,135)'
+  range_phi_deg: '[-45,45)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Bottom
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '180'
+  theta_3db_deg: '4.93'
+  g_max: '13.55'
+  sigma_max: '20.42'
+  range_theta_deg: '[135,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: UAV with large size
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0'
+  theta_3db_deg: '4.93'
+  g_max: '13.55'
+  sigma_max: '20.42'
+  range_theta_deg: '[0,45)'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-5.85'
+  sigma_sigmaS_db: '2.50'
+- target: Human with RCS model 2
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '216.65'
+  theta_center_deg: '90'
+  theta_3db_deg: '55.7'
+  g_max: '2.14'
+  sigma_max: '7.7'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[-90, 90)'
+  lg_sigma_m_dbsm: '-1.37'
+  sigma_sigmaS_db: '3.94'
+- target: Human with RCS model 2
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '216.65'
+  theta_center_deg: '90'
+  theta_3db_deg: '55.7'
+  g_max: '2.14'
+  sigma_max: '7.7'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[90,270)'
+  lg_sigma_m_dbsm: '-1.37'
+  sigma_sigmaS_db: '3.94'
+- target: Vehicle with single scattering point
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.75'
+  sigma_max: '13.68'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[45,135)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '36.32'
+  theta_center_deg: '79.65'
+  theta_3db_deg: '36.73'
+  g_max: '14.56'
+  sigma_max: '7.50'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[135,225)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.75'
+  sigma_max: '13.68'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[225,315)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '40.54'
+  theta_center_deg: '71.75'
+  theta_3db_deg: '29.13'
+  g_max: '15.52'
+  sigma_max: '8.45'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[-45, 45)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with single scattering point
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0.00'
+  theta_3db_deg: '18.13'
+  g_max: '21.26'
+  sigma_max: '14.19'
+  range_theta_deg: '[0,30)'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.60'
+  sigma_max: '20.52'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '36.32'
+  theta_center_deg: '79.65'
+  theta_3db_deg: '36.73'
+  g_max: '13.90'
+  sigma_max: '13.82'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '26.90'
+  theta_center_deg: '79.70'
+  theta_3db_deg: '44.42'
+  g_max: '20.60'
+  sigma_max: '20.52'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '40.54'
+  theta_center_deg: '71.75'
+  theta_3db_deg: '29.13'
+  g_max: '14.99'
+  sigma_max: '14.91'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: Vehicle with multiple scattering points
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0.00'
+  theta_3db_deg: '18.13'
+  g_max: '21.12'
+  sigma_max: '21.05'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '11.25'
+  sigma_sigmaS_db: '3.41'
+- target: AGV with single scattering point
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '13.68'
+  theta_center_deg: '90'
+  theta_3db_deg: '13.68'
+  g_max: '13.02'
+  sigma_max: '23.29'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[-45,45)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.33'
+  sigma_max: '17.60'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[45,135)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '12.49'
+  theta_center_deg: '90'
+  theta_3db_deg: '11.89'
+  g_max: '11.01'
+  sigma_max: '21.28'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[135,225)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.33'
+  sigma_max: '17.60'
+  range_theta_deg: '[30,180]'
+  range_phi_deg: '[225,315)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with single scattering point
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0'
+  theta_3db_deg: '11.44'
+  g_max: '11.79'
+  sigma_max: '22.06'
+  range_theta_deg: '[0,30)'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Front
+  phi_center_deg: '0'
+  phi_3db_deg: '13.68'
+  theta_center_deg: '90'
+  theta_3db_deg: '13.68'
+  g_max: '13.00'
+  sigma_max: '30.26'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Left
+  phi_center_deg: '90'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.27'
+  sigma_max: '24.53'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Back
+  phi_center_deg: '180'
+  phi_3db_deg: '12.49'
+  theta_center_deg: '90'
+  theta_3db_deg: '11.89'
+  g_max: '10.98'
+  sigma_max: '28.24'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Right
+  phi_center_deg: '270'
+  phi_3db_deg: '15.53'
+  theta_center_deg: '75'
+  theta_3db_deg: '20.03'
+  g_max: '7.27'
+  sigma_max: '24.53'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+- target: AGV with multiple scattering points
+  scattering_point: Roof
+  phi_center_deg: '-'
+  phi_3db_deg: '-'
+  theta_center_deg: '0'
+  theta_3db_deg: '11.44'
+  g_max: '11.77'
+  sigma_max: '29.03'
+  range_theta_deg: '[0,180]'
+  range_phi_deg: '[0,360)'
+  lg_sigma_m_dbsm: '-4.25'
+  sigma_sigmaS_db: '2.51'
+rcs_model_2_k_parameters:
+- target: UAV with large size
+  k1: '6.05'
+  k2: '1.33'
+- target: Human with RCS model 2
+  k1: '0.5714'
+  k2: '0.1'
+- target: Vehicle with single/multiple SPSTs
+  k1: '6'
+  k2: '1.65'
+- target: AGV with single/multiple SPSTs
+  k1: '12'
+  k2: '1.45'
+xpr:
+- target: UAV
+  mu_xpr_db: '13.75'
+  sigma_xpr_db: '7.07'
+- target: Human
+  mu_xpr_db: '19.81'
+  sigma_xpr_db: '4.25'
+- target: Vehicle
+  mu_xpr_db: '21.12'
+  sigma_xpr_db: '6.88'
+- target: AGV
+  mu_xpr_db: '9.60'
+  sigma_xpr_db: '6.85'
+reference_channel_models:
+- case: '1'
+  tx: TRP
+  rx: TRP
+  reference_tr: "For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF\n- TRP-TRP link of scenario UMi, UMa, InH, and InF following the option based on TR 38.901 defined in Clause A.3 of TR 38.858\n - For InF, hUT is changed to the same height as the BS\n- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hUT=35m (see note 1)\nFor sensing scenario Highway \n- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hUT=35m for FR1(see note 1)\n- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2\nFor sensing scenario Urban grid\n- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858\nFor sensing scenario HST\n- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hUT=35m for FR1 (see note 1)\n- TRP-TRP link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2"
+- case: '2'
+  tx: TRP
+  rx: terrestrial UE
+  reference_tr: "For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF\n- TRP-UE link of scenario UMi, UMa, RMa, InH, and InF in Clause 7 of TR 38.901\nFor sensing scenario Highway and Urban grid\n- P2B link of scenario Highway and Urban grid in Clause 6 of TR 37.885 \nFor sensing scenario HST\n- TRP-UE link of scenario RMa in Clause 7 of TR 38.901 for FR1 and TRP-UE link of scenario UMa in Clause 7 of TR 38.901 for FR2"
+- case: '3'
+  tx: TRP
+  rx: vehicle UE
+  reference_tr: "For sensing scenario Highway and Urban grid \n- V2B link of scenario Highway and Urban grid in Clause 6 of TR 37.885\nFor sensing scenario UMi, UMa, and RMa\n- TRP-UE link of scenario UMi, UMa, and RMa in Clause 7 of TR 38.901"
+- case: '4'
+  tx: TRP
+  rx: aerial UE
+  reference_tr: "For sensing scenario UMa-AV, UMi-AV, and RMa-AV \n- TRP-aerial UE link of scenario UMa-AV, UMi-AV, and RMa-AV in Clause Annex A and B of TR 36.777 for FR1\n- Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2"
+- case: '5'
+  tx: terrestrial UE
+  rx: terrestrial UE
+  reference_tr: 'For sensing scenario UMi/UMi-AV, UMa/UMa-AV, RMa/RMa-AV, InH, InF
+
+    - UE-UE link of scenario UMi, UMa, InH, and InF following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+
+    - TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m (see note 2)
+
+    For sensing scenario Highway and Urban grid
+
+    - P2P link in Clause 6 of TR 37.885
+
+    For sensing scenario HST
+
+    - TRP-UE link of scenario RMa in Clause 7 of TR 38.901 by setting hBS=1.5m for FR1
+
+    - UE-UE link of scenario UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858 for FR2'
+- case: '6'
+  tx: terrestrial UE
+  rx: vehicle UE
+  reference_tr: 'For sensing scenario UMi, UMa, RMa
+
+    - UE-UE link of scenario UMi, UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858
+
+    - TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m
+
+    For sensing scenario Highway and Urban grid
+
+    - V2P link in Clause 6 of TR 37.885'
+- case: '7'
+  tx: terrestrial UE
+  rx: aerial UE
+  reference_tr: 'For sensing scenario UMi-AV, UMa-AV, and RMa-AV
+
+    - TRP-aerial UE link of UMi-AV in Annex A and B of TR 36.777 by setting hBS=1.5m for FR1
+
+    - Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2
+
+    - The corresponding parameter values in FR2 are used'
+- case: '8'
+  tx: vehicle UE
+  rx: vehicle UE
+  reference_tr: "For sensing scenario Highway and Urban grid \n- V2V link of scenario Highway and Urban grid in Clause 6 of TR 37.885 \nFor sensing scenario UMi, UMa, and RMa\n- UE-UE link of scenario UMi, UMa following the option based on TR 38.901 defined in Clause A.3 of TR 38.858\n- TRP-UE link of scenario RMa defined in Clause 7 of TR 38.901 by setting hBS=1.5m"
+- case: '9'
+  tx: aerial UE
+  rx: aerial UE
+  reference_tr: 'For sensing scenario UMi-AV, UMa-AV, RMa-AV
+
+    - TRP-aerial UE link of UMi-AV in Annex A and B of TR 36.777 by setting height of TRP equal to the height of the first aerial UE for FR1 (see note 4)
+
+    - Reuse the channel model of scenario UMa-AV, UMi-AV, and RMa-AV of FR1 for FR2
+
+    - The corresponding parameter values in FR2 are used'
+- case: '10'
+  tx: TRP
+  rx: RSU-type UE
+  reference_tr: 'Highway and Urban grid
+
+    - B2R link in Clause 6 of TR 37.885'
+- case: '11'
+  tx: RSU-type UE
+  rx: terrestrial UE
+  reference_tr: 'Highway and Urban grid
+
+    - V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m'
+- case: '12'
+  tx: RSU-type UE
+  rx: RSU-type UE
+  reference_tr: 'Highway and Urban grid
+
+    - V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m'
+- case: '13'
+  tx: RSU-type UE
+  rx: vehicle UE
+  reference_tr: 'Highway and Urban grid
+
+    - V2V link in Clause 6 of TR 37.885, with antenna height at RSU is 5m'
+target_channel_links:
+- stx_srx: TRP
+  target: UAV
+  case: 'Case 4: TRP-Aerial UE link'
+- stx_srx: TRP
+  target: Human
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  target: Vehicle
+  case: 'Case 3: TRP-Vehicle UE link'
+- stx_srx: TRP
+  target: AGV
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  target: Object (Hazard)
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  target: UAV
+  case: 'Case 7: terrestrial UE - Aerial UE link'
+- stx_srx: Terrestrial UE
+  target: Human
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  target: Vehicle
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Terrestrial UE
+  target: AGV
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  target: Object (Hazard)
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Vehicle UE
+  target: Human
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Vehicle UE
+  target: Vehicle
+  case: 'Case 8: Vehicle UE - Vehicle UE link'
+- stx_srx: Vehicle UE
+  target: Object (Hazard)
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Aerial UE
+  target: UAV
+  case: 'Case 9: Aerial UE - Aerial UE link'
+- stx_srx: AGV UE
+  target: AGV
+  case: 'Case 5: terrestrial UE - terrestrial UE link'
+- stx_srx: RSU-type UE
+  target: Human
+  case: 'Case 11: RSU-type UE - terrestrial UE link'
+- stx_srx: RSU-type UE
+  target: Vehicle
+  case: 'Case 13: RSU-type UE - vehicle UE link'
+- stx_srx: RSU-type UE
+  target: Object (Hazard)
+  case: 'Case 11: RSU-type UE - terrestrial UE link'
+background_channel_links:
+- stx_srx: TRP
+  srx_stx: TRP
+  case: 'Case 1: TRP-TRP link'
+- stx_srx: TRP
+  srx_stx: Terrestrial UE
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  srx_stx: Vehicle UE
+  case: 'Case 3: TRP-Vehicle UE link'
+- stx_srx: TRP
+  srx_stx: Aerial UE
+  case: 'Case 4: TRP-Aerial UE link'
+- stx_srx: TRP
+  srx_stx: AGV UE
+  case: 'Case 2: TRP- terrestrial UE link'
+- stx_srx: TRP
+  srx_stx: RSU-type UE
+  case: 'Case 10: TRP - RSU-type UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: Terrestrial UE
+  case: 'Case 5: terrestrial UE- terrestrial UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: Vehicle UE
+  case: 'Case 6: terrestrial UE - Vehicle UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: Aerial UE
+  case: 'Case 7: terrestrial UE - Aerial UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: AGV UE
+  case: 'Case 5: terrestrial UE - terrestrial UE link'
+- stx_srx: Terrestrial UE
+  srx_stx: RSU-type UE
+  case: 'Case 11: RSU-type UE - terrestrial UE link'
+- stx_srx: Vehicle UE
+  srx_stx: Vehicle UE
+  case: 'Case 8: Vehicle UE - Vehicle UE link'
+- stx_srx: Vehicle UE
+  srx_stx: RSU-type UE
+  case: 'Case 13: RSU-type UE - vehicle UE link'
+- stx_srx: Aerial UE
+  srx_stx: Aerial UE
+  case: 'Case 9: Aerial UE - Aerial UE link'
+- stx_srx: AGV UE
+  srx_stx: AGV UE
+  case: 'Case 5: terrestrial UE - terrestrial UE link'
+- stx_srx: RSU-type UE
+  srx_stx: RSU-type UE
+  case: 'Case 12: RSU-type UE – RSU-type UE link'
+los_condition_determination:
+- case: '7'
+  reference_scenario: UMi in Table 7.4.2-1 in TR 38.901 for sensing scenario UMi-AV/UMa-AV/RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 1.5m <= hUT <= 22.5m; Sensing scenario RMa-AV: 1.5m <= hUT <= 10m'
+- case: '7'
+  reference_scenario: UMi-AV in Table B-1 in TR 36.777 for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for sensing scenario RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 22.5m < hUT <= 300m; Sensing scenario RMa-AV: 10m < hUT <= 300m'
+- case: '9'
+  reference_scenario: UMi in Table 7.4.2-1 in TR 38.901 for sensing scenario UMi-AV/UMa-AV/RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 1.5m <= hUT1, hUT2 <= 22.5m; Sensing scenario RMa-AV: 1.5m <= hUT1, hUT2 <= 10m'
+- case: '9'
+  reference_scenario: UMi-AV in Table B-1 in TR 36.777 for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for sensing scenario RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 22.5m < max(hUT1, hUT2) <= 300m, 1.5m <= min(hUT1, hUT2) <= 22.5m; Sensing scenario RMa-AV: 10m < max(hUT1, hUT2) <= 300m, 1.5m <= min(hUT1, hUT2) <= 10m'
+- case: '9'
+  reference_scenario: UMa-AV in Table B-1 in TR 36.777 for aerial UE height in range (22.5m, 100m] for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for aerial UE height in range (10m, 40m] for sensing scenario RMa-AV
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 22.5m < hUT1, hUT2 <= 100m; Sensing scenario RMa-AV: 10m < hUT1, hUT2 <= 40m'
+- case: '9'
+  reference_scenario: LOS probability is 100%
+  applicability_range: 'Sensing scenario UMi-AV, UMa-AV: 100m < max(hUT1, hUT2) <= 300m, 22.5m < min(hUT1, hUT2) <= 100m; Sensing scenario RMa-AV: 40m < max(hUT1, hUT2) <= 300m, 10m < min(hUT1, hUT2) <= 40m'
+background_channel_params:
+- sensing_mode: TRP monostatic
+  scenario: UMi
+  alpha_d: '6.1996'
+  beta_d: '0.1558'
+  c_d: '15.2697'
+  alpha_h: '12.0487'
+  beta_h: '2.3261'
+  c_h: '0.0157'
+- sensing_mode: TRP monostatic
+  scenario: UMa / Urban grid / Highway(FR2) / HST(FR2)
+  alpha_d: '10.3370'
+  beta_d: '0.1317'
+  c_d: '68.7778'
+  alpha_h: '16.2253'
+  beta_h: '1.9218'
+  c_h: '2.6142'
+- sensing_mode: TRP monostatic
+  scenario: RMa / Highway(FR1) / HST(FR1)
+  alpha_d: '6.2025'
+  beta_d: '0.0391'
+  c_d: '1.2940'
+  alpha_h: '0.0007'
+  beta_h: '5.0146'
+  c_h: '0.0522'
+- sensing_mode: TRP monostatic
+  scenario: Indoor office
+  alpha_d: '4.236'
+  beta_d: '0.19255'
+  c_d: '4.99'
+  alpha_h: '1.3293'
+  beta_h: '0.1442'
+  c_h: '-13.19'
+- sensing_mode: TRP monostatic
+  scenario: Indoor Factory
+  alpha_d: '0.039836'
+  beta_d: '0.179783'
+  c_d: '1.130020'
+  alpha_h: '0.283447'
+  beta_h: '0.435965'
+  c_h: '-17.043530'
+- sensing_mode: UT monostatic
+  scenario: UMi
+  alpha_d: '10.0220'
+  beta_d: '1.2522'
+  c_d: '11.0040'
+  alpha_h: '3.0487'
+  beta_h: '1.9128'
+  c_h: '0.1785'
+- sensing_mode: UT monostatic
+  scenario: UMa / Urban grid / Highway(FR2) / HST(FR2)
+  alpha_d: '2.9072'
+  beta_d: '0.1031'
+  c_d: '3.8471'
+  alpha_h: '1.6640'
+  beta_h: '1.6215'
+  c_h: '-1.4205'
+- sensing_mode: UT monostatic
+  scenario: RMa / Highway(FR1) / HST(FR1)
+  alpha_d: '10.2421'
+  beta_d: '0.0526'
+  c_d: '3.3131'
+  alpha_h: '0.3175'
+  beta_h: '1.4150'
+  c_h: '1.5906'
+- sensing_mode: UT monostatic
+  scenario: Indoor office
+  alpha_d: '4.3733'
+  beta_d: '0.4457'
+  c_d: '4.6302'
+  alpha_h: '0.2974'
+  beta_h: '0.4103'
+  c_h: '2.9711'
+- sensing_mode: UT monostatic
+  scenario: Indoor Factory
+  alpha_d: '0.231418'
+  beta_d: '0.128133'
+  c_d: '2.004903'
+  alpha_h: '0.462968'
+  beta_h: '0.281526'
+  c_h: '-16.921515'
+- sensing_mode: UT monostatic (aerial UE)
+  scenario: UMi-AV
+  alpha_d: 0.0156h + 5.5399
+  beta_d: 40.4517/(h + 254.6318)
+  c_d: 0.0140h + 15.1184
+  alpha_h: 0.0123h + 11.9569
+  beta_h: 17.8047/(h - 0.2202)
+  c_h: 0.0532h - 0.0120
+- sensing_mode: UT monostatic (aerial UE)
+  scenario: UMa-AV
+  alpha_d: 0.83 + 0.00015h
+  beta_d: 1/(536.305 + 1.0279h)
+  c_d: 13.824 + 0.03085h
+  alpha_h: 0.9054 - 0.0001117h
+  beta_h: 1/(38.672 - 0.04658h)
+  c_h: 25.4898 - 0.02398h
+- sensing_mode: UT monostatic (aerial UE)
+  scenario: RMa-AV
+  alpha_d: 4.423 + 0.001926h
+  beta_d: 1/(3.8467 + 0.6547h)
+  c_d: 3.864 + 0.1538h
+  alpha_h: 1.4231 + 0.00192h
+  beta_h: 1/(1.7157 - 0.00538h)
+  c_h: 2.6541 - 0.003851h
+spatial_consistency_correlation:
+- parameter: Delays
+  correlation_type: Link-correlated
+- parameter: Cluster powers
+  correlation_type: Link-correlated
+- parameter: AOA/ZOA/AOD/ZOD offset
+  correlation_type: Link-correlated
+- parameter: AOA/ZOA/AOD/ZOD sign
+  correlation_type: Link-correlated
+- parameter: Random coupling
+  correlation_type: Link-correlated
+- parameter: XPR
+  correlation_type: Link-correlated
+- parameter: Initial random phase
+  correlation_type: Link-correlated
+- parameter: LOS/NLOS states
+  correlation_type: Link-correlated
+- parameter: Blockage (Model A)
+  correlation_type: All-correlated
+- parameter: O2I penetration loss
+  correlation_type: All-correlated
+- parameter: Indoor distance
+  correlation_type: All-correlated
+- parameter: Indoor states
+  correlation_type: All-correlated
+calibration_assumptions:
+- table: 7.9.6.1-1
+  parameter: Scenario
+  value: UMa-AV
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Sensing mode
+  value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Target type
+  value: UAV of small size (0.3m x 0.4m x 0.2m)
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Sectorization
+  value: Single 360-degree sector can be assumed
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Carrier Frequency
+  value: 'FR1: 6 GHz
+
+    FR2: 30 GHz'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: BS antenna configurations
+  value: Single dual-pol isotropic antenna
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: BS Tx power
+  value: 'FR1: 56dBm
+
+    FR2: 41dBm'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Bandwidth
+  value: 'FR1: 100MHz
+
+    FR2: 400MHz'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: BS noise figure
+  value: 'FR1: 5dB
+
+    FR2: 7dB'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: UT antenna configurations
+  value: Single dual-pol isotropic antenna; (M,N,P,Mg,Ng;Mp,Np) = (1,1,2,1,1;1,1)
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: UT noise figure
+  value: 'FR1: 9dB
+
+    FR2: 10dB'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: UT height
+  value: 1.5m for terrestrial UTs,
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: UT Tx power
+  value: 23dBm
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: UT Distribution
+  value: "- The overall number of UTs is 30 uniformly distributed in the center cell. \n- All of the UTs are either terrestrial UTs or aerial UTs, all outdoors. \n- Vertical distribution of aerial UE: Fixed height value of 200 m.\n- FR1 is assumed for aerial UE."
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Sensing target distribution
+  value: '1 target uniformly distributed (across multiple drops) within the center cell. Vertical distribution: Fixed height value of 200 m.'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Component sigma_M of the RCS for each scattering point
+  value: -12.81 dBsm
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: 10 m
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Wrapping Method
+  value: No wrapping method is used if interference is not modelled, otherwise geographical distance based wrapping
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Coupling loss for target channel
+  value: 'power scaling factor (pathloss, shadow fading, and RCS component included):
+
+    L_{TX-SPST-RX} = PL_dB(d1) + PL_dB(d2) + 10lg(c^2/(4*pi*f^2)) - 10lg(sigma_{RCS,A}) + SF_{dB,1} + SF_{dB,2}'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: STX/SRX selection
+  value: "Best N = 4 STX-SRX pairs to be selected for the target. \n\nsee note 1"
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-1
+  parameter: Metrics
+  value: "Coupling loss for target channel \nCoupling loss for background channel (in case of monostatic sensing, this is the coupling loss between Tx and one reference point)\nsee note 2"
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-2
+  parameter: Scenario
+  value: null
+  indoor_value: 'Indoor office
+
+    12 sectors per 120m * 50m * 3m
+
+    ISD = 20m
+
+    InF-SH
+
+    Hall size: L=300 x W=150 m
+
+    Room height: 10m
+
+    18 BSs on a square lattice with spacing D, located D/2 from the walls.
+
+    - D=50m'
+  outdoor_value: UMa (ISD = 500m), UMi (ISD= 200m)
+- table: 7.9.6.1-2
+  parameter: Sensing mode
+  value: null
+  indoor_value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+  outdoor_value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+- table: 7.9.6.1-2
+  parameter: Target type
+  value: null
+  indoor_value: 'Adult Pedestrian: 0.5m x 0.5m x 1.75m. See note.'
+  outdoor_value: 'Adult Pedestrian: 0.5m x 0.5m x 1.75m. See note.'
+- table: 7.9.6.1-2
+  parameter: BS Tx power
+  value: null
+  indoor_value: 'FR1: 24dBm
+
+    FR2: 23dBm'
+  outdoor_value: 'FR1: 56dBm
+
+    FR2: 41dBm'
+- table: 7.9.6.1-2
+  parameter: UT height
+  value: null
+  indoor_value: 1m
+  outdoor_value: 1.5m
+- table: 7.9.6.1-2
+  parameter: UT Distribution
+  value: null
+  indoor_value: 'Per Table 7.8-1 Indoor-Office
+
+    Number of UTs: 20'
+  outdoor_value: "Per Table 7.8-1. \nNumber of UTs/cell: 10"
+- table: 7.9.6.1-2
+  parameter: Sensing target distribution
+  value: null
+  indoor_value: 100% indoor, 1 target uniformly distributed (across multiple drops) over the convex hull of the TRP deployment
+  outdoor_value: 100% outdoor. 1 target uniformly distributed (across multiple drops) within the center cell.
+- table: 7.9.6.1-2
+  parameter: Component sigma_M of the RCS for each scattering point
+  value: null
+  indoor_value: -1.37 dBsm
+  outdoor_value: -1.37 dBsm
+- table: 7.9.6.1-2
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: null
+  indoor_value: "For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 0 m \nFor UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+  outdoor_value: "For TRP monostatic and TRP-TRP bistatic sensing modes, the minimum 2D distances between STX/SRX and the sensing target are 10 m for UMi scenarios and 35 m for UMa scenarios \nFor UE monostatic and UE-UE bistatic sensing modes, the minimum 2D distance between STX/SRX and the sensing target is 1 m (as specified in TR 38.858)"
+- table: 7.9.6.1-2
+  parameter: Wrapping Method
+  value: null
+  indoor_value: N/A
+  outdoor_value: No wrapping method is used if interference is not modelled, otherwise geographical distance based wrapping
+- table: 7.9.6.1-3
+  parameter: Scenario
+  value: "For FR1:\n- Urban Grid (ISD=500m, BS height=25m) \n- Highway (ISD=1732m, BS height=35m)\nFor FR2:\n- Urban Grid (ISD=250m, BS height=25m) \n- Highway (ISD=500m, BS height=25m)\n\nFor Urban Grid ISD =250m\n- The layout is configured as follows:\n - Red triangles: BS with 250m ISD, 18 BSs are located."
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: Sensing mode
+  value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: Target type
+  value: Vehicle type 2 [TR37.885]
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: UT height
+  value: '1.5m for pedestrian type UE
+
+    5m for RSU type UE
+
+    1.6m for vehicle type UE'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: UT Distribution
+  value: "For Highway: \n- Vehicle Type UT distribution follows vehicle UE dropping as in Clause 6.1.2 from TR37.885.\n- RSU-type UTs are uniformly allocated with 100m spacing in the middle of the freeway as per TR37.885. \nFor Urban grid:\n- Vehicle Type UT distribution follows vehicle UE dropping as in Clause 6.1.2 from TR37.885. \n- Pedestrian type UT, the dropping using equally spaced along the sidewalk with a fixed inter-pedestrian X m dropped per TR37.885\n - Total number of pedestrian UEs is 16 in the centre grid.\n - Pedestrian UE is in the middle of the sidewalk\n - The inter-pedestrian UE distance (m) (i.e., X) is calculated by ‘A/(16*N)’, where ‘A’ is the total length of sidewalk where the pedestrian UEs are dropped under the assumption of ‘N’ road grids (i.e., ‘{(250m – 17m) + (433m – 17m)} * 2 * N’).\n - N=1;\n- RSU-type UT: the dropping is at the center of intersection per TR37.885.\nsee note 1"
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: Sensing target distribution
+  value: 'Per TR37.885:
+
+    - Option A
+
+    - Vehicle type distribution: 100% vehicle type 2.
+
+    - Clustered dropping is not used.
+
+    - Highway: one target uniformly distributed (across multiple drops) within the simulation region. Vehicle speed is 140 km/h in all the lanes as baseline.
+
+    - Urban Grid: one target is uniformly distributed (across multiple drops) within the center road grid. Vehicle speed is 60 km/h in all the lanes as baseline.
+
+
+    see note 2'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: Component sigma_M of the RCS for each scattering point
+  value: 11.25 dBsm
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: Minimum 3D distances between STX/SRX and sensing target
+  value: Min distances based on min TRP/UE distances defined in TR37.885
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: Wrapping Method
+  value: No wrapping method is used if interference is not modelled, otherwise geographical distance based wrapping. As defined in urban grid/highway scenario
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-3
+  parameter: STX/SRX selection
+  value: "Best N = 4 STX-SRX pairs to be selected for the target, with the following exceptions for Highway for FR1: \n- For TRP-TRP monostatic sensing, N=2\n- For TRP-TRP bistatic sensing, N=1"
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: Scenario
+  value: 'InF: 18 TRPs per the big hall: L = 300 m x W = 150 m
+
+
+    - X-axis is pointing down to the floor
+
+    - The antenna array is mounted in the Y-Z plane with boresight along the X-axis
+
+    - The X-axis/Y-axis/Z-axis refer to LCS
+
+    - 8 m for high BS scenario'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: Sensing mode
+  value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: Target type
+  value: 'Option 1: 0.5m x 1.0m x 0.5m'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: BS Tx power
+  value: 'FR1: 24dBm
+
+    FR2: 23dBm'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: UT height
+  value: 1.5m
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: UT Distribution
+  value: 'Per Table 7.8-7 Indoor Factory.
+
+    Number of UTs: 30'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: Sensing target distribution
+  value: 100% indoor, 1 target uniformly distributed (across multiple drops) over the convex hull of the TRP deployment
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.1-4
+  parameter: Component sigma_M of the RCS for each scattering point
+  value: '-4.25 dBsm
+
+    see note'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: Scenario
+  value: UMa-AV
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: Sensing mode
+  value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: Target type
+  value: UAV of small size (0.3m x 0.4m x 0.2m)
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: RCS for each scattering point
+  value: 'Component sigma_M: -12.81 dBsm
+
+    Component sigma_D: 0 dB
+
+    Component sigma_S: 3.74 dB for standard deviation
+
+    The same values are used for monostatic RCS and bistatic RCS'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: Fast fading model
+  value: TR 36.777 Annex B.1.3
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: (mu, std) for XPR of target
+  value: Mean 13.75 dB, deviation 7.07 dB
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: The power threshold for path dropping after concatenation for target channel
+  value: -40 dB
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: Coupling loss for target channel
+  value: 'By definition, need to consider all direct and indirect paths. The following parameters are included in the calculation:
+
+    - power scaling factor (pathloss, shadow fading, and RCS component included)
+
+    - for small scale RCS / and power of rays in Tx-target/target-Rx links (), STX/SRX antenna pattern, 3 polarization matrixes, i.e.,'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: Absolute delay
+  value: The model of UMa scenario defined in Table 7.6.9-1 is reused for UMa-AV for all sensing modes.
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-1
+  parameter: Metrics
+  value: "Coupling loss for target channel \nCoupling loss for background channel (in case of monostatic sensing, this is the linear sum of coupling losses between STX/SRX and all reference points)\nSee note.\n\nCDF of Delay Spread and Angle Spread (ASD, ZSD, ASA, ZSA). For monostatic sensing mode: delay spread and angle spread of the background channel is calculated separately for each reference point.\nDefinition of Delay Spread is similar to the definition of angle spread in Annex A of TR 25.996, \nDefinition of Angle Spread can ref to Annex A of TR 25.996."
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-2
+  parameter: Scenario
+  value: null
+  indoor_value: As specified in Table 7.9.6.1-2
+  outdoor_value: As specified in Table 7.9.6.1-2
+- table: 7.9.6.2-2
+  parameter: Sensing mode
+  value: null
+  indoor_value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+  outdoor_value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+- table: 7.9.6.2-2
+  parameter: Target type
+  value: null
+  indoor_value: 'Adult Pedestrian: 0.5m x 0.5m x 1.75m
+
+    see note'
+  outdoor_value: 'Adult Pedestrian: 0.5m x 0.5m x 1.75m
+
+    see note'
+- table: 7.9.6.2-2
+  parameter: UT Distribution
+  value: null
+  indoor_value: 'Per Table 7.8-2 Indoor-Office
+
+    Number of UTs: 20'
+  outdoor_value: 'Per Table 7.8-2
+
+    Number of UTs/cell: 10'
+- table: 7.9.6.2-2
+  parameter: RCS for each scattering point
+  value: null
+  indoor_value: 'Component sigma_M: -1.37 dBsm
+
+    Component sigma_D: 0 dB
+
+    Component sigma_S: 3.94 dB
+
+    The same values are used for monostatic RCS and bistatic RCS'
+  outdoor_value: 'Component sigma_M: -1.37 dBsm
+
+    Component sigma_D: 0 dB
+
+    Component sigma_S: 3.94 dB
+
+    The same values are used for monostatic RCS and bistatic RCS'
+- table: 7.9.6.2-2
+  parameter: Fast fading model
+  value: null
+  indoor_value: 'For BS to UE link: Follow the procedure defined in TR38.901
+
+    For BS to target link: Follow the procedure defined in TR38.901
+
+    for target to UE link: Follow the procedure defined in 38.858'
+  outdoor_value: 'For BS to UE link: Follow the procedure defined in TR38.901
+
+    For BS to target link: Follow the procedure defined in TR38.901
+
+    for target to UE link: Follow the procedure defined in 38.858'
+- table: 7.9.6.2-2
+  parameter: (mu, std) for XPR of target
+  value: null
+  indoor_value: (19.81, 4.25) dB
+  outdoor_value: (19.81, 4.25) dB
+- table: 7.9.6.2-2
+  parameter: Absolute delay
+  value: null
+  indoor_value: The model of InH, InF-SH scenarios defined in Table 7.6.9-1.
+  outdoor_value: The model of UMa/UMi scenario defined in Table 7.6.9-1.
+- table: 7.9.6.2-3
+  parameter: Scenario
+  value: As specified in Table 7.9.6.1-3
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-3
+  parameter: Sensing mode
+  value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-3
+  parameter: Target type
+  value: Vehicle type 2 [TR37.885]
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-3
+  parameter: RCS for each scattering point
+  value: Based on the RCS model in Clause 7.9.2.1.
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-3
+  parameter: Fast fading model (full calibration)
+  value: Procedures based on 37.885
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-3
+  parameter: (mu, std) for XPR of target
+  value: (21.12, 6.88) dB.
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-3
+  parameter: Absolute delay
+  value: 'The model of UMa scenario defined in Table 7.6.9-1 is reused for Highway (FR2)/Urban Grid for all sensing modes.
+
+    The model of RMa scenario defined in Table 7.6.9-1 is reused for Highway (1732m ISD) for all sensing modes.'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-4
+  parameter: Scenario
+  value: As specified in Table 7.9.6.1-4
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-4
+  parameter: Sensing mode
+  value: TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-4
+  parameter: Target type
+  value: 'Option 1: 0.5m x 1.0m x 0.5m'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-4
+  parameter: RCS for each scattering point
+  value: 'The values/pattern of component sigma_D are generated by Table 7.9.2.1-6
+
+    The same values are used for monostatic RCS and bistatic RCS'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-4
+  parameter: Fast fading model (Full calibration)
+  value: 'For BS to UE link: Follow the procedure defined in TR38.901
+
+    For BS to target link: Follow the procedure defined in TR38.901
+
+    for target to UE link: Follow the procedure defined in TR 38.858'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-4
+  parameter: (mu, std) for XPR of target
+  value: (9.60, 6.85) dB
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.2-4
+  parameter: Absolute delay
+  value: The model of InF scenario defined in Table 7.6.9-1 is reused for all sensing modes.
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: Scenario
+  value: Urban grid, Indoor office
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: Cell layout
+  value: 'Urban grid: ISD = 500m, the same layout with 37.885
+
+    Indoor office: Office size (WxLxH): 120mx50mx3m, ISD=20m (refer to TR 38.901)'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: Sensing mode
+  value: TRP- pedestrian UE bistatic in urban grid and TRP-UE bistatic in indoor office
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: Polarized antenna model
+  value: Model-2 in clause 7.3.2 in TR 38.901
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: Scattering point
+  value: Single point
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: Calibration link and calibration method
+  value: "- Calibration link: same target associated to different UT as following figure\n\n- Calibration method\nStep1: In single drop simulation, drop one Target and multiple UTs.\nStep2: Generate the channel of each link based on Target level spatial consistency method.\nStep3: Determine Target-UT groups based on the distance between UTs.\nStep4: Bin all the link pairs into certain distance groups, e.g.,\n - 0m <= the location distance of link pair < 1m -> 0m group\n - 1m <= the location distance of link pair < 2m -> 1m group\n - 2m <= the location distance of link pair < 3m -> 2m group\n - 3m <= the location distance of link pair < 4m -> 3m group\n …\n - (N)m <= the location distance of pair < (N+1)m -> (N)m group (see note 2)\nStep5: Calculate the correlation coefficient metric of each distance groups.\nStep6: Draw the x-y cure, where x=0, …, N, y= correlation coefficient metric related to (x)m group"
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: ST and UT distribution
+  value: "- Urban grid\none target is uniformly dropped within the center grid in the outside lane with length of 433m, \nthe UT is distributed by a uniform distribution distance of [0,1]m in the walk road where is in the same street with the target. \nAs following figure.\n\nsee note 3\n \n- Indoor office\n1 Target is uniform dropped in office region\n10 UTs are dropped uniformly per cell, i.e., totally 120 UTs are uniformly dropped in office region."
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-1
+  parameter: Metrics
+  value: 'Cross-correlation coefficient of delay for the third cluster of channel between link pairs.
+
+    Cross-correlation coefficient of AOA (for UT) for the third cluster of channel between link pairs.
+
+    Cross-correlation coefficient of LOS/NLOS status of channel between link pairs(only for indoor office scenario).'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: Scenario
+  value: Urban grid
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: Cell layout
+  value: 'For FR1: ISD = 500m, the layout is defined as below:
+
+    The BSs are placed at the top of buildings at one corner. Specifically, the road grids shall be shifted by () m in horizontal plane, or the BSs are shifted by ()m in horizontal plane equivalently.
+
+
+    For FR2 ISD=250m, the cell layout is as that specified in Table 7.9.6.1-3'
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: Sensing mode
+  value: "TRP- pedestrian UE bistatic\nTRP- RSU type UE bistatic \nTRP monostatic\nTRP-TRP bistatic\nRSU type UE - RSU type UE bistatic (optional)"
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: EO deployment
+  value: 9 buildings with size 413m x 230m x 20m illustrated by the green blocks as in the figure shown in the row of cell layout.
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: ST distribution
+  value: one target is uniformly distributed (across multiple drops) within the center of the outside lane of the grid.
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: UT distribution
+  value: "- For pedestrian UT\n - Pedestrian type UE, the dropping using equally spaced along the sidewalk with a fixed inter-pedestrian X m dropped per TR37.885.\n - Total number of pedestrian UEs is 16 in the centre grid.\n - Pedestrian UE is in the middle of the sidewalk\n - The inter-pedestrian UE distance (m) (i.e., X) is calculated by ‘A/(16*N)’, where ‘A’ is the total length of sidewalk where the pedestrian UEs are dropped under the assumption of ‘N’ road grids (i.e., ‘{(250m – 17m) + (433m – 17m)} * 2 * N’). \n - N=1;\n- For RSU type UT\n - The dropping is at the center of intersection per TR37.885."
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: EM-parameters
+  value: Refer to the row for concrete in Table 7.6.8-1
+  indoor_value: null
+  outdoor_value: null
+- table: 7.9.6.3-2
+  parameter: Metrics
+  value: 'CDF curves:
+
+    - Full coupling loss: calculate the coupling loss for each Tx-EO-ST-LOS-Rx and Tx-LOS-ST-EO-Rx rays.
+
+    - CDF of the Delay.
+
+    - CDF of the AoA, AoD, ZoA, ZoD.'
+  indoor_value: null
+  outdoor_value: null

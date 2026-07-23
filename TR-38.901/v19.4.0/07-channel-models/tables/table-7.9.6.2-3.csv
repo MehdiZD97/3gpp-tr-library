@@ -1,0 +1,9 @@
+parameter,value
+Scenario,As specified in Table 7.9.6.1-3
+Sensing mode,"TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic"
+Target type,Vehicle type 2 [TR37.885]
+RCS for each scattering point,Based on the RCS model in Clause 7.9.2.1.
+Fast fading model (full calibration),Procedures based on 37.885
+"(mu, std) for XPR of target","(21.12, 6.88) dB."
+Absolute delay,"The model of UMa scenario defined in Table 7.6.9-1 is reused for Highway (FR2)/Urban Grid for all sensing modes.
+The model of RMa scenario defined in Table 7.6.9-1 is reused for Highway (1732m ISD) for all sensing modes."

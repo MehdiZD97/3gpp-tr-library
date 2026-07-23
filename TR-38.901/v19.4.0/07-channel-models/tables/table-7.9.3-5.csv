@@ -1,0 +1,5 @@
+reference_scenario,applicability_range
+UMi in Table 7.4.2-1 in TR 38.901 for sensing scenario UMi-AV/UMa-AV/RMa-AV,"Sensing scenario UMi-AV, UMa-AV: 1.5m <= hUT1, hUT2 <= 22.5m; Sensing scenario RMa-AV: 1.5m <= hUT1, hUT2 <= 10m"
+UMi-AV in Table B-1 in TR 36.777 for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for sensing scenario RMa-AV,"Sensing scenario UMi-AV, UMa-AV: 22.5m < max(hUT1, hUT2) <= 300m, 1.5m <= min(hUT1, hUT2) <= 22.5m; Sensing scenario RMa-AV: 10m < max(hUT1, hUT2) <= 300m, 1.5m <= min(hUT1, hUT2) <= 10m"
+"UMa-AV in Table B-1 in TR 36.777 for aerial UE height in range (22.5m, 100m] for sensing scenario UMi-AV/UMa-AV; RMa-AV in Table B-1 in TR 36.777 for aerial UE height in range (10m, 40m] for sensing scenario RMa-AV","Sensing scenario UMi-AV, UMa-AV: 22.5m < hUT1, hUT2 <= 100m; Sensing scenario RMa-AV: 10m < hUT1, hUT2 <= 40m"
+LOS probability is 100%,"Sensing scenario UMi-AV, UMa-AV: 100m < max(hUT1, hUT2) <= 300m, 22.5m < min(hUT1, hUT2) <= 100m; Sensing scenario RMa-AV: 40m < max(hUT1, hUT2) <= 300m, 10m < min(hUT1, hUT2) <= 40m"

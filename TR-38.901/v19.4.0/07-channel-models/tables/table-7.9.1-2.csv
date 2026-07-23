@@ -1,0 +1,21 @@
+parameter,value
+Applicable communication scenarios,"Highway, Urban Grid. 
+UMi, UMa, RMa, SMa"
+Sensing transmitters and receivers properties,"STX/SRX locations are selected among the TRPs and UEs (e.g., VRU, vehicle, RSU-type UEs) locations in the corresponding communication scenario. 
+Additional option: ISD between TRPs of Urban Grid is 250m"
+LOS/NLOS,LOS and NLOS (including NLOSv)
+Outdoor/indoor,Outdoor
+Mobility (horizontal plane only),Based on TR37.885 mobility for urban grid or highway scenario
+Distribution (horizontal),Based on dropping in TR37.885 per urban grid or highway communication scenario
+Orientation,Lane direction in horizontal plane
+"Physical characteristics (e.g., size)","Type 1/2 (passenger vehicle) 
+Type 3 (truck/bus) 
+Vehicle type distribution per TR 37.885"
+Minimum 3D distances between STX/SRX and sensing target,"For Highway, Urban Grid
+- Min distances based on min TRP/UE distances defined in TR37.885
+For UMi, UMa, RMa, SMa
+- Min distances based on min TRP/UE distances defined in TR38.901"
+Minimum 3D distance between sensing targets,"Option 1: At least larger than the physical size of a sensing target
+Option 2: Fixed value, 10 m."
+"Environment Objects, e.g., types, characteristics, mobility, distribution, etc.","Type-2 EO for Urban Grid
+- up to 4 walls modelled as Type-2 EO, per building of size 413m x 230m x 20m."

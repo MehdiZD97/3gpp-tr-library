@@ -1,0 +1,42 @@
+parameter,value
+Scenario,"For FR1:
+- Urban Grid (ISD=500m, BS height=25m) 
+- Highway (ISD=1732m, BS height=35m)
+For FR2:
+- Urban Grid (ISD=250m, BS height=25m) 
+- Highway (ISD=500m, BS height=25m)
+
+For Urban Grid ISD =250m
+- The layout is configured as follows:
+ - Red triangles: BS with 250m ISD, 18 BSs are located."
+Sensing mode,"TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic"
+Target type,Vehicle type 2 [TR37.885]
+UT height,"1.5m for pedestrian type UE
+5m for RSU type UE
+1.6m for vehicle type UE"
+UT Distribution,"For Highway: 
+- Vehicle Type UT distribution follows vehicle UE dropping as in Clause 6.1.2 from TR37.885.
+- RSU-type UTs are uniformly allocated with 100m spacing in the middle of the freeway as per TR37.885. 
+For Urban grid:
+- Vehicle Type UT distribution follows vehicle UE dropping as in Clause 6.1.2 from TR37.885. 
+- Pedestrian type UT, the dropping using equally spaced along the sidewalk with a fixed inter-pedestrian X m dropped per TR37.885
+ - Total number of pedestrian UEs is 16 in the centre grid.
+ - Pedestrian UE is in the middle of the sidewalk
+ - The inter-pedestrian UE distance (m) (i.e., X) is calculated by ‘A/(16*N)’, where ‘A’ is the total length of sidewalk where the pedestrian UEs are dropped under the assumption of ‘N’ road grids (i.e., ‘{(250m – 17m) + (433m – 17m)} * 2 * N’).
+ - N=1;
+- RSU-type UT: the dropping is at the center of intersection per TR37.885.
+see note 1"
+Sensing target distribution,"Per TR37.885:
+- Option A
+- Vehicle type distribution: 100% vehicle type 2.
+- Clustered dropping is not used.
+- Highway: one target uniformly distributed (across multiple drops) within the simulation region. Vehicle speed is 140 km/h in all the lanes as baseline.
+- Urban Grid: one target is uniformly distributed (across multiple drops) within the center road grid. Vehicle speed is 60 km/h in all the lanes as baseline.
+
+see note 2"
+Component sigma_M of the RCS for each scattering point,11.25 dBsm
+Minimum 3D distances between STX/SRX and sensing target,Min distances based on min TRP/UE distances defined in TR37.885
+Wrapping Method,"No wrapping method is used if interference is not modelled, otherwise geographical distance based wrapping. As defined in urban grid/highway scenario"
+STX/SRX selection,"Best N = 4 STX-SRX pairs to be selected for the target, with the following exceptions for Highway for FR1: 
+- For TRP-TRP monostatic sensing, N=2
+- For TRP-TRP bistatic sensing, N=1"

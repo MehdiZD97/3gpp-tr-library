@@ -1,0 +1,501 @@
+"""
+Pydantic models for the structured data this library produces.
+
+`PathlossEntry` is TR-agnostic and shared across TRs, matching the shape
+documented in `schemas/pathloss.yaml` -- any TR clause presenting a pathloss
+table in the "scenario -> LOS/NLOS formula + shadow fading std +
+applicability range" shape should validate against this model rather than
+a new one.
+
+The remaining models (`LosProbabilityEntry`, `O2IPenetrationLoss` and its
+sub-models, `ShadowFadingAutocorrelation`) are section-specific -- real for
+TR 38.901 clause 7.4, but not assumed to generalize the way `PathlossEntry`
+does. They live here (not in `schemas/`) precisely to keep that boundary:
+`schemas/` holds only what's genuinely reusable across TRs.
+
+Used by both `tools/verify_tables.py` (validation) and `tools/tr_api`
+(typed return values) -- one model, two jobs.
+"""
+from typing import Dict, List, Literal, Optional
+
+from pydantic import BaseModel, Field
+
+
+class ShadowFadingStd(BaseModel):
+    condition: Optional[str] = None
+    value_db: float
+
+
+class PathlossEntry(BaseModel):
+    """Shared across TRs -- see `schemas/pathloss.yaml`."""
+
+    scenario: str
+    condition: Literal["LOS", "NLOS"]
+    variant: Optional[str] = None
+    formula: str
+    formula_ref: Optional[str] = None
+    shadow_fading_std_db: List[ShadowFadingStd] = Field(min_length=1)
+    applicability_range: str
+    notes: List[str] = Field(default_factory=list)
+
+
+class LosProbabilityEntry(BaseModel):
+    """Section-specific (TR 38.901 §7.4.2) -- not part of the shared pathloss schema."""
+
+    scenario: str
+    formula: str
+    notes: List[str] = Field(default_factory=list)
+
+
+class O2IMaterial(BaseModel):
+    material: str
+    formula: str
+    notes: List[str] = Field(default_factory=list)
+
+
+class O2IBuildingModel(BaseModel):
+    model: str
+    pl_tw_formula: str
+    pl_in_formula: str
+    std_p_db: float
+
+
+class O2IBuildingSingleFrequencyBelow6GHz(BaseModel):
+    pl_tw_db: float
+    pl_in_formula: str
+    sigma_p_db: float
+    sigma_sf_db: float
+    note: str
+
+
+class O2ICarPenetrationLoss(BaseModel):
+    formula: str
+    formula_ref: Optional[str] = None
+    mu_db: float
+    mu_metallized_windows_db: float
+    sigma_p_db: float
+    applicable_range_ghz: str
+
+
+class O2IPenetrationLoss(BaseModel):
+    """Section-specific (TR 38.901 §7.4.3) -- four distinct sub-shapes, not one table."""
+
+    materials: List[O2IMaterial]
+    building_models: List[O2IBuildingModel]
+    building_single_frequency_below_6ghz: O2IBuildingSingleFrequencyBelow6GHz
+    car_penetration_loss: O2ICarPenetrationLoss
+
+
+class ShadowFadingAutocorrelation(BaseModel):
+    """Section-specific (TR 38.901 §7.4.4)."""
+
+    formula: str
+    formula_ref: Optional[str] = None
+    note: str
+
+
+class Section74Data(BaseModel):
+    """The full validated shape of a `7.4-pathloss.yaml`-style section file."""
+
+    pathloss: List[PathlossEntry]
+    los_probability: List[LosProbabilityEntry]
+    o2i_penetration_loss: O2IPenetrationLoss
+    shadow_fading_autocorrelation: ShadowFadingAutocorrelation
+
+
+# ---------------------------------------------------------------------------
+# TR 38.901 section 7.5 (Fast fading model) -- section-specific, like the
+# non-pathloss §7.4 models above. `ChannelModelParameterEntry` in particular
+# is named for what it actually is (the TR's own "Channel model parameters"
+# table, Table 7.5-6) rather than "CrossCorrelationMatrix" or similar --
+# cross-correlations are only 21 of its 49 parameter rows, not the whole
+# shape. Nearly every field is `str`, not `float`: nearly half the TR's own
+# cells are carrier-frequency-dependent formulas or "N/A", not bare numbers.
+# ---------------------------------------------------------------------------
+class NotationEntry(BaseModel):
+    """Section-specific (TR 38.901 Table 7.5-1)."""
+
+    parameter: str
+    notation: str
+
+
+class ScalingFactorEntry(BaseModel):
+    """One (# clusters -> scaling factor) pair from Table 7.5-2 or 7.5-4."""
+
+    num_clusters: int
+    c_phi_nlos: Optional[float] = None
+    c_theta_nlos: Optional[float] = None
+
+
+class RayOffsetAngle(BaseModel):
+    """Section-specific (TR 38.901 Table 7.5-3)."""
+
+    ray_numbers: str
+    offset_angle: float
+
+
+class SubClusterInfo(BaseModel):
+    """Section-specific (TR 38.901 Table 7.5-5)."""
+
+    sub_cluster: int
+    mapping_to_rays: str
+    power_fraction: str
+    delay_offset: str
+
+
+class ChannelModelParameterEntry(BaseModel):
+    """
+    One scenario/condition column of Table 7.5-6 -- the master large-scale
+    parameter table. Field names match the YAML/CSV keys. Almost everything
+    here is `str` rather than `float` because many of the table's cells are
+    carrier-frequency-dependent formulas or "N/A", not bare numbers (see
+    `7.5-fast-fading.md`'s own note).
+    """
+
+    scenario: str
+    condition: Literal["LOS", "NLOS", "O2I"]
+
+    mu_lgDS: str
+    sigma_lgDS: str
+    mu_lgASD: str
+    sigma_lgASD: str
+    mu_lgASA: str
+    sigma_lgASA: str
+    mu_lgZSA: str
+    sigma_lgZSA: str
+    sigma_SF: str
+    mu_K: str
+    sigma_K: str
+
+    corr_ASD_DS: str
+    corr_ASA_DS: str
+    corr_ASA_SF: str
+    corr_ASD_SF: str
+    corr_DS_SF: str
+    corr_ASD_ASA: str
+    corr_ASD_K: str
+    corr_ASA_K: str
+    corr_DS_K: str
+    corr_SF_K: str
+    corr_ZSD_SF: str
+    corr_ZSA_SF: str
+    corr_ZSD_K: str
+    corr_ZSA_K: str
+    corr_ZSD_DS: str
+    corr_ZSA_DS: str
+    corr_ZSD_ASD: str
+    corr_ZSA_ASD: str
+    corr_ZSD_ASA: str
+    corr_ZSA_ASA: str
+    corr_ZSD_ZSA: str
+
+    delay_scaling_parameter_r_tau: str
+    mu_XPR: str
+    sigma_XPR: str
+    number_of_clusters: str
+    number_of_rays_per_cluster: str
+    cluster_DS_ns: str
+    cluster_ASD_deg: str
+    cluster_ASA_deg: str
+    cluster_ZSA_deg: str
+    per_cluster_shadowing_std_zeta_db: str
+
+    corr_distance_DS_m: str
+    corr_distance_ASD_m: str
+    corr_distance_ASA_m: str
+    corr_distance_SF_m: str
+    corr_distance_K_m: str
+    corr_distance_ZSA_m: str
+    corr_distance_ZSD_m: str
+
+
+class ZsdZodOffsetEntry(BaseModel):
+    condition: Literal["LOS", "NLOS", "O2I"]
+    mu_lgZSD: str
+    sigma_lgZSD: str
+    mu_offset_ZOD: str
+
+
+class ZsdZodOffsetTable(BaseModel):
+    """One of Tables 7.5-7 through 7.5-12 (one per scenario)."""
+
+    tr_table: str
+    note: Optional[str] = None
+    entries: List[ZsdZodOffsetEntry]
+
+
+class Section75Data(BaseModel):
+    """The full validated shape of a `7.5-fast-fading.yaml`-style section file."""
+
+    notations: List[NotationEntry]
+    scaling_factors_aoa_aod_generation: List[ScalingFactorEntry]
+    ray_offset_angles: List[RayOffsetAngle]
+    scaling_factors_zoa_zod_generation: List[ScalingFactorEntry]
+    sub_cluster_info: List[SubClusterInfo]
+    channel_model_parameters: List[ChannelModelParameterEntry]
+    zsd_zod_offset_parameters: Dict[str, ZsdZodOffsetTable]
+
+
+# ---------------------------------------------------------------------------
+# TR 36.777 Annex B (Channel modelling details) -- the aerial-UE (drone)
+# channel model. Every model here is TR 36.777-specific: these are height-
+# dependent *deltas* to TR 38.901's terrestrial UMa/UMi/RMa models, not a
+# generic reusable shape, so they stay out of schemas/ (same restraint as
+# the §7.4/§7.5 section-specific models above). Formula-bearing fields are
+# `str` (LaTeX or an "According to ... of [4]" reference), like §7.5's
+# formula cells -- see the section .md's verification note on why TR 36.777
+# formula content is PDF-visual single-source.
+# ---------------------------------------------------------------------------
+class LosProbabilityDeltaEntry(BaseModel):
+    """One (scenario, height band) row of Table B-1."""
+
+    scenario: str
+    height_range: str
+    los_probability: str
+    notes: List[str] = Field(default_factory=list)
+
+
+class PathlossDeltaEntry(BaseModel):
+    """One (scenario, condition, height band) row of Table B-2."""
+
+    scenario: str
+    condition: Literal["LOS", "NLOS"]
+    height_range: str
+    pathloss: str
+    notes: List[str] = Field(default_factory=list)
+
+
+class ShadowFadingDeltaEntry(BaseModel):
+    """One (scenario, condition, height band) row of Table B-3."""
+
+    scenario: str
+    condition: Literal["LOS", "NLOS"]
+    height_range: str
+    sf_std: str
+
+
+class FastFadingModelSelectionEntry(BaseModel):
+    """One (scenario, height band) row of Table B-4."""
+
+    scenario: str
+    height_range: str
+    model: str
+
+
+class Alternative1DesiredParametersEntry(BaseModel):
+    """One (scenario, condition) row of Table B.1.1-1 / B.1.1-2 (Alternative 1)."""
+
+    scenario: str
+    condition: Literal["LOS", "NLOS"]
+    asa_deg: str
+    asd_deg: str
+    zsa_deg: str
+    zsd_deg: str
+    desired_k_db: str
+    desired_ds_ns: str
+
+
+class Alternative2ModifiedParameterEntry(BaseModel):
+    """One (scenario, parameter, condition) row of Table B.1.2-1 / B.1.2-2 (Alternative 2)."""
+
+    scenario: str
+    parameter: Literal["DS", "ASA", "ASD", "ZSA", "ZSD", "K"]
+    condition: Literal["LOS", "NLOS"]
+    mu: str
+    sigma: str
+
+
+class AnnexBData(BaseModel):
+    """The full validated shape of a `B-channel-modelling.yaml`-style annex file."""
+
+    los_probability: List[LosProbabilityDeltaEntry]
+    los_probability_notes: Dict[str, str]
+    pathloss: List[PathlossDeltaEntry]
+    pathloss_notes: Dict[str, str]
+    shadow_fading_std: List[ShadowFadingDeltaEntry]
+    fast_fading_model_selection: List[FastFadingModelSelectionEntry]
+    alternative_1_desired_parameters: List[Alternative1DesiredParametersEntry]
+    alternative_2_modified_parameters: List[Alternative2ModifiedParameterEntry]
+
+
+# ---------------------------------------------------------------------------
+# TR 38.901 section 7.9 (Channel model(s) for ISAC) -- the Rel-19 Integrated
+# Sensing and Communication channel model. These models cover the *core*
+# processed sub-clauses (7.9.0-7.9.3): scenarios, the physical-object/RCS
+# model, and the reference-channel-model mapping. 7.9.4 (fast fading),
+# 7.9.5 (additional components), and 7.9.6 (calibration) are deferred to a
+# follow-up "Phase 7 continued" session and have no models here yet.
+#
+# Every field is `str`, like §7.5/Annex B: the RCS tables mix bare numbers,
+# "-" placeholders, and angle-range brackets ("[45,135)"), and the scenario
+# tables carry multi-line descriptive values -- none of it is uniformly
+# float-typed. Named for what they actually are (RCS, XPR, sensing scenarios,
+# reference-channel links), not contorted onto §7.4/§7.5 shapes -- the section
+# is a genuinely new data shape (this matters for Phase 8's introspection
+# layer, which will have to generalize over it).
+# ---------------------------------------------------------------------------
+class SensingScenarioParameter(BaseModel):
+    """One evaluation-parameter row of a §7.9.1 scenario table (7.9.1-1..5).
+
+    Single-value tables (UAV/Automotive/AGV/Objects) fill `value`; the Human
+    table (7.9.1-3) splits into `indoor_value`/`outdoor_value` instead.
+    """
+
+    scenario_type: Literal["UAV", "Automotive", "Human", "AGV", "Objects-creating-hazards"]
+    parameter: str
+    value: Optional[str] = None
+    indoor_value: Optional[str] = None
+    outdoor_value: Optional[str] = None
+
+
+class RcsModel1Entry(BaseModel):
+    """One row of Table 7.9.2.1-1 (angular-independent monostatic RCS: UAV small / human)."""
+
+    sensing_target: str
+    lg_sigma_m_dbsm: str
+    sigma_sigmaS_db: str
+
+
+class RcsModel2Entry(BaseModel):
+    """One scattering-point row of an RCS model 2 table (Tables 7.9.2.1-2..7).
+
+    `target` distinguishes the six tables (UAV-large / human / vehicle- and
+    AGV-single/multiple); `scattering_point` is the aspect (Front/Left/...).
+    """
+
+    target: str
+    scattering_point: str
+    phi_center_deg: str
+    phi_3db_deg: str
+    theta_center_deg: str
+    theta_3db_deg: str
+    g_max: str
+    sigma_max: str
+    range_theta_deg: str
+    range_phi_deg: str
+    lg_sigma_m_dbsm: str
+    sigma_sigmaS_db: str
+
+
+class RcsModel2KParameter(BaseModel):
+    """The (k1, k2) shape parameters for RCS model 2, per target (from Eq. 7.9.2-3).
+
+    Not a numbered TR table -- these live in the bullet list under the
+    equation -- so there is no CSV for this key, only YAML + the section .md.
+    """
+
+    target: str
+    k1: str
+    k2: str
+
+
+class XprEntry(BaseModel):
+    """One row of Table 7.9.2.2-1 (cross-polarization ratio, per target type)."""
+
+    target: str
+    mu_xpr_db: str
+    sigma_xpr_db: str
+
+
+class ReferenceChannelModelEntry(BaseModel):
+    """One Case (1-13) row of Table 7.9.3-1: the reference TR(s) for a Tx/Rx pair."""
+
+    case: str
+    tx: str
+    rx: str
+    reference_tr: str
+
+
+class TargetChannelLinkEntry(BaseModel):
+    """One (STX/SRX, target) row of Table 7.9.3-2: which Case defines the ST link."""
+
+    stx_srx: str
+    target: str
+    case: str
+
+
+class BackgroundChannelLinkEntry(BaseModel):
+    """One (STX/SRX, SRX/STX) row of Table 7.9.3-3: which Case defines the background link."""
+
+    stx_srx: str
+    srx_stx: str
+    case: str
+
+
+class LosConditionEntry(BaseModel):
+    """One row of Table 7.9.3-4 (Case 7) or 7.9.3-5 (Case 9), distinguished by `case`.
+
+    `applicability_range` is the aerial-UE height condition -- OMML in the docx
+    that python-docx drops, so it's PDF-visual-primary (see the section .md's
+    verification note); `reference_scenario` is two-source (docx + PDF).
+    """
+
+    case: Literal["7", "9"]
+    reference_scenario: str
+    applicability_range: str
+
+
+# --- 7.9.4 (Fast fading model) / 7.9.5 (Additional components) / 7.9.6
+# (Calibration) -- added in the "Phase 7 continued" session. The 32 numbered
+# equations of 7.9.4/7.9.5 live only as LaTeX in the section .md (procedural,
+# per the §7.5 precedent -- not queryable data), so there are no models for
+# them; these three cover the queryable tables of the continuation. ---
+class BackgroundChannelParamEntry(BaseModel):
+    """One (sensing_mode, scenario) row of a §7.9.4.2 background-channel table.
+
+    The six fields are the shape-rate Gamma-distribution parameters for the RP
+    distance and height (Tables 7.9.4.2-1 / 7.9.4.2-2 Part-1/2). For the
+    terrestrial-UT tables they're numeric; for Part-2 (aerial UE) they're
+    height-dependent formulas (str with `h` = aerial-UE height), so every field
+    is `str`.
+    """
+
+    sensing_mode: str
+    scenario: str
+    alpha_d: str
+    beta_d: str
+    c_d: str
+    alpha_h: str
+    beta_h: str
+    c_h: str
+
+
+class SpatialConsistencyCorrelationEntry(BaseModel):
+    """One row of Table 7.9.5.1-1 (parameter -> Link-correlated / All-correlated)."""
+
+    parameter: str
+    correlation_type: str
+
+
+class CalibrationAssumption(BaseModel):
+    """One (table, parameter) row of a §7.9.6 calibration table (7.9.6.1-1..4,
+    7.9.6.2-1..4, 7.9.6.3-1/2). `table` distinguishes the ten tables; single-
+    value tables fill `value`, the Human tables split into indoor/outdoor."""
+
+    table: str
+    parameter: str
+    value: Optional[str] = None
+    indoor_value: Optional[str] = None
+    outdoor_value: Optional[str] = None
+
+
+class Section79Data(BaseModel):
+    """The full validated shape of a `7.9-isac-channel-model.yaml`-style file.
+
+    Covers the full clause: the core 7.9.0-7.9.3 keys plus the 7.9.4 (fast
+    fading), 7.9.5 (additional components) and 7.9.6 (calibration) tables added
+    in the "Phase 7 continued" session.
+    """
+
+    sensing_scenarios: List[SensingScenarioParameter]
+    rcs_model_1: List[RcsModel1Entry]
+    rcs_model_2: List[RcsModel2Entry]
+    rcs_model_2_k_parameters: List[RcsModel2KParameter]
+    xpr: List[XprEntry]
+    reference_channel_models: List[ReferenceChannelModelEntry]
+    target_channel_links: List[TargetChannelLinkEntry]
+    background_channel_links: List[BackgroundChannelLinkEntry]
+    los_condition_determination: List[LosConditionEntry]
+    background_channel_params: List[BackgroundChannelParamEntry]
+    spatial_consistency_correlation: List[SpatialConsistencyCorrelationEntry]
+    calibration_assumptions: List[CalibrationAssumption]

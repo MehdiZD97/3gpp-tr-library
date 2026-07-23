@@ -1,0 +1,317 @@
+pathloss:
+- scenario: RMa
+  condition: LOS
+  variant: null
+  formula: PL_{RMa-LOS} = \begin{cases} PL_1 & 10m \le d_{2D} \le d_{BP} \\ PL_2 & d_{BP} \le d_{2D} \le 10km \end{cases};
+    \quad PL_1 = 20\log_{10}(40\pi d_{3D} f_c/3) + \min(0.03h^{1.72},10)\log_{10}(d_{3D}) - \min(0.044h^{1.72},14.77) + 0.002\log_{10}(h)d_{3D};
+    \quad PL_2 = PL_1(d_{BP}) + 40\log_{10}(d_{3D}/d_{BP})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: 10 m <= d2D < dBP
+    value_db: 4
+  - condition: dBP <= d2D < 10 km
+    value_db: 6
+  applicability_range: hBS = 35 m, hUT = 1.5 m, W = 20 m, h = 5 m (h = avg. building height, W = avg. street width)
+  notes:
+  - NOTE 5
+  - NOTE 6
+- scenario: RMa
+  condition: NLOS
+  variant: null
+  formula: PL_{RMa-NLOS} = \max(PL_{RMa-LOS}, PL'_{RMa-NLOS}), \text{ for } 10m \le d_{2D} \le 5km; \quad PL'_{RMa-NLOS} =
+    161.04 - 7.1\log_{10}(W) + 7.5\log_{10}(h) - (24.37 - 3.7(h/h_{BS})^2)\log_{10}(h_{BS}) + (43.42 - 3.1\log_{10}(h_{BS}))(\log_{10}(d_{3D})
+    - 3) + 20\log_{10}(f_c) - (3.2(\log_{10}(11.75 h_{UT}))^2 - 4.97)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 8
+  applicability_range: 'W = avg. street width; ranges: 5m <= h <= 50m, 5m <= W <= 50m, 10m <= hBS <= 150m, 1m <= hUT <= 10m'
+  notes:
+  - NOTE 6
+- scenario: UMa
+  condition: LOS
+  variant: null
+  formula: PL_{UMa-LOS} = \begin{cases} PL_1 & 10m \le d_{2D} \le d'_{BP} \\ PL_2 & d'_{BP} \le d_{2D} \le 5km \end{cases};
+    \quad PL_1 = 28.0 + 22\log_{10}(d_{3D}) + 20\log_{10}(f_c); \quad PL_2 = 28.0 + 40\log_{10}(d_{3D}) + 20\log_{10}(f_c)
+    - 9\log_{10}((d'_{BP})^2 + (h_{BS}-h_{UT})^2)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 4
+  applicability_range: 1.5m <= hUT <= 22.5m, hBS = 25m (see NOTE 7)
+  notes:
+  - NOTE 1
+  - NOTE 6
+  - NOTE 7
+- scenario: UMa
+  condition: NLOS
+  variant: null
+  formula: PL_{UMa-NLOS} = \max(PL_{UMa-LOS}, PL'_{UMa-NLOS}), \text{ for } 10m \le d_{2D} \le 5km; \quad PL'_{UMa-NLOS} =
+    13.54 + 39.08\log_{10}(d_{3D}) + 20\log_{10}(f_c) - 0.6(h_{UT} - 1.5)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 6
+  applicability_range: 1.5m <= hUT <= 22.5m, hBS = 25m (see NOTE 3)
+  notes:
+  - NOTE 3
+  - NOTE 6
+- scenario: UMa
+  condition: NLOS
+  variant: optional
+  formula: PL_{UMa-NLOS} = 32.4 + 20\log_{10}(f_c) + 30\log_{10}(d_{3D})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 7.8
+  applicability_range: Same as UMa NLOS primary model
+  notes: []
+- scenario: UMi-StreetCanyon
+  condition: LOS
+  variant: null
+  formula: PL_{UMi-LOS} = \begin{cases} PL_1 & 10m \le d_{2D} \le d'_{BP} \\ PL_2 & d'_{BP} \le d_{2D} \le 5km \end{cases};
+    \quad PL_1 = 32.4 + 21\log_{10}(d_{3D}) + 20\log_{10}(f_c); \quad PL_2 = 32.4 + 40\log_{10}(d_{3D}) + 20\log_{10}(f_c)
+    - 9.5\log_{10}((d'_{BP})^2 + (h_{BS}-h_{UT})^2)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 4
+  applicability_range: 1.5m <= hUT <= 22.5m, hBS = 10m (see NOTE 7)
+  notes:
+  - NOTE 1
+  - NOTE 6
+  - NOTE 7
+- scenario: UMi-StreetCanyon
+  condition: NLOS
+  variant: null
+  formula: PL_{UMi-NLOS} = \max(PL_{UMi-LOS}, PL'_{UMi-NLOS}), \text{ for } 10m \le d_{2D} \le 5km; \quad PL'_{UMi-NLOS} =
+    35.3\log_{10}(d_{3D}) + 22.4 + 21.3\log_{10}(f_c) - 0.3(h_{UT} - 1.5)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 7.82
+  applicability_range: 1.5m <= hUT <= 22.5m, hBS = 10m (see NOTE 4)
+  notes:
+  - NOTE 4
+  - NOTE 6
+- scenario: UMi-StreetCanyon
+  condition: NLOS
+  variant: optional
+  formula: PL_{UMi-NLOS} = 32.4 + 20\log_{10}(f_c) + 31.9\log_{10}(d_{3D})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 8.2
+  applicability_range: Same as UMi-StreetCanyon NLOS primary model
+  notes: []
+- scenario: InH-Office
+  condition: LOS
+  variant: null
+  formula: PL_{InH-LOS} = 32.4 + 17.3\log_{10}(d_{3D}) + 20\log_{10}(f_c)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 3
+  applicability_range: 1m <= d3D <= 150m
+  notes:
+  - NOTE 6
+- scenario: InH-Office
+  condition: NLOS
+  variant: null
+  formula: PL_{InH-NLOS} = \max(PL_{InH-LOS}, PL'_{InH-NLOS}); \quad PL'_{InH-NLOS} = 38.3\log_{10}(d_{3D}) + 17.30 + 24.9\log_{10}(f_c)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 8.03
+  applicability_range: 1m <= d3D <= 150m
+  notes:
+  - NOTE 6
+- scenario: InH-Office
+  condition: NLOS
+  variant: optional
+  formula: PL'_{InH-NLOS} = 32.4 + 20\log_{10}(f_c) + 31.9\log_{10}(d_{3D})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 8.29
+  applicability_range: 1m <= d3D <= 150m
+  notes: []
+- scenario: InF
+  condition: LOS
+  variant: null
+  formula: PL_{LOS} = 31.84 + 21.50\log_{10}(d_{3D}) + 19.00\log_{10}(f_c)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 4.3
+  applicability_range: 1m <= d3D <= 600m (shared by all InF sub-scenarios)
+  notes:
+  - NOTE 6
+- scenario: InF-SL
+  condition: NLOS
+  variant: null
+  formula: PL = 33 + 25.5\log_{10}(d_{3D}) + 20\log_{10}(f_c); \quad PL_{NLOS} = \max(PL, PL_{LOS})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 5.7
+  applicability_range: 1m <= d3D <= 600m
+  notes:
+  - NOTE 6
+- scenario: InF-DL
+  condition: NLOS
+  variant: null
+  formula: PL = 18.6 + 35.7\log_{10}(d_{3D}) + 20\log_{10}(f_c); \quad PL_{NLOS} = \max(PL, PL_{LOS}, PL_{InF-SL})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 7.2
+  applicability_range: 1m <= d3D <= 600m
+  notes:
+  - NOTE 6
+- scenario: InF-SH
+  condition: NLOS
+  variant: null
+  formula: PL = 32.4 + 23.0\log_{10}(d_{3D}) + 20\log_{10}(f_c); \quad PL_{NLOS} = \max(PL, PL_{LOS})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 5.9
+  applicability_range: 1m <= d3D <= 600m
+  notes:
+  - NOTE 6
+- scenario: InF-DH
+  condition: NLOS
+  variant: null
+  formula: PL = 33.63 + 21.9\log_{10}(d_{3D}) + 20\log_{10}(f_c); \quad PL_{NLOS} = \max(PL, PL_{LOS})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 4.0
+  applicability_range: 1m <= d3D <= 600m
+  notes:
+  - NOTE 6
+- scenario: SMa
+  condition: LOS
+  variant: null
+  formula: PL_{SMa-LOS} = \begin{cases} PL_1 & 10m \le d_{2D} < d_{BP} \\ PL_2 & d_{BP} \le d_{2D} \le 5km \end{cases}; \quad
+    PL_1 = 20\log_{10}(40\pi d_{3D} f_c/3) + \min(0.03h^{1.72},10)\log_{10}(d_{3D}) - \min(0.044h^{1.72},14.77) + 0.002\log_{10}(h)d_{3D};
+    \quad PL_2 = PL_1(d_{BP}) + 40\log_{10}(d_{3D}/d_{BP})
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: 10 m <= d2D < dBP
+    value_db: 4
+  - condition: dBP <= d2D < 5000 m
+    value_db: 6
+  applicability_range: 25m < hBS < 35m, h = 10m (h = avg. building height)
+  notes:
+  - NOTE 5
+  - NOTE 6
+- scenario: SMa
+  condition: NLOS
+  variant: null
+  formula: PL_{SMa-NLOS} = 161.04 - 7.1\log_{10}(W) + 7.5\log_{10}(h) - (24.37 - 3.7(h/h_{BS})^2)\log_{10}(h_{BS}) + (43.42
+    - 3.1\log_{10}(h_{BS}))(\log_{10}(d_{3D}) - 3) + 20\log_{10}(f_c) - (3.2(\log_{10}(11.75 h_{UT}))^2 - 4.97)
+  formula_ref: null
+  shadow_fading_std_db:
+  - condition: null
+    value_db: 8
+  applicability_range: 10m <= d2D < 5000m, 1m < hUT < 14m, h = 10m, W = 10m
+  notes:
+  - NOTE 6
+los_probability:
+- scenario: RMa
+  formula: Pr_{LOS} = \begin{cases} 1 & d_{2D-out} \le 10m \\ \exp\left(-\dfrac{d_{2D-out}-10}{1000}\right) & 10m < d_{2D-out}
+    \end{cases}
+  notes: []
+- scenario: UMi-StreetCanyon
+  formula: Pr_{LOS} = \begin{cases} 1 & d_{2D-out} \le 18m \\ \dfrac{18}{d_{2D-out}} + \exp\left(-\dfrac{d_{2D-out}}{36}\right)\left(1-\dfrac{18}{d_{2D-out}}\right)
+    & 18m < d_{2D-out} \end{cases}
+  notes: []
+- scenario: UMa
+  formula: Pr_{LOS} = \begin{cases} 1 & d_{2D-out} \le 18m \\ \left[\dfrac{18}{d_{2D-out}} + \exp\left(-\dfrac{d_{2D-out}}{63}\right)\left(1-\dfrac{18}{d_{2D-out}}\right)\right]\left(1
+    + C'(h_{UT})\dfrac{5}{4}\left(\dfrac{d_{2D-out}}{100}\right)^3 \exp\left(-\dfrac{d_{2D-out}}{150}\right)\right) & 18m
+    < d_{2D-out} \end{cases}; \quad C'(h_{UT}) = \begin{cases} 0 & h_{UT} \le 13m \\ \left(\dfrac{h_{UT}-13}{10}\right)^{1.5}
+    & 13m < h_{UT} \le 23m \end{cases}
+  notes: []
+- scenario: Indoor-MixedOffice
+  formula: Pr_{LOS} = \begin{cases} 1 & d_{2D-in} \le 1.2m \\ \exp\left(-\dfrac{d_{2D-in}-1.2}{4.7}\right) & 1.2m < d_{2D-in}
+    < 6.5m \\ \exp\left(-\dfrac{d_{2D-in}-6.5}{32.6}\right)\cdot 0.32 & 6.5m \le d_{2D-in} \end{cases}
+  notes: []
+- scenario: Indoor-OpenOffice
+  formula: Pr_{LOS} = \begin{cases} 1 & d_{2D-in} \le 5m \\ \exp\left(-\dfrac{d_{2D-in}-5}{70.8}\right) & 5m < d_{2D-in} \le
+    49m \\ \exp\left(-\dfrac{d_{2D-in}-49}{211.7}\right)\cdot 0.54 & 49m < d_{2D-in} \end{cases}
+  notes: []
+- scenario: InF-SL, InF-DL, InF-SH, InF-DH
+  formula: Pr_{LOS,subsce}(d_{2D}) = \exp\left(-\dfrac{d_{2D}}{k_{subsce}}\right); \quad k_{subsce} = \begin{cases} -\dfrac{d_{clutter}}{\ln(1-r)}
+    & \text{for InF-SL and InF-DL} \\ -\dfrac{d_{clutter}}{\ln(1-r)}\cdot\dfrac{h_{BS}-h_{UT}}{h_c-h_{UT}} & \text{for InF-SH
+    and InF-DH} \end{cases}
+  notes:
+  - Parameters d_clutter, r, h_c defined in Table 7.2-4
+- scenario: InF-HH
+  formula: Pr_{LOS} = 1
+  notes: []
+- scenario: SMa
+  formula: P_{LOS} = \begin{cases} 1 & d_{2D-out} \le 10m \\ \exp\left(-\dfrac{d_{2D-out}}{k_{commercial}}\right)\exp\left(-\dfrac{d_{2D-out}}{k_{residential}}\right)\exp\left(-\dfrac{d_{2D-out}}{k_{vegetation}}\right)
+    & d_{2D-out} > 10m \end{cases}; \quad \dfrac{1}{k_{commercial}} = -\dfrac{\ln(1-r_{commercial})}{d_{clutter}}\cdot\dfrac{h_{commercial}-h_{UT}}{h_{BS}-h_{UT}};
+    \quad \dfrac{1}{k_{residential}} = -\dfrac{\ln(1-r_{residential})}{d_{clutter}}\cdot\dfrac{\max(h_{residential}-h_{UT},0)}{h_{BS}-h_{UT}};
+    \quad \dfrac{1}{k_{vegetation}} = -\dfrac{\ln(1-r_{vegetation})}{d_{clutter}}\cdot\dfrac{h_{vegetation}-h_{UT}}{h_{BS}-h_{UT}};
+    \quad d_{clutter}=30m, h_{commercial}=20m, h_{residential}=8m, h_{vegetation}=15m, r_{commercial}=2\%, r_{residential}=18\%,
+    r_{vegetation}=0\%/10\%/20\%
+  notes:
+  - 'r_vegetation: 0% no vegetation, 10% sparse vegetation, 20% dense vegetation'
+o2i_penetration_loss:
+  materials:
+  - material: Standard multi-pane glass
+    formula: L_{glass} = 2 + 0.2f
+    notes:
+    - NOTE 1
+  - material: IRR glass
+    formula: L_{IRRglass} = 25.4 + 0.11f
+    notes:
+    - NOTE 1
+    - NOTE 2
+  - material: Concrete
+    formula: L_{concrete} = 5 + 4f
+    notes:
+    - NOTE 1
+  - material: Plywood
+    formula: L_{plywood} = 1.03 + 0.17f
+    notes:
+    - NOTE 1
+  - material: Wood
+    formula: L_{wood} = 4.85 + 0.12f
+    notes:
+    - NOTE 1
+  building_models:
+  - model: Low-loss model
+    pl_tw_formula: 5 - 10\log_{10}\left(0.3\cdot10^{-L_{glass}/10} + 0.7\cdot10^{-L_{concrete}/10}\right)
+    pl_in_formula: 0.5\, d_{2D-in}
+    std_p_db: 4.4
+  - model: High-loss model
+    pl_tw_formula: 5 - 10\log_{10}\left(0.7\cdot10^{-L_{IRRglass}/10} + 0.3\cdot10^{-L_{concrete}/10}\right)
+    pl_in_formula: 0.5\, d_{2D-in}
+    std_p_db: 6.5
+  - model: Low-loss A model
+    pl_tw_formula: 5 - 10\log_{10}\left(0.3\cdot10^{-L_{glass}/10} + 0.7\cdot10^{-L_{plywood}/10}\right)
+    pl_in_formula: 0.5\, d_{2D-in}
+    std_p_db: 4.4
+  building_single_frequency_below_6ghz:
+    pl_tw_db: 20
+    pl_in_formula: 0.5\, d_{2D-in} \text{, with } d_{2D-in} \text{ a single, link-specific, uniform variable between 0 and
+      25 m}
+    sigma_p_db: 0
+    sigma_sf_db: 7
+    note: sigma_SF replaces the respective value in Table 7.4.1-1
+  car_penetration_loss:
+    formula: PL = PL_b + N(\mu, \sigma_P^2)
+    formula_ref: 7.4-4
+    mu_db: 9
+    mu_metallized_windows_db: 20
+    sigma_p_db: 5
+    applicable_range_ghz: 0.6-60
+shadow_fading_autocorrelation:
+  formula: R(\Delta x) = e^{-|\Delta x| / d_{cor}}
+  formula_ref: 7.4-5
+  note: Correlation length d_cor depends on the environment; see Table 7.5-6 (Channel model parameters). In the spatial consistency
+    procedure (Clause 7.6.3), cluster-specific random variables are also correlated following this exponential function.

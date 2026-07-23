@@ -1,0 +1,3 @@
+scenario,condition,asa_deg,asd_deg,zsa_deg,zsd_deg,desired_k_db,desired_ds_ns
+RMa-AV,LOS,0.2,0.2,0.1,0.1,20,10
+RMa-AV,NLOS,0.5,0.5,0.2,0.2,10,30

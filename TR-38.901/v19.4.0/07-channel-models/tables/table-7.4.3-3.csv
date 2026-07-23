@@ -1,0 +1,5 @@
+parameter,value
+PL_tw,20 dB
+PL_in,"0.5\, d_{2D-in} \text{, with } d_{2D-in} \text{ a single, link-specific, uniform variable between 0 and 25 m}"
+sigma_P,0 dB
+sigma_SF,7 dB (sigma_SF replaces the respective value in Table 7.4.1-1)

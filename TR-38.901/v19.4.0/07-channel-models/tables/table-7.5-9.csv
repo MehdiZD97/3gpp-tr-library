@@ -1,0 +1,4 @@
+condition,mu_lgZSD,sigma_lgZSD,mu_offset_ZOD
+LOS,"max[-1, -0.17(d2D/1000) -0.01(hUT - 1.5) + 0.22]",0.34,0
+NLOS,"max[-1, -0.19(d2D/1000) -0.01(hUT - 1.5) + 0.28]",0.30,arctan((35 - 3.5)/d2D) -arctan((35 - 1.5)/d2D)
+O2I,"max[-1, -0.19(d2D/1000) -0.01(hUT - 1.5) + 0.28]",0.30,arctan((35 - 3.5)/d2D) -arctan((35 - 1.5)/d2D)

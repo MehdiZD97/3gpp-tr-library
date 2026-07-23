@@ -1,0 +1,21 @@
+parameter,value
+Applicable communication scenarios,"Highway, Urban grid, HST (High Speed Train, TR 38.802)
+UMi, UMa, RMa, SMa"
+STX/SRX Locations,"STX/SRX locations are selected among the TRPs and UEs (e.g., VRU, vehicle, RSU-type UEs) locations in the corresponding communication scenarios.
+Additional option: ISD between TRPs of Urban Grid is 250 m"
+LOS/NLOS,LOS and NLOS
+Outdoor/indoor,Outdoor
+3D mobility,Horizontal velocity: up to 10 km/h for humans and animals
+3D distribution,Uniformly distributed in horizontal plane
+Orientation,Random distribution in horizontal plane
+"Physical characteristics (e.g., size)","For human/pedestrians: Child: 0.2m x 0.3m x 1m
+Adult: 0.5m x 0.5m x 1.75m 
+For animals: Size: 1.5m x 0.5m x 1 m"
+Minimum 3D distances between STX/SRX and sensing target,"For Highway, Urban Grid, HST 
+- Min. distance is based on min TRP/UE distances defined in TR37.885 and TR38.802
+For UMi, UMa, RMa, SMa
+- Min distances based on min TRP/UE distances defined in TR38.901"
+Minimum 3D distance between sensing targets,"Option 1: At least larger than the physical size of a sensing target
+Option 2: Fixed value, 10 m."
+"Environment objects, e.g., types, characteristics, mobility, distribution, etc.","Type-2 EO for Urban Grid
+- up to 4 walls modelled as Type-2 EO, per building of size 413m x 230m x 20m."

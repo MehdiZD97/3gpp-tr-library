@@ -1,0 +1,27 @@
+# Schema for a 3GPP pathloss table: LOS/NLOS formulas per deployment
+# scenario, plus the shadow-fading standard deviation and applicability
+# range that go with each formula.
+#
+# This describes the shape of a `pathloss:` list in a section's populated
+# YAML (e.g. TR-38.901/v19.4.0/07-channel-models/7.4-pathloss.yaml). It is
+# shared across TRs: any clause presenting a pathloss table in this
+# "scenario -> LOS/NLOS formula + shadow fading std + applicability range"
+# shape should reuse this schema rather than inventing a new one. Content
+# specific to one TR's clause (e.g. LOS probability, O2I penetration loss)
+# does not belong here — it lives as sibling keys in that section's own
+# YAML file, alongside a `pathloss:` list that conforms to this schema.
+#
+# Types below are documentation, not an enforced JSON-Schema — Phase 3's
+# verify_tables.py is expected to formalize this into real validation.
+
+pathloss:
+  - scenario: string # e.g. "RMa", "UMa", "UMi-StreetCanyon", "InH-Office", "InF-SL"
+    condition: string # "LOS" | "NLOS"
+    variant: string | null # e.g. "optional" for an alternate/simplified formula; null for the primary one
+    formula: string # LaTeX; piecewise formulas use \begin{cases}...\end{cases}
+    formula_ref: string | null # TR equation number this formula is individually numbered as, if any
+    shadow_fading_std_db: # one or more (condition, value) pairs; a single null-condition entry if constant
+      - condition: string | null # e.g. "10 m <= d2D < dBP"; null if the std applies unconditionally
+        value_db: number
+    applicability_range: string # free-text summary of antenna height / distance defaults and ranges
+    notes: [string] # TR NOTE labels this row references, e.g. ["NOTE 1", "NOTE 6"]

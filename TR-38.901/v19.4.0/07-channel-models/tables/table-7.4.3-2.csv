@@ -1,0 +1,4 @@
+model,pl_tw_formula,pl_in_formula,std_p_db
+Low-loss model,5 - 10\log_{10}\left(0.3\cdot10^{-L_{glass}/10} + 0.7\cdot10^{-L_{concrete}/10}\right),"0.5\, d_{2D-in}",4.4
+High-loss model,5 - 10\log_{10}\left(0.7\cdot10^{-L_{IRRglass}/10} + 0.3\cdot10^{-L_{concrete}/10}\right),"0.5\, d_{2D-in}",6.5
+Low-loss A model,5 - 10\log_{10}\left(0.3\cdot10^{-L_{glass}/10} + 0.7\cdot10^{-L_{plywood}/10}\right),"0.5\, d_{2D-in}",4.4

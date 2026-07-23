@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tr_api"
+version = "0.1.0"
+description = "Typed Python access to 3gpp-tr-library's structured TR data (pathloss, LOS probability, O2I penetration loss, and more)."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pydantic>=2",
+    "pyyaml",
+]
+
+[project.scripts]
+tr-api = "tr_api.cli:main"
+
+[tool.setuptools]
+packages = ["tr_api"]
+package-dir = {"tr_api" = "."}

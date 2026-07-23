@@ -1,0 +1,23 @@
+parameter,indoor_value,outdoor_value
+Scenario,As specified in Table 7.9.6.1-2,As specified in Table 7.9.6.1-2
+Sensing mode,"TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic","TRP monostatic, TRP-TRP bistatic, TRP-UE bistatic, UE-UE bistatic, UE monostatic"
+Target type,"Adult Pedestrian: 0.5m x 0.5m x 1.75m
+see note","Adult Pedestrian: 0.5m x 0.5m x 1.75m
+see note"
+UT Distribution,"Per Table 7.8-2 Indoor-Office
+Number of UTs: 20","Per Table 7.8-2
+Number of UTs/cell: 10"
+RCS for each scattering point,"Component sigma_M: -1.37 dBsm
+Component sigma_D: 0 dB
+Component sigma_S: 3.94 dB
+The same values are used for monostatic RCS and bistatic RCS","Component sigma_M: -1.37 dBsm
+Component sigma_D: 0 dB
+Component sigma_S: 3.94 dB
+The same values are used for monostatic RCS and bistatic RCS"
+Fast fading model,"For BS to UE link: Follow the procedure defined in TR38.901
+For BS to target link: Follow the procedure defined in TR38.901
+for target to UE link: Follow the procedure defined in 38.858","For BS to UE link: Follow the procedure defined in TR38.901
+For BS to target link: Follow the procedure defined in TR38.901
+for target to UE link: Follow the procedure defined in 38.858"
+"(mu, std) for XPR of target","(19.81, 4.25) dB","(19.81, 4.25) dB"
+Absolute delay,"The model of InH, InF-SH scenarios defined in Table 7.6.9-1.",The model of UMa/UMi scenario defined in Table 7.6.9-1.
