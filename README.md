@@ -133,7 +133,7 @@ This repository redistributes hand-verified structured *extracts*, not the origi
 This repository is **complementary** to those efforts rather than a substitute for them. Where a broad-corpus dataset or an MCP bridge optimizes for *coverage* — as much 3GPP text as possible, in an LLM-friendly form — this project optimizes for *depth and correctness on a focused set of high-value TRs*: hand-verified, section-level extracts with queryable **typed** parameters (`tr_api`), the TR's own real table numbers, and cross-format verification against multiple independent source formats before anything is marked `verified`. In short: those provide breadth for language-model workflows; this provides depth and machine-usable, version-pinned parameters for simulation and analysis. The two serve different needs and pair naturally.
 
 ### How to cite this repository
-
+<!--
 Archived on Zenodo with a DOI: [10.5281/zenodo.21501655](https://doi.org/10.5281/zenodo.21501655)
 
 > Zafari, M. (2026). *3gpp-tr-library: Hand-verified, section-level 3GPP Technical Reports as queryable Markdown, CSV and YAML* (v0.1.0). Zenodo. https://doi.org/10.5281/zenodo.21501655
@@ -152,3 +152,5 @@ Archived on Zenodo with a DOI: [10.5281/zenodo.21501655](https://doi.org/10.5281
 ```
 
 Please also cite the underlying 3GPP Technical Reports themselves (listed above). This library provides structured extracts, not original specification content.
+-->
+*A citation entry will be added here if/when a formal write-up exists.*
