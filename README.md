@@ -8,6 +8,7 @@
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg?logo=python&logoColor=white)
 ![Last Commit](https://img.shields.io/github/last-commit/MehdiZD97/3gpp-tr-library)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
+
 [![DOI](https://zenodo.org/badge/1300838692.svg)](https://doi.org/10.5281/zenodo.21501655)
 
 </div>
