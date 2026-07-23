@@ -8,18 +8,19 @@
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg?logo=python&logoColor=white)
 ![Last Commit](https://img.shields.io/github/last-commit/MehdiZD97/3gpp-tr-library)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
+[![DOI](https://zenodo.org/badge/1300838692.svg)](https://doi.org/10.5281/zenodo.21501655)
 
 </div>
 
-**Hand-verified, section-level 3GPP Technical Reports as queryable Markdown + CSV/YAML — and a typed Python API to pull channel-model parameters straight into simulation code.**
+**Hand-verified, section-level 3GPP Technical Reports as queryable Markdown + CSV/YAML and a typed Python API to pull channel-model parameters straight into simulation code.**
 
-The tables, formulas, and parameters buried in 3GPP TRs are exactly the content that PDF extractors and LLMs mangle — merged cells, image-rendered equations, per-scenario conditions that flatten into nonsense. This repository takes select TRs and turns the sections that matter into **hand-verified, cross-checked** structured data: Markdown for reading, CSV + YAML for machines, and a small pip-installable API so you can call for a pathloss formula or a large-scale-parameter set instead of transcribing one out of a 160-page document.
+The tables, formulas, and parameters buried in 3GPP TRs are exactly the content that PDF extractors and LLMs mangle, merged cells, image-rendered equations, per-scenario conditions that flatten into nonsense. This repository takes select TRs and turns the sections that matter into **hand-verified, cross-checked** structured data: Markdown for reading, CSV + YAML for machines, and a small pip-installable API so you can call for a pathloss formula or a large-scale-parameter set instead of transcribing one out of a 160-page document.
 
 It's built for LLM ingestion / RAG pipelines and for direct use in wireless simulation code.
 
 ## What's in it right now
 
-Coverage grows opportunistically as research needs demand — not front-to-back through each document — and that selectivity is deliberate: depth and verification over breadth. Currently processed and `verified`:
+Coverage grows opportunistically as research needs demand, not front-to-back through each document, and that selectivity is deliberate: depth and verification over breadth. Currently processed and `verified`:
 
 | TR | Version | Section | What it covers |
 |---|---|---|---|
@@ -133,7 +134,21 @@ This repository is **complementary** to those efforts rather than a substitute f
 
 ### How to cite this repository
 
-<!-- Placeholder: a citable reference (e.g. a future write-up or a CITATION.cff)
-     can be added here once one exists. -->
+Archived on Zenodo with a DOI: [10.5281/zenodo.21501655](https://doi.org/10.5281/zenodo.21501655)
 
-*A citation entry will be added here if/when a formal write-up exists.*
+> Zafari, M. (2026). *3gpp-tr-library: Hand-verified, section-level 3GPP Technical Reports as queryable Markdown, CSV and YAML* (v0.1.0). Zenodo. https://doi.org/10.5281/zenodo.21501655
+
+```bibtex
+@software{zafari_3gpp_tr_library_2026,
+  author    = {Zafari, Mehdi},
+  title     = {{3gpp-tr-library}: Hand-verified, section-level 3GPP Technical
+               Reports as queryable Markdown, CSV and YAML},
+  year      = {2026},
+  version   = {v0.1.0},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.21501655},
+  url       = {https://github.com/MehdiZD97/3gpp-tr-library}
+}
+```
+
+Please also cite the underlying 3GPP Technical Reports themselves (listed above). This library provides structured extracts, not original specification content.
