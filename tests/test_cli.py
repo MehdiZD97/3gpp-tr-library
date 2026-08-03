@@ -53,11 +53,11 @@ _MEMBER_CASES = _member_cases()
 # ---------------------------------------------------------------------------
 # list / describe -- both TRs reachable
 # ---------------------------------------------------------------------------
-def test_list_shows_all_four_units_across_both_trs(capsys):
+def test_list_shows_every_unit_across_both_trs(capsys):
     code, out, _ = run(["list"], capsys)
     assert code == 0
     assert "TR 38.901" in out and "TR 36.777" in out
-    for token in ("7.4", "7.5", "7.9", "Channel modelling details"):
+    for token in ("7.4", "7.5", "7.6", "7.9", "Channel modelling details"):
         assert token in out
 
 
@@ -141,6 +141,31 @@ def test_dump_csv_matches_committed_file(capsys):
         assert out == f.read()
 
 
+@pytest.mark.parametrize("member,table_number", [
+    ("oxygen_absorption", "7.6.1-1"),
+    ("correlation_distance", "7.6.3.1-2"),
+    ("correlation_type", "7.6.3.4-1"),
+    ("uncorrelated_states", "7.6.3.4-2"),
+    ("self_blocking_region", "7.6.4.1-1"),
+    ("blocking_region", "7.6.4.1-2"),
+    ("blockage_sign_description", "7.6.4.1-3"),
+    ("blockage_correlation_distance", "7.6.4.1-4"),
+    ("blocker_parameters", "7.6.4.2-5"),
+    ("ground_material", "7.6.8-1"),
+    ("absolute_time_of_arrival", "7.6.9-1"),
+])
+def test_dump_csv_matches_every_committed_7_6_table(member, table_number, capsys):
+    # The thin-layer proof extended to §7.6: the CLI regenerates each committed
+    # CSV byte-for-byte from the YAML, through the real accessors.
+    code, out, _ = run(["dump", "tr38901", "7.6", member, "--format", "csv"], capsys)
+    assert code == 0
+    committed = os.path.join(
+        REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models", "tables", f"table-{table_number}.csv"
+    )
+    with open(committed, newline="") as f:
+        assert out == f.read()
+
+
 def test_dump_csv_on_non_table_errors_helpfully(capsys):
     code, out, err = run(["dump", "tr38901", "7.4", "o2i_penetration_loss", "--format", "csv"], capsys)
     assert code == 2
@@ -167,9 +192,10 @@ def test_unknown_member_lists_available_members(capsys):
 
 
 def test_unknown_section_exits_nonzero(capsys):
-    code, _out, err = run(["describe", "tr38901", "7.6"], capsys)
+    # §7.7 is not processed (§7.6 was the stand-in here before Phase 10 Group A).
+    code, _out, err = run(["describe", "tr38901", "7.7"], capsys)
     assert code == 2
-    assert "7.6" in err
+    assert "7.7" in err
 
 
 # ---------------------------------------------------------------------------

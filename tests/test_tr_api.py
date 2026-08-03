@@ -45,11 +45,14 @@ def test_o2i_and_autocorrelation_accessors():
 
 
 def test_section_lookup_for_unprocessed_section_raises_informative_error():
+    # §7.7 (link-level CDL/TDL models) is not processed; §7.6 was the stand-in
+    # here until Phase 10 Group A processed it.
     with pytest.raises(SectionNotFoundError) as exc_info:
-        tr38901.section("7.6")
+        tr38901.section("7.7")
     message = str(exc_info.value)
-    assert "7.6" in message
-    assert "7.4" in message and "7.5" in message and "7.9" in message  # lists what *is* processed
+    assert "7.7" in message
+    # lists what *is* processed
+    assert "7.4" in message and "7.5" in message and "7.6" in message and "7.9" in message
 
 
 def test_section_lookup_for_unknown_version_raises_informative_error():
@@ -250,3 +253,83 @@ def test_both_trs_usable_from_same_import():
     aerial = t36.annex("B").pathloss(scenario="RMa-AV", condition="LOS")
     assert type(pathloss).__name__ == "PathlossEntry"
     assert isinstance(aerial, list)
+
+
+# --- TR 38.901 §7.6 (Additional modelling components) ---
+def test_section_7_6_registered_and_cached():
+    assert tr38901.section("7.6") is tr38901.section("7.6")
+    assert type(tr38901.section("7.6")).__name__ == "Section76"
+
+
+def test_section_7_6_lookups_return_typed_entries():
+    s = tr38901.section("7.6")
+    assert type(s.oxygen_absorption(f_ghz="60")).__name__ == "OxygenAbsorptionEntry"
+    assert type(s.correlation_distance(scenario="UMa", condition="NLOS")).__name__ == \
+        "SpatialConsistencyCorrelationDistanceEntry"
+    assert type(s.correlation_type(parameter="Delays")).__name__ == "SpatialConsistencyCorrelationTypeEntry"
+    assert type(s.uncorrelated_states(parameter="Blockage")).__name__ == \
+        "SpatialConsistencyUncorrelatedStatesEntry"
+    assert type(s.self_blocking_region(mode="Portrait mode")).__name__ == "SelfBlockingRegionEntry"
+    assert type(s.blocking_region(scenario="InH scenario")).__name__ == "BlockingRegionEntry"
+    assert type(s.blockage_correlation_distance(scenario="InH", condition="LOS")).__name__ == \
+        "BlockageCorrelationDistanceEntry"
+    assert type(s.blocker_parameters(blocker="Human")).__name__ == "BlockerParameterEntry"
+    assert type(s.ground_material(material_class="Concrete")).__name__ == "GroundMaterialEntry"
+    assert type(s.absolute_time_of_arrival(scenario="UMa")).__name__ == "AbsoluteTimeOfArrivalEntry"
+
+
+def test_section_7_6_blockage_sign_description_is_a_property_returning_the_grid():
+    rows = tr38901.section("7.6").blockage_sign_description
+    assert isinstance(rows, list) and len(rows) == 9
+    assert type(rows[0]).__name__ == "BlockageSignEntry"
+
+
+def test_section_7_6_condition_is_optional_only_where_the_tr_merges_it():
+    s = tr38901.section("7.6")
+    # Indoor/InF have no LOS/NLOS/O2I split -> reachable by scenario alone.
+    assert s.correlation_distance(scenario="Indoor").indoor_outdoor_state_m == "N/A"
+    # ...but a scenario that *does* split must not silently match with no condition.
+    with pytest.raises(tr38901.ScenarioNotFoundError):
+        s.correlation_distance(scenario="UMa")
+
+
+@pytest.mark.parametrize("call,bad", [
+    ("oxygen_absorption", {"f_ghz": "999"}),
+    ("correlation_distance", {"scenario": "Mars", "condition": "LOS"}),
+    ("correlation_type", {"parameter": "Nonsense"}),
+    ("uncorrelated_states", {"parameter": "Nonsense"}),
+    ("self_blocking_region", {"mode": "Diagonal mode"}),
+    ("blocking_region", {"scenario": "Lunar scenario"}),
+    ("blockage_correlation_distance", {"scenario": "InH", "condition": "O2I"}),
+    ("blocker_parameters", {"blocker": "Dragon"}),
+    ("ground_material", {"material_class": "Unobtanium"}),
+    ("absolute_time_of_arrival", {"scenario": "Mars"}),
+])
+def test_section_7_6_unknown_key_raises_informative_error(call, bad):
+    s = tr38901.section("7.6")
+    with pytest.raises(tr38901.ScenarioNotFoundError) as exc_info:
+        getattr(s, call)(**bad)
+    message = str(exc_info.value)
+    assert "Available" in message
+    for value in bad.values():
+        assert str(value) in message or "Available" in message
+
+
+def test_section_7_6_registry_addition_needed_no_loader_change():
+    # §7.6 went in as a one-line _SECTION_REGISTRY entry through the shared
+    # TRLoader (the Phase 5 generalization). Confirm it is loaded by exactly
+    # the same machinery as every other unit, not a special case.
+    from tr_api._loader import TRLoader
+    assert isinstance(tr38901._loader, TRLoader)
+    assert set(tr38901._SECTION_REGISTRY) == {"7.4", "7.5", "7.6", "7.9"}
+    rel_yaml, model_cls, accessor_cls = tr38901._SECTION_REGISTRY["7.6"]
+    assert rel_yaml == "07-channel-models/7.6-additional-components.yaml"
+    assert model_cls.__name__ == "Section76Data" and accessor_cls.__name__ == "Section76"
+
+
+def test_existing_section_surfaces_unchanged_by_the_7_6_addition():
+    # Regression guard: adding §7.6 must not perturb §7.4/§7.5/§7.9.
+    assert tr38901.section("7.4").pathloss(scenario="RMa", condition="LOS").condition == "LOS"
+    assert tr38901.section("7.5").channel_model_parameters(
+        scenario="UMa", condition="LOS").number_of_clusters == "12"
+    assert tr38901.section("7.9").xpr(target="UAV").mu_xpr_db == "13.75"

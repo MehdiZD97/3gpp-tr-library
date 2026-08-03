@@ -499,3 +499,152 @@ class Section79Data(BaseModel):
     background_channel_params: List[BackgroundChannelParamEntry]
     spatial_consistency_correlation: List[SpatialConsistencyCorrelationEntry]
     calibration_assumptions: List[CalibrationAssumption]
+
+
+# ---------------------------------------------------------------------------
+# TR 38.901 section 7.6 (Additional modelling components) -- the optional
+# add-ons to the §7.5 fast-fading model. These models cover the *dependency-
+# driven core* processed in Phase 10 Group A: 7.6.0/7.6.1 (oxygen absorption),
+# 7.6.3 (spatial consistency), 7.6.4 (blockage), 7.6.8 (explicit ground
+# reflection), 7.6.9 (absolute time of arrival) and 7.6.10 (dual mobility) --
+# i.e. exactly the sub-clauses the already-processed §7.4/§7.5/§7.9 reference.
+# 7.6.2, 7.6.5-7.6.7 and 7.6.11-7.6.16 are not processed and have no models.
+#
+# Every field is `str`, like §7.5/§7.9/Annex B: the tables mix bare numbers
+# with "N/A", distribution descriptions ("Uniform in [0, 360]"), a formula
+# ("d_clutter/2") and a power ("10^7"). Named for what they are (blocking
+# regions, blocker parameters, ground material properties, ...) rather than
+# reused from another section's shape -- 7.6.10 (dual mobility) contributes
+# equations only, so it has no model here.
+# ---------------------------------------------------------------------------
+class OxygenAbsorptionEntry(BaseModel):
+    """One frequency bin of Table 7.6.1-1 (frequency dependent oxygen loss)."""
+
+    f_ghz: str
+    alpha_db_per_km: str
+
+
+class SpatialConsistencyCorrelationDistanceEntry(BaseModel):
+    """One (scenario, condition) column of Table 7.6.3.1-2.
+
+    The TR prints three parameter rows against scenario/condition columns, with
+    the LOS/NLOS-state and indoor/outdoor-state values merged across each
+    scenario's LOS/NLOS/O2I columns -- hence those two repeat per scenario here.
+    `condition` is None for Indoor and InF, which have no LOS/NLOS/O2I split.
+    """
+
+    scenario: str
+    condition: Optional[str] = None
+    cluster_ray_specific_m: str
+    los_nlos_state_m: str
+    indoor_outdoor_state_m: str
+
+
+class SpatialConsistencyCorrelationTypeEntry(BaseModel):
+    """One row of Table 7.6.3.4-1 (parameter -> Site-specific / All-correlated)."""
+
+    parameter: str
+    correlation_type: str
+
+
+class SpatialConsistencyUncorrelatedStatesEntry(BaseModel):
+    """One row of Table 7.6.3.4-2 (parameter -> the states in which it is uncorrelated)."""
+
+    parameter: str
+    uncorrelated_states: str
+
+
+class SelfBlockingRegionEntry(BaseModel):
+    """One mode of Table 7.6.4.1-1 (blockage model A self-blocking region).
+
+    Columns are the TR's phi'_sb, x_sb, theta'_sb, y_sb, all in degrees.
+    """
+
+    mode: str
+    phi_sb_deg: str
+    x_sb_deg: str
+    theta_sb_deg: str
+    y_sb_deg: str
+
+
+class BlockingRegionEntry(BaseModel):
+    """One scenario row of Table 7.6.4.1-2 (blockage model A non-self-blocking
+    regions, k = 1..4). Angles in degrees; `r_m` is the UT-blocker distance."""
+
+    scenario: str
+    phi_k_deg: str
+    x_k_deg: str
+    theta_k_deg: str
+    y_k_deg: str
+    r_m: str
+
+
+class BlockageSignEntry(BaseModel):
+    """One cell of Table 7.6.4.1-3, the sign table for Eq. 7.6-23's tan^-1 term.
+
+    The TR prints a 3x3 grid (AOA-range rows x ZOA-range columns); this is one
+    row per grid cell, with the sign pair applied to (A1, A2) and to (Z1, Z2).
+    """
+
+    aoa_range: str
+    zoa_range: str
+    signs_a1_a2: str
+    signs_z1_z2: str
+
+
+class BlockageCorrelationDistanceEntry(BaseModel):
+    """One (scenario, condition) column of Table 7.6.4.1-4 (d_corr for the
+    random variable determining the centre of the blocker)."""
+
+    scenario: str
+    condition: str
+    d_corr_m: str
+
+
+class BlockerParameterEntry(BaseModel):
+    """One recommended blocker of Table 7.6.4.2-5 (blockage model B)."""
+
+    environment: str
+    blocker: str
+    dimensions: str
+    mobility_pattern: str
+
+
+class GroundMaterialEntry(BaseModel):
+    """One material class of Table 7.6.8-1 -- the a_eps/b_eps (relative
+    permittivity) and c_sigma/d_sigma (conductivity) coefficients of
+    Eq. 7.6-41/7.6-42, plus the applicable frequency range in GHz."""
+
+    material_class: str
+    a_epsilon: str
+    b_epsilon: str
+    c_sigma: str
+    d_sigma: str
+    frequency_range_ghz: str
+
+
+class AbsoluteTimeOfArrivalEntry(BaseModel):
+    """One scenario column of Table 7.6.9-1 -- the mean/std of
+    lg(delta_tau) = log10(delta_tau / 1s) and the horizontal correlation distance."""
+
+    scenario: str
+    mu_lg_delta_tau: str
+    sigma_lg_delta_tau: str
+    corr_distance_m: str
+
+
+class Section76Data(BaseModel):
+    """The full validated shape of a `7.6-additional-components.yaml`-style file
+    (the dependency-driven core: 7.6.0/1/3/4/8/9/10)."""
+
+    oxygen_absorption_loss: List[OxygenAbsorptionEntry]
+    spatial_consistency_correlation_distance: List[SpatialConsistencyCorrelationDistanceEntry]
+    spatial_consistency_correlation_type: List[SpatialConsistencyCorrelationTypeEntry]
+    spatial_consistency_uncorrelated_states: List[SpatialConsistencyUncorrelatedStatesEntry]
+    self_blocking_region: List[SelfBlockingRegionEntry]
+    blocking_region: List[BlockingRegionEntry]
+    blockage_sign_description: List[BlockageSignEntry]
+    blockage_correlation_distance: List[BlockageCorrelationDistanceEntry]
+    blocker_parameters: List[BlockerParameterEntry]
+    ground_material_properties: List[GroundMaterialEntry]
+    absolute_time_of_arrival: List[AbsoluteTimeOfArrivalEntry]

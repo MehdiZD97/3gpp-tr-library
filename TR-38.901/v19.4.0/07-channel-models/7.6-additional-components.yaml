@@ -1,0 +1,328 @@
+oxygen_absorption_loss:
+- f_ghz: 0-52
+  alpha_db_per_km: '0'
+- f_ghz: '53'
+  alpha_db_per_km: '1'
+- f_ghz: '54'
+  alpha_db_per_km: '2.2'
+- f_ghz: '55'
+  alpha_db_per_km: '4'
+- f_ghz: '56'
+  alpha_db_per_km: '6.6'
+- f_ghz: '57'
+  alpha_db_per_km: '9.7'
+- f_ghz: '58'
+  alpha_db_per_km: '12.6'
+- f_ghz: '59'
+  alpha_db_per_km: '14.6'
+- f_ghz: '60'
+  alpha_db_per_km: '15'
+- f_ghz: '61'
+  alpha_db_per_km: '14.6'
+- f_ghz: '62'
+  alpha_db_per_km: '14.3'
+- f_ghz: '63'
+  alpha_db_per_km: '10.5'
+- f_ghz: '64'
+  alpha_db_per_km: '6.8'
+- f_ghz: '65'
+  alpha_db_per_km: '3.9'
+- f_ghz: '66'
+  alpha_db_per_km: '1.9'
+- f_ghz: '67'
+  alpha_db_per_km: '1'
+- f_ghz: 68-100
+  alpha_db_per_km: '0'
+spatial_consistency_correlation_distance:
+- scenario: RMa
+  condition: LOS
+  cluster_ray_specific_m: '50'
+  los_nlos_state_m: '60'
+  indoor_outdoor_state_m: '50'
+- scenario: RMa
+  condition: NLOS
+  cluster_ray_specific_m: '60'
+  los_nlos_state_m: '60'
+  indoor_outdoor_state_m: '50'
+- scenario: RMa
+  condition: O2I
+  cluster_ray_specific_m: '15'
+  los_nlos_state_m: '60'
+  indoor_outdoor_state_m: '50'
+- scenario: UMi
+  condition: LOS
+  cluster_ray_specific_m: '12'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: UMi
+  condition: NLOS
+  cluster_ray_specific_m: '15'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: UMi
+  condition: O2I
+  cluster_ray_specific_m: '15'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: UMa
+  condition: LOS
+  cluster_ray_specific_m: '40'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: UMa
+  condition: NLOS
+  cluster_ray_specific_m: '50'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: UMa
+  condition: O2I
+  cluster_ray_specific_m: '15'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: SMa
+  condition: LOS
+  cluster_ray_specific_m: '40'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: SMa
+  condition: NLOS
+  cluster_ray_specific_m: '50'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: SMa
+  condition: O2I
+  cluster_ray_specific_m: '15'
+  los_nlos_state_m: '50'
+  indoor_outdoor_state_m: '50'
+- scenario: Indoor
+  condition: null
+  cluster_ray_specific_m: '10'
+  los_nlos_state_m: '10'
+  indoor_outdoor_state_m: N/A
+- scenario: InF
+  condition: null
+  cluster_ray_specific_m: '10'
+  los_nlos_state_m: d_clutter/2
+  indoor_outdoor_state_m: N/A
+spatial_consistency_correlation_type:
+- parameter: Delays
+  correlation_type: Site-specific
+- parameter: Cluster powers
+  correlation_type: Site-specific
+- parameter: AOA/ZOA/AOD/ZOD offset
+  correlation_type: Site-specific
+- parameter: AOA/ZOA/AOD/ZOD sign
+  correlation_type: Site-specific
+- parameter: Random coupling
+  correlation_type: Site-specific
+- parameter: XPR
+  correlation_type: Site-specific
+- parameter: Initial random phase
+  correlation_type: Site-specific
+- parameter: LOS/NLOS states
+  correlation_type: Site-specific
+- parameter: Blockage (Model A)
+  correlation_type: All-correlated
+- parameter: O2I penetration loss
+  correlation_type: All-correlated
+- parameter: Indoor distance
+  correlation_type: All-correlated
+- parameter: Indoor states
+  correlation_type: All-correlated
+spatial_consistency_uncorrelated_states:
+- parameter: Delays
+  uncorrelated_states: Outdoor LOS/outdoor NLOS/O2I (different floors)
+- parameter: Cluster powers
+  uncorrelated_states: Outdoor LOS/outdoor NLOS/O2I (different floors)
+- parameter: AOA/ZOA/AOD/ZOD offset
+  uncorrelated_states: Outdoor LOS/outdoor NLOS/O2I (different floors)
+- parameter: AOA/ZOA/AOD/ZOD sign
+  uncorrelated_states: Outdoor LOS/outdoor NLOS/O2I (different floors)
+- parameter: Random coupling
+  uncorrelated_states: Outdoor LOS/outdoor NLOS/O2I (different floors)
+- parameter: XPR
+  uncorrelated_states: Outdoor LOS/outdoor NLOS/O2I (different floors)
+- parameter: Initial random phase
+  uncorrelated_states: Outdoor LOS/outdoor NLOS/O2I (different floors)
+- parameter: Blockage
+  uncorrelated_states: Outdoor/O2I (different floors)
+- parameter: Standard deviation for O2I penetration loss
+  uncorrelated_states: Different building types, i.e., high/low loss
+self_blocking_region:
+- mode: Portrait mode
+  phi_sb_deg: '260'
+  x_sb_deg: '120'
+  theta_sb_deg: '100'
+  y_sb_deg: '80'
+- mode: Landscape mode
+  phi_sb_deg: '40'
+  x_sb_deg: '160'
+  theta_sb_deg: '110'
+  y_sb_deg: '75'
+blocking_region:
+- scenario: InH scenario
+  phi_k_deg: Uniform in [0, 360]
+  x_k_deg: Uniform in [15, 45]
+  theta_k_deg: '90'
+  y_k_deg: Uniform in [5, 15]
+  r_m: '2'
+- scenario: UMi, UMa, SMa, RMa scenarios
+  phi_k_deg: Uniform in [0, 360]
+  x_k_deg: Uniform in [5, 15]
+  theta_k_deg: '90'
+  y_k_deg: '5'
+  r_m: '10'
+blockage_sign_description:
+- aoa_range: x_k/2 < phi_AOA - phi_k <= x_k
+  zoa_range: -y_k < theta_ZOA - theta_k <= -y_k/2
+  signs_a1_a2: (-, +)
+  signs_z1_z2: (+, -)
+- aoa_range: x_k/2 < phi_AOA - phi_k <= x_k
+  zoa_range: -y_k/2 < theta_ZOA - theta_k <= y_k/2
+  signs_a1_a2: (-, +)
+  signs_z1_z2: (+, +)
+- aoa_range: x_k/2 < phi_AOA - phi_k <= x_k
+  zoa_range: y_k/2 < theta_ZOA - theta_k <= y_k
+  signs_a1_a2: (-, +)
+  signs_z1_z2: (-, +)
+- aoa_range: -x_k/2 < phi_AOA - phi_k <= x_k/2
+  zoa_range: -y_k < theta_ZOA - theta_k <= -y_k/2
+  signs_a1_a2: (+, +)
+  signs_z1_z2: (+, -)
+- aoa_range: -x_k/2 < phi_AOA - phi_k <= x_k/2
+  zoa_range: -y_k/2 < theta_ZOA - theta_k <= y_k/2
+  signs_a1_a2: (+, +)
+  signs_z1_z2: (+, +)
+- aoa_range: -x_k/2 < phi_AOA - phi_k <= x_k/2
+  zoa_range: y_k/2 < theta_ZOA - theta_k <= y_k
+  signs_a1_a2: (+, +)
+  signs_z1_z2: (-, +)
+- aoa_range: -x_k < phi_AOA - phi_k <= -x_k/2
+  zoa_range: -y_k < theta_ZOA - theta_k <= -y_k/2
+  signs_a1_a2: (+, -)
+  signs_z1_z2: (+, -)
+- aoa_range: -x_k < phi_AOA - phi_k <= -x_k/2
+  zoa_range: -y_k/2 < theta_ZOA - theta_k <= y_k/2
+  signs_a1_a2: (+, -)
+  signs_z1_z2: (+, +)
+- aoa_range: -x_k < phi_AOA - phi_k <= -x_k/2
+  zoa_range: y_k/2 < theta_ZOA - theta_k <= y_k
+  signs_a1_a2: (+, -)
+  signs_z1_z2: (-, +)
+blockage_correlation_distance:
+- scenario: UMi/UMa/SMa/RMa
+  condition: LOS
+  d_corr_m: '10'
+- scenario: UMi/UMa/SMa/RMa
+  condition: NLOS
+  d_corr_m: '10'
+- scenario: UMi/UMa/SMa/RMa
+  condition: O2I
+  d_corr_m: '5'
+- scenario: InH
+  condition: LOS
+  d_corr_m: '5'
+- scenario: InH
+  condition: NLOS
+  d_corr_m: '5'
+blocker_parameters:
+- environment: Indoor; Outdoor; InF
+  blocker: Human
+  dimensions: 'Cartesian: w=0.3m; h=1.7m'
+  mobility_pattern: Stationary or up to 3 km/h
+- environment: Outdoor
+  blocker: Vehicle
+  dimensions: 'Cartesian: w=4.8m; h=1.4m'
+  mobility_pattern: Stationary or up to 100 km/h
+- environment: InF
+  blocker: AGV
+  dimensions: 'Cartesian: w=3m; h=1.5m'
+  mobility_pattern: Up to 30 km/h
+- environment: InF
+  blocker: Industrial robot
+  dimensions: 'Cartesian: w=2m; h=0.2m'
+  mobility_pattern: Up to 3 m/s
+ground_material_properties:
+- material_class: Concrete
+  a_epsilon: '5.31'
+  b_epsilon: '0'
+  c_sigma: '0.0326'
+  d_sigma: '0.8095'
+  frequency_range_ghz: 1-100
+- material_class: Brick
+  a_epsilon: '3.75'
+  b_epsilon: '0'
+  c_sigma: '0.038'
+  d_sigma: '0'
+  frequency_range_ghz: 1-10
+- material_class: Plasterboard
+  a_epsilon: '2.94'
+  b_epsilon: '0'
+  c_sigma: '0.0116'
+  d_sigma: '0.7076'
+  frequency_range_ghz: 1-100
+- material_class: Wood
+  a_epsilon: '1.99'
+  b_epsilon: '0'
+  c_sigma: '0.0047'
+  d_sigma: '1.0718'
+  frequency_range_ghz: 0.001-100
+- material_class: Floorboard
+  a_epsilon: '3.66'
+  b_epsilon: '0'
+  c_sigma: '0.0044'
+  d_sigma: '1.3515'
+  frequency_range_ghz: 50-100
+- material_class: Metal
+  a_epsilon: '1'
+  b_epsilon: '0'
+  c_sigma: 10^7
+  d_sigma: '0'
+  frequency_range_ghz: 1-100
+- material_class: Very dry ground
+  a_epsilon: '3'
+  b_epsilon: '0'
+  c_sigma: '0.00015'
+  d_sigma: '2.52'
+  frequency_range_ghz: 1-10
+- material_class: Medium dry ground
+  a_epsilon: '15'
+  b_epsilon: '-0.1'
+  c_sigma: '0.035'
+  d_sigma: '1.63'
+  frequency_range_ghz: 1-10
+- material_class: Wet ground
+  a_epsilon: '30'
+  b_epsilon: '-0.4'
+  c_sigma: '0.15'
+  d_sigma: '1.30'
+  frequency_range_ghz: 1-10
+absolute_time_of_arrival:
+- scenario: InH
+  mu_lg_delta_tau: '-8.6'
+  sigma_lg_delta_tau: '0.1'
+  corr_distance_m: '10'
+- scenario: InF-SL, InF-DL
+  mu_lg_delta_tau: '-7.5'
+  sigma_lg_delta_tau: '0.4'
+  corr_distance_m: '6'
+- scenario: InF-SH, InF-DH
+  mu_lg_delta_tau: '-7.5'
+  sigma_lg_delta_tau: '0.4'
+  corr_distance_m: '11'
+- scenario: UMi
+  mu_lg_delta_tau: '-7.5'
+  sigma_lg_delta_tau: '0.5'
+  corr_distance_m: '15'
+- scenario: UMa
+  mu_lg_delta_tau: '-7.4'
+  sigma_lg_delta_tau: '0.2'
+  corr_distance_m: '50'
+- scenario: RMa
+  mu_lg_delta_tau: '-8.33'
+  sigma_lg_delta_tau: '0.26'
+  corr_distance_m: '50'
+- scenario: SMa
+  mu_lg_delta_tau: '-7.702'
+  sigma_lg_delta_tau: '0.4'
+  corr_distance_m: '50'

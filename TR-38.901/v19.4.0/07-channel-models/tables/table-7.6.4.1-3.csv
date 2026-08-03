@@ -1,0 +1,10 @@
+aoa_range,zoa_range,signs_a1_a2,signs_z1_z2
+x_k/2 < phi_AOA - phi_k <= x_k,-y_k < theta_ZOA - theta_k <= -y_k/2,"(-, +)","(+, -)"
+x_k/2 < phi_AOA - phi_k <= x_k,-y_k/2 < theta_ZOA - theta_k <= y_k/2,"(-, +)","(+, +)"
+x_k/2 < phi_AOA - phi_k <= x_k,y_k/2 < theta_ZOA - theta_k <= y_k,"(-, +)","(-, +)"
+-x_k/2 < phi_AOA - phi_k <= x_k/2,-y_k < theta_ZOA - theta_k <= -y_k/2,"(+, +)","(+, -)"
+-x_k/2 < phi_AOA - phi_k <= x_k/2,-y_k/2 < theta_ZOA - theta_k <= y_k/2,"(+, +)","(+, +)"
+-x_k/2 < phi_AOA - phi_k <= x_k/2,y_k/2 < theta_ZOA - theta_k <= y_k,"(+, +)","(-, +)"
+-x_k < phi_AOA - phi_k <= -x_k/2,-y_k < theta_ZOA - theta_k <= -y_k/2,"(+, -)","(+, -)"
+-x_k < phi_AOA - phi_k <= -x_k/2,-y_k/2 < theta_ZOA - theta_k <= y_k/2,"(+, -)","(+, +)"
+-x_k < phi_AOA - phi_k <= -x_k/2,y_k/2 < theta_ZOA - theta_k <= y_k,"(+, -)","(-, +)"

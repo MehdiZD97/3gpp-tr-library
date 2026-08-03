@@ -18,13 +18,15 @@ from tr_api import introspect, tr36777, tr38901
 def test_all_units_covers_both_trs():
     units = introspect.all_units()
     keys = {(u.tr_module, u.key) for u in units}
-    assert keys == {("tr38901", "7.4"), ("tr38901", "7.5"), ("tr38901", "7.9"), ("tr36777", "B")}
+    assert keys == {("tr38901", "7.4"), ("tr38901", "7.5"), ("tr38901", "7.6"),
+                    ("tr38901", "7.9"), ("tr36777", "B")}
 
 
 def test_section_titles_come_from_front_matter():
     by_key = {u.key: u for u in tr38901.list_sections()}
     assert by_key["7.4"].title == "Pathloss, LOS probability and penetration modelling"
     assert by_key["7.5"].title == "Fast fading model"
+    assert by_key["7.6"].title == "Additional modelling components"
     assert by_key["7.9"].title == "Channel model(s) for ISAC"
     assert all(u.verb == "section" for u in by_key.values())
 

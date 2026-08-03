@@ -1,0 +1,3 @@
+scenario,phi_k_deg,x_k_deg,theta_k_deg,y_k_deg,r_m
+InH scenario,"Uniform in [0, 360]","Uniform in [15, 45]",90,"Uniform in [5, 15]",2
+"UMi, UMa, SMa, RMa scenarios","Uniform in [0, 360]","Uniform in [5, 15]",90,5,10

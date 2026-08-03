@@ -128,3 +128,42 @@ def test_section_7_9_html_region_is_omml_text_when_present():
 
         pytest.skip("TR 38.901 HTML not present locally (gitignored)")
     assert html_region_has_text_formulas(html, "Parameters on RCS for the STs", "Channel model for STX-ST") is True
+
+
+def test_section_7_6_checker_passes_on_real_data():
+    # verify_section_7_6() covers all eleven in-scope tables with the existing
+    # verify_table() checker -- no new checker shape was needed.
+    from verify_tables import verify_section_7_6
+    assert verify_section_7_6() == []
+
+
+def test_section_7_6_checker_catches_a_yaml_drift(monkeypatch, tmp_path):
+    # Point the checker at a deliberately corrupted copy of the YAML and confirm
+    # it reports the CSV<->YAML disagreement instead of passing.
+    import shutil
+
+    import verify_tables as vt
+
+    corrupted = tmp_path / "7.6-corrupt.yaml"
+    shutil.copy(vt.SECTION_7_6_YAML_PATH, corrupted)
+    text = corrupted.read_text().replace("alpha_db_per_km: '15'", "alpha_db_per_km: '99'", 1)
+    assert "99" in text, "fixture setup failed: the 60 GHz peak value was not substituted"
+    corrupted.write_text(text)
+
+    monkeypatch.setattr(vt, "SECTION_7_6_YAML_PATH", str(corrupted))
+    errors = vt.verify_section_7_6()
+    assert errors, "a drifted YAML value was not caught"
+    assert any("table-7.6.1-1.csv" in e for e in errors)
+
+
+def test_section_7_6_html_region_is_omml_text_when_present():
+    # §7.6 is release-stratified: its *equations* are OLE/.wmz images in the
+    # older sub-clauses, but the region still carries OMML text (7.6.9 onward),
+    # and every table *cell value* renders as text -- which is what
+    # verify_section_7_6()'s value cross-check actually re-reads.
+    html = os.path.join(REPO_ROOT, "references", "3gpp-tr38901", "v19.4.0", "38901-j40.html")
+    if not os.path.isfile(html):
+        import pytest
+
+        pytest.skip("TR 38.901 HTML not present locally (gitignored)")
+    assert html_region_has_text_formulas(html, "7.6.0", "Clustered Delay Line (CDL) models") is True

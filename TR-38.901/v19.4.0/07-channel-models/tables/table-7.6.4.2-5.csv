@@ -1,0 +1,5 @@
+environment,blocker,dimensions,mobility_pattern
+Indoor; Outdoor; InF,Human,Cartesian: w=0.3m; h=1.7m,Stationary or up to 3 km/h
+Outdoor,Vehicle,Cartesian: w=4.8m; h=1.4m,Stationary or up to 100 km/h
+InF,AGV,Cartesian: w=3m; h=1.5m,Up to 30 km/h
+InF,Industrial robot,Cartesian: w=2m; h=0.2m,Up to 3 m/s

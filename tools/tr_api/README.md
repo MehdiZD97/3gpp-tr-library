@@ -44,6 +44,28 @@ scaling = tr38901.section("7.5").scaling_factors_aoa_aod_generation       # Tabl
 ray_offsets = tr38901.section("7.5").ray_offset_angles                    # Table 7.5-3
 sub_clusters = tr38901.section("7.5").sub_cluster_info                    # Table 7.5-5
 
+# --- §7.6: Additional modelling components (7.6.0/1/3/4/8/9/10) ---
+extra = tr38901.section("7.6")
+
+extra.oxygen_absorption(f_ghz="60").alpha_db_per_km                       # Table 7.6.1-1
+
+# Spatial consistency (7.6.3). Indoor/InF have no LOS/NLOS/O2I split, so
+# `condition` is omitted for them:
+extra.correlation_distance(scenario="UMa", condition="NLOS")              # Table 7.6.3.1-2
+extra.correlation_distance(scenario="InF")
+extra.correlation_type(parameter="Delays").correlation_type              # Table 7.6.3.4-1
+extra.uncorrelated_states(parameter="Blockage")                          # Table 7.6.3.4-2
+
+# Blockage (7.6.4), models A and B:
+extra.self_blocking_region(mode="Portrait mode")                         # Table 7.6.4.1-1
+extra.blocking_region(scenario="InH scenario")                           # Table 7.6.4.1-2
+extra.blockage_correlation_distance(scenario="InH", condition="LOS")     # Table 7.6.4.1-4
+extra.blocker_parameters(blocker="Human").dimensions                     # Table 7.6.4.2-5
+extra.blockage_sign_description                                          # Table 7.6.4.1-3 (3x3 grid)
+
+extra.ground_material(material_class="Concrete").a_epsilon               # Table 7.6.8-1
+extra.absolute_time_of_arrival(scenario="UMa").mu_lg_delta_tau           # Table 7.6.9-1
+
 # --- §7.9: Channel model(s) for ISAC (Rel-19), full clause 7.9.0-7.9.6 ---
 isac = tr38901.section("7.9")
 
@@ -86,7 +108,7 @@ b.alternative_1(scenario="RMa-AV", condition="LOS").desired_k_db          # Tabl
 b.alternative_2(scenario="UMa-AV", parameter="DS", condition="NLOS").mu   # Table B.1.2-2
 ```
 
-`section()` / `annex()` default to each TR's latest processed version (`v19.4.0` for TR 38.901, `v15.0.0` for TR 36.777) and accept an explicit `version=` keyword otherwise. (§7.9 covers the full ISAC clause 7.9.0-7.9.6; its 32 target/background fast-fading equations live as LaTeX in the section `.md` rather than the queryable surface, per the §7.5 precedent for procedural equations.) Each id resolves to its own YAML file, Pydantic model, and accessor class (see each module's `_SECTION_REGISTRY` / `_ANNEX_REGISTRY`) rather than assuming every section shares one shape. A lookup for a scenario/condition/variant that doesn't exist raises `ScenarioNotFoundError` with the list of what *is* available; an unprocessed section/annex or version raises `SectionNotFoundError`, listing what's actually processed -- neither returns `None` or a bare `KeyError`.
+`section()` / `annex()` default to each TR's latest processed version (`v19.4.0` for TR 38.901, `v15.0.0` for TR 36.777) and accept an explicit `version=` keyword otherwise. (§7.9 covers the full ISAC clause 7.9.0-7.9.6; its 32 target/background fast-fading equations live as LaTeX in the section `.md` rather than the queryable surface, per the §7.5 precedent for procedural equations. §7.6 covers the dependency-driven core of its clause — 7.6.0/7.6.1/7.6.3/7.6.4/7.6.8/7.6.9/7.6.10, i.e. the sub-clauses the other processed sections actually reference; its 54 in-scope equations likewise live only in the `.md`, and 7.6.2 / 7.6.5–7.6.7 / 7.6.11–7.6.16 are not processed.) Each id resolves to its own YAML file, Pydantic model, and accessor class (see each module's `_SECTION_REGISTRY` / `_ANNEX_REGISTRY`) rather than assuming every section shares one shape. A lookup for a scenario/condition/variant that doesn't exist raises `ScenarioNotFoundError` with the list of what *is* available; an unprocessed section/annex or version raises `SectionNotFoundError`, listing what's actually processed -- neither returns `None` or a bare `KeyError`.
 
 ## Introspection — discover what's available without reading source
 

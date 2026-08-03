@@ -216,3 +216,66 @@ def test_every_data_row_is_retrievable_and_matches(tr_module, key, member_name, 
         assert row.model_dump() in [r.model_dump() for r in result]
     else:
         assert result.model_dump() == row.model_dump()
+
+
+# ---------------------------------------------------------------------------
+# §7.6 -- exhaustive accessor <-> YAML for every field of every row, plus a
+# guard that the generic per-row coverage above actually reaches this section.
+# (§7.6's tables are small and finite, so test_values_7_6.py additionally pins
+# every one of them literally -- the §7.9 RCS/XPR treatment, not §7.5's
+# row+column sampling.)
+# ---------------------------------------------------------------------------
+_D76 = _load("7.6-additional-components.yaml")
+
+# YAML key -> (accessor method, {kwarg: field}) for every list-based §7.6 lookup.
+_S76_LOOKUPS = {
+    "oxygen_absorption_loss": ("oxygen_absorption", {"f_ghz": "f_ghz"}),
+    "spatial_consistency_correlation_distance":
+        ("correlation_distance", {"scenario": "scenario", "condition": "condition"}),
+    "spatial_consistency_correlation_type": ("correlation_type", {"parameter": "parameter"}),
+    "spatial_consistency_uncorrelated_states": ("uncorrelated_states", {"parameter": "parameter"}),
+    "self_blocking_region": ("self_blocking_region", {"mode": "mode"}),
+    "blocking_region": ("blocking_region", {"scenario": "scenario"}),
+    "blockage_correlation_distance":
+        ("blockage_correlation_distance", {"scenario": "scenario", "condition": "condition"}),
+    "blocker_parameters": ("blocker_parameters", {"blocker": "blocker"}),
+    "ground_material_properties": ("ground_material", {"material_class": "material_class"}),
+    "absolute_time_of_arrival": ("absolute_time_of_arrival", {"scenario": "scenario"}),
+}
+
+_S76_CASES = [
+    pytest.param(yaml_key, i, id=f"{yaml_key}-{i}")
+    for yaml_key in _S76_LOOKUPS
+    for i in range(len(_D76[yaml_key]))
+]
+
+
+@pytest.mark.parametrize("yaml_key,idx", _S76_CASES)
+def test_section_7_6_accessor_matches_yaml_for_every_field(yaml_key, idx):
+    method_name, arg_map = _S76_LOOKUPS[yaml_key]
+    yaml_row = _D76[yaml_key][idx]
+    kwargs = {arg: yaml_row[field] for arg, field in arg_map.items() if yaml_row[field] is not None}
+    entry = getattr(tr38901.section("7.6"), method_name)(**kwargs)
+    for field, expected in yaml_row.items():
+        assert getattr(entry, field) == expected, f"{yaml_key}[{idx}] field {field} drifted"
+
+
+def test_section_7_6_blockage_sign_property_matches_yaml_for_every_field():
+    # The one §7.6 member that's a property (the 3x3 sign grid), so it isn't
+    # covered by the lookup loop above.
+    rows = tr38901.section("7.6").blockage_sign_description
+    assert len(rows) == len(_D76["blockage_sign_description"])
+    for entry, yaml_row in zip(rows, _D76["blockage_sign_description"]):
+        assert entry.model_dump() == yaml_row
+
+
+def test_generic_per_row_coverage_reaches_section_7_6():
+    # Empirical confirmation (rather than assumption) that the discovery-driven
+    # per-row test above enumerates §7.6's lookups too -- one case per row of
+    # every list-based §7.6 member.
+    covered = {(m, i) for (tr, key, m, i) in
+               [(p.values[0], p.values[1], p.values[2], p.values[3]) for p in _ACCESSOR_ROW_CASES]
+               if tr == "tr38901" and key == "7.6"}
+    expected = {(method, i) for yaml_key, (method, _args) in _S76_LOOKUPS.items()
+                for i in range(len(_D76[yaml_key]))}
+    assert covered == expected, "the generic per-row test does not cover §7.6's lookups exactly"
