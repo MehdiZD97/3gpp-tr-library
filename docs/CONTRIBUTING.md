@@ -24,6 +24,19 @@ pip install -e tools/tr3gpp
 
 The first `pip install` covers everything needed to work on the repo itself — source extraction (`python-docx`, `pymupdf`, `beautifulsoup4`, `lxml`), and the test/verification tooling (`pytest`, `pyyaml`, `pydantic`). The second, editable install of `tools/tr3gpp` is needed to run its own tests (`tests/test_models.py`, `tests/test_tr3gpp.py`) and to use the package the way downstream simulation code would — see [`tools/tr3gpp/README.md`](../tools/tr3gpp/README.md) if you're consuming the library rather than contributing to it.
 
+An editable install reads the TR data straight from the repo's `TR-*/` directories, so nothing extra is needed for day-to-day work.
+
+## Building a distributable wheel
+
+A wheel has no repo around it, so it ships its own copy of the processed data. That copy is **generated, not tracked** — regenerate it before every build:
+
+```sh
+python tools/sync_package_data.py     # populates tools/tr3gpp/data/ from TR-*/
+python -m build tools/tr3gpp
+```
+
+`tools/tr3gpp/data/` is gitignored: the repo-root `TR-*/` directories remain the single source of truth in version control. `python tools/sync_package_data.py --check` verifies an existing bundle against those originals and exits non-zero if any file is stale, missing, or extra — worth running if you're unsure whether a bundle in your working tree is current. At runtime the package always prefers the repo checkout over its bundled copy, so a stale bundle can't shadow your edits while you work.
+
 ## Verification standard
 
 Every table or parameter value that's marked `status: verified` in a section's front matter must have been cross-checked against the source 3GPP document before that status is set. A pull request introducing or changing a `verified` section should note, in the PR description, what source format(s) the values were checked against. Content that hasn't been cross-checked should stay at `planned` or `in-progress`.

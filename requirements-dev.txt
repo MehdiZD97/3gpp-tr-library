@@ -11,3 +11,6 @@ lxml             # XML export parsing; also BeautifulSoup's backing parser
 pyyaml           # section YAML / schema YAML (always yaml.safe_load, never yaml.load)
 pytest           # test suite (tests/), filterwarnings = error via pytest.ini
 pydantic         # schema models (tools/tr3gpp/models.py), also used by verify_tables.py
+build            # `python -m build tools/tr3gpp` — wheel/sdist for the packaging work
+                 #   (run `python tools/sync_package_data.py` first: the wheel bundles
+                 #    the processed TR data, and that bundle is generated, not tracked)
