@@ -38,6 +38,11 @@ set and cannot drift from it via a hand-maintained list.
 
 TR-level and repo-level READMEs are deliberately *not* bundled: they are
 documentation about the repo, not processed section data.
+
+The repo-root `LICENSE` is also copied next to the package (not into `data/`),
+so `license-files = ["LICENSE"]` in pyproject.toml ships the licence text
+inside the built artifact. It is gitignored for the same reason the data bundle
+is: exactly one copy in version control.
 """
 import argparse
 import filecmp
@@ -50,6 +55,17 @@ from section_utils import REPO_ROOT, discover_section_md_files  # noqa: E402
 
 PACKAGE_DIR = os.path.join(REPO_ROOT, "tools", "tr3gpp")
 DEFAULT_BUNDLE_DIR = os.path.join(PACKAGE_DIR, "data")
+
+# Sits beside the package (not inside data/) so pyproject's
+# license-files = ["LICENSE"] finds it; gitignored, like the bundle.
+LICENSE_SOURCE = os.path.join(REPO_ROOT, "LICENSE")
+LICENSE_DEST = os.path.join(PACKAGE_DIR, "LICENSE")
+
+
+def sync_license():
+    """Copy the repo-root LICENSE next to the package. Returns the destination."""
+    shutil.copy2(LICENSE_SOURCE, LICENSE_DEST)
+    return LICENSE_DEST
 
 
 def bundle_manifest():
@@ -124,6 +140,10 @@ def main(argv=None):
 
     if args.check:
         problems = check_bundle(args.dest)
+        if args.dest == DEFAULT_BUNDLE_DIR and not (
+            os.path.isfile(LICENSE_DEST) and filecmp.cmp(LICENSE_SOURCE, LICENSE_DEST, shallow=False)
+        ):
+            problems.append("LICENSE beside the package is missing or differs from the repo LICENSE")
         if problems:
             print(f"Bundle check FAILED ({len(problems)} problem(s)) against {args.dest}:")
             for p in problems:
@@ -140,6 +160,8 @@ def main(argv=None):
     print(f"Bundled {len(written)} file(s) ({total / 1024:.0f} KB) into {args.dest}")
     for ext, n in sorted(by_ext.items()):
         print(f"  {ext or '(no ext)'}: {n}")
+    if args.dest == DEFAULT_BUNDLE_DIR:
+        print(f"Copied LICENSE to {sync_license()}")
     return 0
 
 

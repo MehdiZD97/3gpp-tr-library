@@ -1,6 +1,11 @@
 # tr3gpp
 
-Typed Python access to [3gpp-tr-library](../../README.md)'s structured 3GPP TR data — for simulation code that needs pathloss formulas, LOS probability, penetration loss, and related parameters without parsing YAML/CSV by hand.
+Typed Python access to [3gpp-tr-library](https://github.com/MehdiZD97/3gpp-tr-library)'s structured 3GPP TR data — for simulation code that needs pathloss formulas, LOS probability, penetration loss, and related parameters without parsing YAML/CSV by hand.
+
+<!-- This file is the package's PyPI long description, so every link here must be
+     an absolute URL: relative paths do not resolve on pypi.org. -->
+
+Covers **TR 38.901 v19.4.0** §7.4 (pathloss, LOS probability, O2I penetration), §7.5 (fast fading), §7.6 (additional modelling components) and §7.9 (ISAC), plus **TR 36.777 v15.0.0** Annex B (aerial-UE deltas). Every value is hand-verified against multiple independent source formats — see the [verification story](https://github.com/MehdiZD97/3gpp-tr-library#how-its-verified).
 
 `tr3gpp` is the distribution name, the import name and the console command — one stem for all three.
 
