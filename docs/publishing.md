@@ -27,6 +27,7 @@ One number, everywhere. Before building, confirm all four agree:
 | Where | What to set |
 |---|---|
 | `tools/tr3gpp/pyproject.toml` | `version = "X.Y.Z"` |
+| `CITATION.cff` | `version: X.Y.Z`, and add `date-released: YYYY-MM-DD` on the day you release |
 | git tag on `main` | `vX.Y.Z` |
 | GitHub release | title/tag `vX.Y.Z` |
 | Zenodo | the archive created from that release records `vX.Y.Z` |

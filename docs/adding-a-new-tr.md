@@ -112,11 +112,36 @@ The TR-agnostic load/validate/cache machinery lives in
 3. A `TRLoader("TR-<number>", "TR <number>", "v<version>", registry)` and a
    thin access verb — `section()` for numbered clauses, `annex()` for a
    lettered annex.
+4. **A `_QUERYABLE` map on every accessor class.** This is the one piece of
+   metadata the introspection layer can't derive by inspecting a signature:
+   for each lookup method it records the data attribute the method queries and
+   how each keyword arg maps to an entry field, e.g.
+
+   ```python
+   _QUERYABLE = {
+       # method: (data attribute, {kwarg: entry field})
+       "ground_material": ("ground_material_properties", {"material_class": "material_class"}),
+       "rcs_model_1": ("rcs_model_1", {"target": "sensing_target"}),   # arg name != field name
+   }
+   ```
+
+   Without it, `tr3gpp describe` can't list a parameter's available values —
+   and a parametrized **drift guard** in `tests/test_introspect.py` fails if
+   `_QUERYABLE`'s keys don't exactly match the accessor's real public methods,
+   or if any method arg is unmapped. Use `"@keys"` as the field when the arg
+   selects a dict key rather than an entry field (see §7.5's `zsd_zod_offset`).
 
 Then expose the module in `tools/tr3gpp/__init__.py` and add a usage block to
 `tools/tr3gpp/README.md`. **Do not break existing import paths** (e.g.
 `from tr3gpp import tr38901`) — downstream simulation code may already depend
 on them; confirm with `tests/test_tr3gpp.py` after any loader change.
+
+Nothing needs doing for **data bundling**: the wheel's copy of the processed
+data is produced by `python tools/sync_package_data.py`, which is driven by the
+same `discover_section_md_files()` discovery, so a new TR is picked up
+automatically. Run it (or `--check`) after adding content if you want to
+confirm — and always run it before `python -m build`, since the bundle is
+generated rather than tracked. See [publishing.md](publishing.md).
 
 ## 7. `tools/verify_tables.py`
 

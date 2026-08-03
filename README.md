@@ -28,6 +28,7 @@ Coverage grows opportunistically as research needs demand, not front-to-back thr
 |---|---|---|---|
 | **TR 38.901** | v19.4.0 | §7.4 | Pathloss, LOS probability, and O2I (building/car) penetration modelling |
 | **TR 38.901** | v19.4.0 | §7.5 | Fast fading model — the full 12-step channel-coefficient generation procedure + all 12 supporting tables (incl. the 49×16 channel-model-parameter table) |
+| **TR 38.901** | v19.4.0 | §7.6 | Additional modelling components — the add-ons to the fast-fading model that the other processed sections actually depend on: oxygen absorption, spatial consistency, blockage (models A and B), explicit ground reflection, absolute time of arrival, and dual mobility (11 tables, 54 equations; the clause's remaining sub-clauses are not yet processed) |
 | **TR 38.901** | v19.4.0 | §7.9 | Channel model(s) for ISAC (Integrated Sensing and Communication) — the full Rel-19 clause: sensing scenarios, the physical-object/RCS target model, reference-channel mapping, the target/background fast-fading procedure, additional components, and calibration (32 tables, ~37 equations) |
 | **TR 36.777** | v15.0.0 | Annex B | Aerial-UE (drone) channel model for RMa-AV/UMa-AV/UMi-AV — height-dependent deltas to TR 38.901's terrestrial models |
 
@@ -36,6 +37,12 @@ See **[INDEX.md](INDEX.md)** for the live, section-by-section status table.
 ## The `tr3gpp` Python package
 
 The headline feature: a typed, pip-installable API that reads the structured data directly, so version-pinned 3GPP parameters go into your simulation code without a hand-transcription step.
+
+```sh
+pip install tr3gpp
+```
+
+The package name, the import name and the command are all `tr3gpp`, and it **bundles the data** — no clone required.
 
 ```python
 from tr3gpp import tr38901, tr36777
@@ -48,6 +55,9 @@ entry.shadow_fading_std_db   # a typed Pydantic model, not a raw dict
 # TR 38.901 §7.5 — large-scale parameters for UMa NLOS:
 lsp = tr38901.section("7.5").channel_model_parameters(scenario="UMa", condition="NLOS")
 lsp.mu_lgDS                  # carrier-frequency-dependent delay-spread mean
+
+# TR 38.901 §7.6 — ground material properties for the explicit reflection model:
+tr38901.section("7.6").ground_material(material_class="Concrete").a_epsilon
 
 # TR 36.777 Annex B — aerial-UE pathloss (returns the height bands):
 tr36777.annex("B").pathloss(scenario="RMa-AV", condition="LOS")
@@ -102,7 +112,7 @@ Where that automated cross-check *can't* apply, the README says so rather than p
    - `planned` — identified as in-scope, not yet written.
    - `in-progress` — being drafted or cross-checked against source.
    - `verified` — cross-checked against multiple source formats and ready to use.
-2. **Use from code:** `pip install -e /path/to/3gpp-tr-library/tools/tr3gpp`, then `from tr3gpp import tr38901` (see [tools/tr3gpp/README.md](tools/tr3gpp/README.md)).
+2. **Use from code:** `pip install tr3gpp`, then `from tr3gpp import tr38901` (see [tools/tr3gpp/README.md](tools/tr3gpp/README.md)). The released package carries its own copy of the data, so it needs no clone. To work against a checkout instead — so your edits to `TR-*/` are picked up immediately — use `pip install -e /path/to/3gpp-tr-library/tools/tr3gpp`.
 
 ## Contributing
 
@@ -135,24 +145,22 @@ This repository redistributes hand-verified structured *extracts*, not the origi
 This repository is **complementary** to those efforts rather than a substitute for them. Where a broad-corpus dataset or an MCP bridge optimizes for *coverage* — as much 3GPP text as possible, in an LLM-friendly form — this project optimizes for *depth and correctness on a focused set of high-value TRs*: hand-verified, section-level extracts with queryable **typed** parameters (`tr3gpp`), the TR's own real table numbers, and cross-format verification against multiple independent source formats before anything is marked `verified`. In short: those provide breadth for language-model workflows; this provides depth and machine-usable, version-pinned parameters for simulation and analysis. The two serve different needs and pair naturally.
 
 ### How to cite this repository
-<!--
-Archived on Zenodo with a DOI: [10.5281/zenodo.21501655](https://doi.org/10.5281/zenodo.21501655)
 
-> Zafari, M. (2026). *3gpp-tr-library: Hand-verified, section-level 3GPP Technical Reports as queryable Markdown, CSV and YAML* (v0.1.0). Zenodo. https://doi.org/10.5281/zenodo.21501655
+Archived on Zenodo: [**10.5281/zenodo.21501655**](https://doi.org/10.5281/zenodo.21501655). That is the *concept* DOI — it always resolves to the most recent archived release, so it stays correct as new versions are published. GitHub's **"Cite this repository"** button (top right, generated from [`CITATION.cff`](CITATION.cff)) produces APA and BibTeX for you.
+
+> Zafari, M. *3gpp-tr-library: Hand-verified, section-level 3GPP Technical Reports as queryable Markdown, CSV and YAML*. Zenodo. https://doi.org/10.5281/zenodo.21501655
 
 ```bibtex
-@software{zafari_3gpp_tr_library_2026,
+@software{zafari_3gpp_tr_library,
   author    = {Zafari, Mehdi},
   title     = {{3gpp-tr-library}: Hand-verified, section-level 3GPP Technical
                Reports as queryable Markdown, CSV and YAML},
-  year      = {2026},
-  version   = {v0.1.0},
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.21501655},
   url       = {https://github.com/MehdiZD97/3gpp-tr-library}
 }
 ```
 
+To cite the exact snapshot you used, take that release's own version DOI from the [Zenodo record](https://doi.org/10.5281/zenodo.21501655) and add the matching `version`/`year` fields.
+
 Please also cite the underlying 3GPP Technical Reports themselves (listed above). This library provides structured extracts, not original specification content.
--->
-*A citation entry will be added here if/when a formal write-up exists.*

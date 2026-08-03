@@ -13,13 +13,23 @@ Covers **TR 38.901 v19.4.0** §7.4 (pathloss, LOS probability, O2I penetration),
 
 ## Install
 
-From a separate project's environment, pointed at wherever this repo is cloned locally:
+```sh
+pip install tr3gpp
+```
+
+The package **bundles the processed TR data**, so it works with no clone of the repository anywhere — install it into your simulator's environment and query it.
+
+Requires Python 3.9+; the only dependencies are `pydantic` and `pyyaml`.
+
+### From a checkout instead
+
+If you're editing the data (or contributing), install the package from a clone in editable mode:
 
 ```sh
 pip install -e /path/to/3gpp-tr-library/tools/tr3gpp
 ```
 
-This is an editable install: `tr3gpp` reads data directly from the cloned repo's `TR-*/` directories at call time, so it always reflects the repo's current state without needing to be rebuilt or republished.
+`tr3gpp` resolves each data file against the repo checkout **first** and its own bundled copy second, so an editable install always reflects the clone's current state — your edits to `TR-*/` take effect immediately, and a previously generated bundle can never shadow them.
 
 ## Usage
 
