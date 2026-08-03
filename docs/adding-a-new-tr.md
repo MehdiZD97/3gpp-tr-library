@@ -90,7 +90,7 @@ Paraphrase prose (don't copy TR prose verbatim); reproduce numeric values and
 formulas faithfully. This is the same pattern `_scratch/build_data_*.py` uses
 for every processed section.
 
-## 5. Pydantic models (`tools/tr_api/models.py`)
+## 5. Pydantic models (`tools/tr3gpp/models.py`)
 
 Give each new data shape its own model. Keep the **`schemas/` restraint**:
 only genuinely cross-TR-reusable shapes (like `PathlossEntry`) go in
@@ -99,10 +99,10 @@ only genuinely cross-TR-reusable shapes (like `PathlossEntry`) go in
 `PathlossDeltaEntry` etc., not a pretend-generic name). Formula-bearing
 fields are `str` (LaTeX or an "According to … of [4]" reference).
 
-## 6. The `tr_api` package
+## 6. The `tr3gpp` package
 
 The TR-agnostic load/validate/cache machinery lives in
-`tools/tr_api/_loader.py` (`TRLoader`, `SectionNotFoundError`,
+`tools/tr3gpp/_loader.py` (`TRLoader`, `SectionNotFoundError`,
 `ScenarioNotFoundError`). A per-TR module is thin:
 
 1. A `_SECTION_REGISTRY` / `_ANNEX_REGISTRY` mapping each id to
@@ -113,10 +113,10 @@ The TR-agnostic load/validate/cache machinery lives in
    thin access verb — `section()` for numbered clauses, `annex()` for a
    lettered annex.
 
-Then expose the module in `tools/tr_api/__init__.py` and add a usage block to
-`tools/tr_api/README.md`. **Do not break existing import paths** (e.g.
-`from tr_api import tr38901`) — downstream simulation code may already depend
-on them; confirm with `tests/test_tr_api.py` after any loader change.
+Then expose the module in `tools/tr3gpp/__init__.py` and add a usage block to
+`tools/tr3gpp/README.md`. **Do not break existing import paths** (e.g.
+`from tr3gpp import tr38901`) — downstream simulation code may already depend
+on them; confirm with `tests/test_tr3gpp.py` after any loader change.
 
 ## 7. `tools/verify_tables.py`
 

@@ -33,12 +33,12 @@ Coverage grows opportunistically as research needs demand, not front-to-back thr
 
 See **[INDEX.md](INDEX.md)** for the live, section-by-section status table.
 
-## The `tr_api` Python package
+## The `tr3gpp` Python package
 
 The headline feature: a typed, pip-installable API that reads the structured data directly, so version-pinned 3GPP parameters go into your simulation code without a hand-transcription step.
 
 ```python
-from tr_api import tr38901, tr36777
+from tr3gpp import tr38901, tr36777
 
 # TR 38.901 §7.4 — pathloss for a UMi Street-Canyon NLOS link:
 entry = tr38901.section("7.4").pathloss(scenario="UMi-StreetCanyon", condition="NLOS")
@@ -55,16 +55,16 @@ tr36777.annex("B").pathloss(scenario="RMa-AV", condition="LOS")
 
 Lookups return typed models (never a bare dict or `None`); an unknown scenario/section raises an error that lists what *is* available.
 
-**Don't know the section or parameter names?** The API is self-describing, and installing it also installs a `tr-api` command that discovers everything for you — no prior knowledge, no reading source:
+**Don't know the section or parameter names?** The API is self-describing, and installing it also installs a `tr3gpp` command that discovers everything for you — no prior knowledge, no reading source:
 
 ```console
-$ tr-api list                       # every TR and its processed sections/annexes
-$ tr-api describe tr38901 7.9        # a section's parameters, their args, and available values
-$ tr-api get tr38901 7.4 pathloss --scenario UMi-StreetCanyon --condition NLOS
-$ tr-api dump tr38901 7.5 channel_model_parameters --format csv > lsp.csv   # or --format json | jq
+$ tr3gpp list                       # every TR and its processed sections/annexes
+$ tr3gpp describe tr38901 7.9        # a section's parameters, their args, and available values
+$ tr3gpp get tr38901 7.4 pathloss --scenario UMi-StreetCanyon --condition NLOS
+$ tr3gpp dump tr38901 7.5 channel_model_parameters --format csv > lsp.csv   # or --format json | jq
 ```
 
-Full API, the introspection layer, the CLI, install instructions, and organization are in **[tools/tr_api/README.md](tools/tr_api/README.md)**.
+Full API, the introspection layer, the CLI, install instructions, and organization are in **[tools/tr3gpp/README.md](tools/tr3gpp/README.md)**.
 
 ## Why three formats
 
@@ -72,7 +72,7 @@ Each processed section ships in **three coordinated, mutually-verified formats**
 
 - **`.md` — for humans and for RAG.** A section is a self-contained unit: front-matter scaffolding (TR, version, clause, `depends_on`, `verified_against`), paraphrased prose, inline tables, and equations as LaTeX. That's what you read to understand the model — and, because it's one coherent chunk with metadata, what an LLM can ingest *whole* for retrieval-augmented generation without the table-mangling that wrecks raw-PDF ingestion.
 - **`.csv` — for spreadsheets, pandas, and diffing.** One file per *real* TR table, named with the TR's own table number (`table-7.9.2.1-2.csv`, not a made-up scheme), so it maps straight back to the source document. Load it in pandas, open it in a spreadsheet, or `git diff` it across TR versions — tabular workflows want a table, not prose.
-- **`.yaml` + the typed API — for simulation code.** Queryable parameters validated against Pydantic models, so version-pinned 3GPP values flow into your simulator through `tr_api` (or the `tr-api` CLI) with no hand-transcription step — the transcription step being precisely where errors creep into research code.
+- **`.yaml` + the typed API — for simulation code.** Queryable parameters validated against Pydantic models, so version-pinned 3GPP values flow into your simulator through the `tr3gpp` package (or its CLI of the same name) with no hand-transcription step — the transcription step being precisely where errors creep into research code.
 
 **The same parameter, three ways.** Take the UAV cross-polarization ratio (§7.9, Table 7.9.2.2-1): the `.md` shows a row `| UAV | 13.75 | 7.07 |` under the XPR equations; `tables/table-7.9.2.2-1.csv` has `UAV,13.75,7.07`; the `.yaml` has `- {target: UAV, mu_xpr_db: "13.75", sigma_xpr_db: "7.07"}`, reachable as `tr38901.section("7.9").xpr(target="UAV").mu_xpr_db`. All three are checked against each other on every push (see [How it's verified](#how-its-verified)), so they can't silently drift apart.
 
@@ -84,7 +84,7 @@ Each processed section ships in **three coordinated, mutually-verified formats**
 │   └── v<version>/<chapter>/  #   section .md + .yaml, and tables/*.csv
 ├── schemas/                    # shared, TR-agnostic YAML schemas (e.g. the pathloss table shape)
 ├── tools/
-│   ├── tr_api/                 # the pip-installable typed Python API
+│   ├── tr3gpp/                 # the pip-installable typed Python API
 │   └── verify_tables.py        # the CSV↔YAML consistency + formula cross-check gate
 ├── tests/                      # pytest suite (structure, versions, values, cross-format)
 └── docs/                       # section template, contributing guide, "adding a new TR" how-to
@@ -102,7 +102,7 @@ Where that automated cross-check *can't* apply, the README says so rather than p
    - `planned` — identified as in-scope, not yet written.
    - `in-progress` — being drafted or cross-checked against source.
    - `verified` — cross-checked against multiple source formats and ready to use.
-2. **Use from code:** `pip install -e /path/to/3gpp-tr-library/tools/tr_api`, then `from tr_api import tr38901` (see [tools/tr_api/README.md](tools/tr_api/README.md)).
+2. **Use from code:** `pip install -e /path/to/3gpp-tr-library/tools/tr3gpp`, then `from tr3gpp import tr38901` (see [tools/tr3gpp/README.md](tools/tr3gpp/README.md)).
 
 ## Contributing
 
@@ -132,7 +132,7 @@ This repository redistributes hand-verified structured *extracts*, not the origi
 - **TSpec-LLM** — *An Open-source Comprehensive Dataset of 3GPP Specifications for LLM Understanding* ([dataset](https://huggingface.co/datasets/rasoul-nikbakht/TSpec-LLM)). A broad corpus of 3GPP specification text prepared for large-language-model consumption — retrieval, training, and evaluation across many documents.
 - **3GPP MCP server** ([github.com/edhijlu/3gpp-mcp-server](https://github.com/edhijlu/3gpp-mcp-server)) — a Model Context Protocol server that exposes 3GPP material to LLM clients.
 
-This repository is **complementary** to those efforts rather than a substitute for them. Where a broad-corpus dataset or an MCP bridge optimizes for *coverage* — as much 3GPP text as possible, in an LLM-friendly form — this project optimizes for *depth and correctness on a focused set of high-value TRs*: hand-verified, section-level extracts with queryable **typed** parameters (`tr_api`), the TR's own real table numbers, and cross-format verification against multiple independent source formats before anything is marked `verified`. In short: those provide breadth for language-model workflows; this provides depth and machine-usable, version-pinned parameters for simulation and analysis. The two serve different needs and pair naturally.
+This repository is **complementary** to those efforts rather than a substitute for them. Where a broad-corpus dataset or an MCP bridge optimizes for *coverage* — as much 3GPP text as possible, in an LLM-friendly form — this project optimizes for *depth and correctness on a focused set of high-value TRs*: hand-verified, section-level extracts with queryable **typed** parameters (`tr3gpp`), the TR's own real table numbers, and cross-format verification against multiple independent source formats before anything is marked `verified`. In short: those provide breadth for language-model workflows; this provides depth and machine-usable, version-pinned parameters for simulation and analysis. The two serve different needs and pair naturally.
 
 ### How to cite this repository
 <!--

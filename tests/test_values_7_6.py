@@ -19,7 +19,7 @@ cells python-docx cannot supply (OMML symbol labels; Metal's 10^7) are
 PDF-visual only and recorded in the section .md's `verification_notes`.
 """
 import pytest
-from tr_api import tr38901
+from tr3gpp import tr38901
 
 SECTION = tr38901.section("7.6")
 

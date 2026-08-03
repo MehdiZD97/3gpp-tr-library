@@ -25,7 +25,7 @@ import os
 
 import pytest
 import yaml
-from tr_api import introspect, tr36777, tr38901
+from tr3gpp import introspect, tr36777, tr38901
 
 _CH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -180,7 +180,7 @@ def test_annex_b_pathloss_band_structure(scenario, condition):
 # committed data. This anchors the remaining tables per-row (§7.9's calibration
 # 97 rows, the case/link tables, Annex B's alternatives, §7.4 pathloss/LOS,
 # etc.) without hand-writing a test per section. Dict-based lookups (§7.5's
-# zsd_zod_offset) are covered in test_tr_api.py.
+# zsd_zod_offset) are covered in test_tr3gpp.py.
 # ---------------------------------------------------------------------------
 def _accessor_row_cases():
     cases = []

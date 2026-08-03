@@ -1,15 +1,15 @@
 """
-Tests for tr_api's introspection layer (Phase 8) -- the self-describing surface
+Tests for tr3gpp's introspection layer (Phase 8) -- the self-describing surface
 the CLI renders. Two things matter most here: it describes the *actual*
 accessor surface (both the section() and annex() worlds, symmetrically), and it
 can't silently diverge from the accessors (the drift guard).
 
-Requires tr_api installed (`pip install -e tools/tr_api`).
+Requires tr3gpp installed (`pip install -e tools/tr3gpp`).
 """
 import inspect
 
 import pytest
-from tr_api import introspect, tr36777, tr38901
+from tr3gpp import introspect, tr36777, tr38901
 
 
 # ---------------------------------------------------------------------------

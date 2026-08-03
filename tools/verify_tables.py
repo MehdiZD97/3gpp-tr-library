@@ -22,7 +22,7 @@ second source for formula content, not just a structural tiebreaker.
 
 CLI usage: `python tools/verify_tables.py` discovers every processed
 section, validates its YAML against the Pydantic models in
-`tools/tr_api/models.py`, cross-checks every table's CSV against its YAML,
+`tools/tr3gpp/models.py`, cross-checks every table's CSV against its YAML,
 and (when `references/` is present locally) cross-checks formulas against
 the HTML export. Prints a pass/fail summary and exits non-zero on any
 failure.
@@ -36,7 +36,7 @@ from pydantic import ValidationError
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from section_utils import REPO_ROOT, discover_section_md_files, read_csv_rows, split_front_matter  # noqa: E402
-from tr_api.models import (  # noqa: E402
+from tr3gpp.models import (  # noqa: E402
     AnnexBData,
     ChannelModelParameterEntry,
     Section74Data,
@@ -322,7 +322,7 @@ def verify_section_7_4():
 # YAML/CSV represent it as one row per (scenario, condition) with 49 named
 # fields -- a list-of-entities shape, same as Table 7.4.1-1 -- rather than
 # as a literal 2D matrix. That's a deliberate design choice (it's also the
-# more useful shape for tr_api: one call returns every parameter for a given
+# more useful shape for tr3gpp: one call returns every parameter for a given
 # scenario/condition), not an accident that happened to dodge the need for
 # new tooling. The only place the "matrix" shape actually shows up is the
 # *inline Markdown* table, which transposes to parameter-rows x

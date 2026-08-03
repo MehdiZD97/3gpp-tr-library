@@ -1,7 +1,7 @@
 """
 Python API for TR 36.777's processed annexes.
 
-    from tr_api import tr36777
+    from tr3gpp import tr36777
 
     b = tr36777.annex("B")
 
@@ -43,7 +43,7 @@ from .models import (
 DEFAULT_VERSION = "v15.0.0"
 
 # The access verb / unit noun for this TR (a lettered annex, not a numbered
-# clause), read by tr_api.introspect so it's described as first-class as
+# clause), read by tr3gpp.introspect so it's described as first-class as
 # TR 38.901's sections.
 UNIT_KIND = "annex"
 

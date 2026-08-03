@@ -19,10 +19,10 @@ Keep pull requests scoped to one section (or one fix) at a time — it makes rev
 python3 -m venv .venv
 source .venv/bin/activate        # .venv\Scripts\activate on Windows
 pip install -r requirements-dev.txt
-pip install -e tools/tr_api
+pip install -e tools/tr3gpp
 ```
 
-The first `pip install` covers everything needed to work on the repo itself — source extraction (`python-docx`, `pymupdf`, `beautifulsoup4`, `lxml`), and the test/verification tooling (`pytest`, `pyyaml`, `pydantic`). The second, editable install of `tools/tr_api` is needed to run its own tests (`tests/test_models.py`, `tests/test_tr_api.py`) and to use the package the way downstream simulation code would — see [`tools/tr_api/README.md`](../tools/tr_api/README.md) if you're consuming the library rather than contributing to it.
+The first `pip install` covers everything needed to work on the repo itself — source extraction (`python-docx`, `pymupdf`, `beautifulsoup4`, `lxml`), and the test/verification tooling (`pytest`, `pyyaml`, `pydantic`). The second, editable install of `tools/tr3gpp` is needed to run its own tests (`tests/test_models.py`, `tests/test_tr3gpp.py`) and to use the package the way downstream simulation code would — see [`tools/tr3gpp/README.md`](../tools/tr3gpp/README.md) if you're consuming the library rather than contributing to it.
 
 ## Verification standard
 

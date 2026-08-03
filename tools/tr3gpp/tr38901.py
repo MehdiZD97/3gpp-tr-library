@@ -1,7 +1,7 @@
 """
 Python API for TR 38.901's processed sections.
 
-    from tr_api import tr38901
+    from tr3gpp import tr38901
 
     entry = tr38901.section("7.4").pathloss(scenario="UMi-StreetCanyon", condition="NLOS")
     entry.shadow_fading_std_db      # a Pydantic model instance, not a raw dict
@@ -94,7 +94,7 @@ from .models import (
 
 DEFAULT_VERSION = "v19.4.0"
 
-# The access verb / unit noun for this TR, read by tr_api.introspect so both
+# The access verb / unit noun for this TR, read by tr3gpp.introspect so both
 # TR 38.901's numbered sections and TR 36.777's lettered annexes are described
 # uniformly.
 UNIT_KIND = "section"
@@ -109,7 +109,7 @@ __all__ = [
 class Section74:
     """TR 38.901 §7.4 (Pathloss, LOS probability and penetration modelling)."""
 
-    # Minimal explicit metadata the introspection layer (tr_api.introspect)
+    # Minimal explicit metadata the introspection layer (tr3gpp.introspect)
     # can't derive from a signature alone: for each lookup method, the data
     # attribute it queries and how each keyword arg maps to an entry field
     # (so "what values are available" can be listed). Method names, args,

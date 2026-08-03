@@ -13,7 +13,7 @@ TR 38.901 clause 7.4, but not assumed to generalize the way `PathlossEntry`
 does. They live here (not in `schemas/`) precisely to keep that boundary:
 `schemas/` holds only what's genuinely reusable across TRs.
 
-Used by both `tools/verify_tables.py` (validation) and `tools/tr_api`
+Used by both `tools/verify_tables.py` (validation) and `tools/tr3gpp`
 (typed return values) -- one model, two jobs.
 """
 from typing import Dict, List, Literal, Optional

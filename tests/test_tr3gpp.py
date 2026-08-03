@@ -1,14 +1,14 @@
 """
-Tests for tools/tr_api's public API: a known-good call returns the expected
+Tests for tools/tr3gpp's public API: a known-good call returns the expected
 typed value; a lookup for a scenario/section that doesn't exist fails in a
 sensible, informative way rather than returning None or a raw KeyError.
 
-Requires tr_api to be installed (`pip install -e tools/tr_api`) -- see
+Requires tr3gpp to be installed (`pip install -e tools/tr3gpp`) -- see
 docs/CONTRIBUTING.md's Development setup section.
 """
 import pytest
-from tr_api import tr38901
-from tr_api.tr38901 import ScenarioNotFoundError, SectionNotFoundError
+from tr3gpp import tr38901
+from tr3gpp.tr38901 import ScenarioNotFoundError, SectionNotFoundError
 
 
 def test_known_good_pathloss_lookup_returns_expected_typed_value():
@@ -193,7 +193,7 @@ def test_spatial_consistency_correlation_property():
 # TR 36.777 Annex B -- the second TR, accessed via annex() rather than
 # section(). Exercises the shared-loader generalization from a caller's view.
 # ---------------------------------------------------------------------------
-from tr_api import tr36777  # noqa: E402
+from tr3gpp import tr36777  # noqa: E402
 
 
 def test_annex_b_pathloss_returns_list_of_height_bands():
@@ -238,8 +238,8 @@ def test_shared_loader_errors_are_the_same_type_across_trs():
     # The dispatcher generalization moved SectionNotFoundError/ScenarioNotFoundError
     # into the shared _loader; both TR modules must raise the *same* classes,
     # so a caller can catch one regardless of which TR raised it.
-    from tr_api._loader import ScenarioNotFoundError as BaseScenario
-    from tr_api._loader import SectionNotFoundError as BaseSection
+    from tr3gpp._loader import ScenarioNotFoundError as BaseScenario
+    from tr3gpp._loader import SectionNotFoundError as BaseSection
 
     assert tr38901.SectionNotFoundError is BaseSection
     assert tr36777.SectionNotFoundError is BaseSection
@@ -248,7 +248,7 @@ def test_shared_loader_errors_are_the_same_type_across_trs():
 
 
 def test_both_trs_usable_from_same_import():
-    from tr_api import tr36777 as t36, tr38901 as t38
+    from tr3gpp import tr36777 as t36, tr38901 as t38
     pathloss = t38.section("7.4").pathloss(scenario="RMa", condition="LOS")
     aerial = t36.annex("B").pathloss(scenario="RMa-AV", condition="LOS")
     assert type(pathloss).__name__ == "PathlossEntry"
@@ -319,7 +319,7 @@ def test_section_7_6_registry_addition_needed_no_loader_change():
     # §7.6 went in as a one-line _SECTION_REGISTRY entry through the shared
     # TRLoader (the Phase 5 generalization). Confirm it is loaded by exactly
     # the same machinery as every other unit, not a special case.
-    from tr_api._loader import TRLoader
+    from tr3gpp._loader import TRLoader
     assert isinstance(tr38901._loader, TRLoader)
     assert set(tr38901._SECTION_REGISTRY) == {"7.4", "7.5", "7.6", "7.9"}
     rel_yaml, model_cls, accessor_cls = tr38901._SECTION_REGISTRY["7.6"]

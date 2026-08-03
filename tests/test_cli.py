@@ -1,20 +1,20 @@
 """
-Tests for the `tr-api` CLI (Phase 8). Invoked in-process via `cli.main(argv)`.
+Tests for the `tr3gpp` CLI (Phase 8). Invoked in-process via `cli.main(argv)`.
 
 The load-bearing tests are the ones proving the CLI is a *thin layer*: `get`
-returns exactly what a direct `tr_api` call returns, and `dump --format csv`
+returns exactly what a direct `tr3gpp` call returns, and `dump --format csv`
 matches the committed CSV byte-for-byte. Plus: both TRs are reachable, machine
 output is clean for piping, and bad input is a helpful message + non-zero exit,
 not a traceback.
 
-Requires tr_api installed (`pip install -e tools/tr_api`).
+Requires tr3gpp installed (`pip install -e tools/tr3gpp`).
 """
 import json
 import os
 
 import pytest
-from tr_api import cli, introspect, tr36777, tr38901
-from tr_api._loader import ScenarioNotFoundError
+from tr3gpp import cli, introspect, tr36777, tr38901
+from tr3gpp._loader import ScenarioNotFoundError
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

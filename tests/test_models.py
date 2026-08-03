@@ -1,14 +1,14 @@
 """
-Tests for tools/tr_api/models.py's Pydantic models: a valid entry validates
+Tests for tools/tr3gpp/models.py's Pydantic models: a valid entry validates
 and produces the expected typed access; a malformed one (missing required
 field, wrong type, invalid enum-like value) is rejected.
 
-Requires tr_api to be installed (`pip install -e tools/tr_api`) -- see
+Requires tr3gpp to be installed (`pip install -e tools/tr3gpp`) -- see
 docs/CONTRIBUTING.md's Development setup section.
 """
 import pytest
 from pydantic import ValidationError
-from tr_api.models import (
+from tr3gpp.models import (
     AbsoluteTimeOfArrivalEntry,
     Alternative1DesiredParametersEntry,
     Alternative2ModifiedParameterEntry,

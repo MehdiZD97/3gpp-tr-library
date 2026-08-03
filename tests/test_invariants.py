@@ -3,7 +3,7 @@ Cross-cutting invariants (Phase 9, Part 1 Task 2) -- discovery-driven checks
 that hold across *every* processed section at once, so they also cover future
 sections for free. These catch whole classes of error (a value in a CSV not
 mirrored in the .md, a malformed depends_on, a duplicated equation number, the
-tr_api registry drifting from the filesystem, introspection advertising a value
+tr3gpp registry drifting from the filesystem, introspection advertising a value
 the accessor rejects) that per-section tests would each have to re-check.
 
 Also home to the `verification_notes` front-matter shape check (the Phase 9
@@ -20,7 +20,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
 
 from section_utils import discover_section_md_files, read_csv_rows, split_front_matter  # noqa: E402
-from tr_api import introspect, tr36777, tr38901  # noqa: E402
+from tr3gpp import introspect, tr36777, tr38901  # noqa: E402
 
 KNOWN_FORMATS = {"docx", "doc", "pdf", "html", "xml"}
 
@@ -183,7 +183,7 @@ def test_value_like_csv_cells_appear_in_markdown(md_path):
 
 
 # ---------------------------------------------------------------------------
-# tr_api registry <-> filesystem: neither can silently drift from the other
+# tr3gpp registry <-> filesystem: neither can silently drift from the other
 # ---------------------------------------------------------------------------
 def _registered_units():
     out = []
@@ -208,14 +208,14 @@ def test_registered_unit_has_files_on_disk(tr_dir, ver, key, rel_yaml):
 
 
 def test_every_discovered_section_is_registered():
-    # Every processed section .md must be reachable via a tr_api registry entry
+    # Every processed section .md must be reachable via a tr3gpp registry entry
     # (so the API surface and the data files stay in lockstep).
     registered_yaml = set()
     for tr_dir, ver, _key, rel_yaml in _registered_units():
         registered_yaml.add(os.path.join(REPO_ROOT, tr_dir, ver, rel_yaml))
     for md_path in _MD_PATHS:
         yaml_path = md_path[:-3] + ".yaml"
-        assert yaml_path in registered_yaml, f"{md_path} has no tr_api registry entry"
+        assert yaml_path in registered_yaml, f"{md_path} has no tr3gpp registry entry"
 
 
 # ---------------------------------------------------------------------------
@@ -260,7 +260,7 @@ def test_advertised_values_are_accepted_and_bogus_rejected(tr_module, key, acces
             pass  # (structure covered above)
 
     # A value that isn't advertised must be rejected, not silently accepted.
-    from tr_api._loader import ScenarioNotFoundError
+    from tr3gpp._loader import ScenarioNotFoundError
     bogus = dict(kwargs)
     bogus[member.args[0].name] = "__definitely_not_a_real_value__"
     with pytest.raises(ScenarioNotFoundError):

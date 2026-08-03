@@ -17,7 +17,7 @@ from pathlib import Path
 
 import yaml
 
-# This file lives at tools/tr_api/_loader.py; the repo root is two levels up.
+# This file lives at tools/tr3gpp/_loader.py; the repo root is two levels up.
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 
 _FRONT_MATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
