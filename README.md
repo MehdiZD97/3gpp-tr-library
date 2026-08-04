@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![3GPP](https://img.shields.io/badge/Standard-3GPP-orange?style=flat&logo=bookstack&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.9+-blue.svg?logo=python&logoColor=white)
-![Release](https://img.shields.io/badge/Release-v0.1.0-red)
+![Release](https://img.shields.io/badge/Release-v0.2.0-red)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)\
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21501655-blue?style=flat&logo=zenodo&logoColor=white)](https://doi.org/10.5281/zenodo.21501655)
 <!-- [![DOI](https://zenodo.org/badge/1300838692.svg)](https://doi.org/10.5281/zenodo.21501655) 
