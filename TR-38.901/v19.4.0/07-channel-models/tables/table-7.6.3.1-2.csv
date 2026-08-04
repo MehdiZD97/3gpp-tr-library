@@ -1,0 +1,15 @@
+scenario,condition,cluster_ray_specific_m,los_nlos_state_m,indoor_outdoor_state_m
+RMa,LOS,50,60,50
+RMa,NLOS,60,60,50
+RMa,O2I,15,60,50
+UMi,LOS,12,50,50
+UMi,NLOS,15,50,50
+UMi,O2I,15,50,50
+UMa,LOS,40,50,50
+UMa,NLOS,50,50,50
+UMa,O2I,15,50,50
+SMa,LOS,40,50,50
+SMa,NLOS,50,50,50
+SMa,O2I,15,50,50
+Indoor,,10,10,N/A
+InF,,10,d_clutter/2,N/A

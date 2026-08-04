@@ -1,15 +1,15 @@
 """
-Tests for tr_api's introspection layer (Phase 8) -- the self-describing surface
+Tests for tr3gpp's introspection layer (Phase 8) -- the self-describing surface
 the CLI renders. Two things matter most here: it describes the *actual*
 accessor surface (both the section() and annex() worlds, symmetrically), and it
 can't silently diverge from the accessors (the drift guard).
 
-Requires tr_api installed (`pip install -e tools/tr_api`).
+Requires tr3gpp installed (`pip install -e tools/tr3gpp`).
 """
 import inspect
 
 import pytest
-from tr_api import introspect, tr36777, tr38901
+from tr3gpp import introspect, tr36777, tr38901
 
 
 # ---------------------------------------------------------------------------
@@ -18,13 +18,15 @@ from tr_api import introspect, tr36777, tr38901
 def test_all_units_covers_both_trs():
     units = introspect.all_units()
     keys = {(u.tr_module, u.key) for u in units}
-    assert keys == {("tr38901", "7.4"), ("tr38901", "7.5"), ("tr38901", "7.9"), ("tr36777", "B")}
+    assert keys == {("tr38901", "7.4"), ("tr38901", "7.5"), ("tr38901", "7.6"),
+                    ("tr38901", "7.9"), ("tr36777", "B")}
 
 
 def test_section_titles_come_from_front_matter():
     by_key = {u.key: u for u in tr38901.list_sections()}
     assert by_key["7.4"].title == "Pathloss, LOS probability and penetration modelling"
     assert by_key["7.5"].title == "Fast fading model"
+    assert by_key["7.6"].title == "Additional modelling components"
     assert by_key["7.9"].title == "Channel model(s) for ISAC"
     assert all(u.verb == "section" for u in by_key.values())
 

@@ -1,0 +1,13 @@
+parameter,correlation_type
+Delays,Site-specific
+Cluster powers,Site-specific
+AOA/ZOA/AOD/ZOD offset,Site-specific
+AOA/ZOA/AOD/ZOD sign,Site-specific
+Random coupling,Site-specific
+XPR,Site-specific
+Initial random phase,Site-specific
+LOS/NLOS states,Site-specific
+Blockage (Model A),All-correlated
+O2I penetration loss,All-correlated
+Indoor distance,All-correlated
+Indoor states,All-correlated

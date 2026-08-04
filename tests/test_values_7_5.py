@@ -52,7 +52,7 @@ def test_channel_model_parameter_samples_match_verified_values(section_7_5_yaml_
 
 
 def test_channel_model_parameters_have_all_49_fields(section_7_5_yaml_data):
-    from tr_api.models import ChannelModelParameterEntry
+    from tr3gpp.models import ChannelModelParameterEntry
 
     expected_fields = set(ChannelModelParameterEntry.model_fields) - {"scenario", "condition"}
     for entry in section_7_5_yaml_data["channel_model_parameters"]:

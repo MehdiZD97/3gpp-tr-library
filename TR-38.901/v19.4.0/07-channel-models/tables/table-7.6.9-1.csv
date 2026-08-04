@@ -1,0 +1,8 @@
+scenario,mu_lg_delta_tau,sigma_lg_delta_tau,corr_distance_m
+InH,-8.6,0.1,10
+"InF-SL, InF-DL",-7.5,0.4,6
+"InF-SH, InF-DH",-7.5,0.4,11
+UMi,-7.5,0.5,15
+UMa,-7.4,0.2,50
+RMa,-8.33,0.26,50
+SMa,-7.702,0.4,50

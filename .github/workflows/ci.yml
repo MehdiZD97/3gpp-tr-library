@@ -20,7 +20,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
-          pip install -e tools/tr_api
+          pip install -e tools/tr3gpp
 
       - name: Run pytest
         run: pytest tests/ -v

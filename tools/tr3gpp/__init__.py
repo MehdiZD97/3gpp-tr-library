@@ -1,7 +1,7 @@
 """
-tr_api: typed Python access to this repo's structured 3GPP TR data.
+tr3gpp: typed Python access to this repo's structured 3GPP TR data.
 
-    from tr_api import tr38901, tr36777
+    from tr3gpp import tr38901, tr36777
 
     # TR 38.901 -- numbered clauses, accessed via section():
     entry = tr38901.section("7.4").pathloss(scenario="UMi-StreetCanyon", condition="NLOS")

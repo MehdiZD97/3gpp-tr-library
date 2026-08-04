@@ -1,5 +1,5 @@
 """
-Self-describing surface for `tr_api` -- so a user (or the CLI) can discover
+Self-describing surface for `tr3gpp` -- so a user (or the CLI) can discover
 which TRs / sections / parameters exist and how to call them, without reading
 source or memorizing names and signatures.
 

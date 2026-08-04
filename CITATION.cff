@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: >-
+  If you use this repository (or the tr3gpp package) in your research, please
+  cite it using the metadata below, and also cite the underlying 3GPP Technical
+  Reports themselves — this library provides hand-verified structured extracts,
+  not original specification content.
+title: >-
+  3gpp-tr-library: Hand-verified, section-level 3GPP Technical Reports as
+  queryable Markdown, CSV and YAML
+abstract: >-
+  Hand-curated, section-level extracts of 3GPP Technical Reports, cross-checked
+  against multiple independent source formats and published as coordinated
+  Markdown, CSV and YAML plus a typed Python API (tr3gpp). Covers TR 38.901
+  v19.4.0 clauses 7.4 (pathloss, LOS probability, O2I penetration), 7.5 (fast
+  fading), 7.6 (additional modelling components) and 7.9 (ISAC), and TR 36.777
+  v15.0.0 Annex B (aerial-UE channel model).
+type: software
+authors:
+  - family-names: Zafari
+    given-names: Mehdi
+    affiliation: LS-Wireless
+repository-code: https://github.com/MehdiZD97/3gpp-tr-library
+url: https://github.com/MehdiZD97/3gpp-tr-library
+license: MIT
+# The Zenodo *concept* DOI: always resolves to the latest archived release, so
+# this line does not need updating per release. To cite a specific snapshot,
+# use that release's own version DOI from the Zenodo record.
+doi: 10.5281/zenodo.21501655
+version: 0.2.0
+date-released: 2026-08-04
+keywords:
+  - 3GPP
+  - channel model
+  - TR 38.901
+  - TR 36.777
+  - 5G NR
+  - wireless propagation
+  - pathloss
+  - fast fading
+  - ISAC
+  - aerial UE
+  - simulation

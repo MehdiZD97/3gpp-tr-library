@@ -1,0 +1,10 @@
+parameter,uncorrelated_states
+Delays,Outdoor LOS/outdoor NLOS/O2I (different floors)
+Cluster powers,Outdoor LOS/outdoor NLOS/O2I (different floors)
+AOA/ZOA/AOD/ZOD offset,Outdoor LOS/outdoor NLOS/O2I (different floors)
+AOA/ZOA/AOD/ZOD sign,Outdoor LOS/outdoor NLOS/O2I (different floors)
+Random coupling,Outdoor LOS/outdoor NLOS/O2I (different floors)
+XPR,Outdoor LOS/outdoor NLOS/O2I (different floors)
+Initial random phase,Outdoor LOS/outdoor NLOS/O2I (different floors)
+Blockage,Outdoor/O2I (different floors)
+Standard deviation for O2I penetration loss,"Different building types, i.e., high/low loss"

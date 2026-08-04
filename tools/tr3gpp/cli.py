@@ -1,8 +1,8 @@
 """
-`tr-api` -- discover and query this repo's structured 3GPP TR data from a
+`tr3gpp` -- discover and query this repo's structured 3GPP TR data from a
 terminal.
 
-This is a **thin presentation layer over `tr_api.introspect`**: it holds no
+This is a **thin presentation layer over `tr3gpp.introspect`**: it holds no
 section/parameter knowledge of its own. `list`/`describe` render what the
 introspection API reports; `get` calls the real accessors; `dump` serializes
 what the API hands back. If something needs section knowledge, it belongs in
@@ -62,7 +62,7 @@ def cmd_list(args, extras):
         for u in tr_units:
             print(f"  {u.key:<{width}}  {u.title}")
         print()
-    print("Run 'tr-api describe <tr> <id>' to see a section's callable parameters.")
+    print("Run 'tr3gpp describe <tr> <id>' to see a section's callable parameters.")
     return 0
 
 
@@ -104,9 +104,9 @@ def cmd_describe(args, extras):
                 f'--{a.name} "{a.available[0]}"' if a.available else f"--{a.name} <value>"
                 for a in example.args
             )
-            print(f"\nExample:\n  tr-api get {unit.tr_module} {unit.key} {example.name} {call}")
+            print(f"\nExample:\n  tr3gpp get {unit.tr_module} {unit.key} {example.name} {call}")
         else:
-            print(f"\nExample:\n  tr-api dump {unit.tr_module} {unit.key} {example.name} --format csv")
+            print(f"\nExample:\n  tr3gpp dump {unit.tr_module} {unit.key} {example.name} --format csv")
     return 0
 
 
@@ -235,9 +235,9 @@ def cmd_dump(args, extras):
 # ---------------------------------------------------------------------------
 def build_parser():
     parser = argparse.ArgumentParser(
-        prog="tr-api",
+        prog="tr3gpp",
         description="Discover and query 3gpp-tr-library's structured 3GPP TR data. "
-                    "Start with 'tr-api list', then 'tr-api describe <tr> <id>'.",
+                    "Start with 'tr3gpp list', then 'tr3gpp describe <tr> <id>'.",
     )
     sub = parser.add_subparsers(dest="command", required=True, metavar="{list,describe,get,dump}")
 
@@ -250,7 +250,7 @@ def build_parser():
 
     p_get = sub.add_parser(
         "get", help="perform a lookup and print the result",
-        description="Perform a lookup, e.g.: tr-api get tr38901 7.4 pathloss --scenario UMi-StreetCanyon --condition NLOS",
+        description="Perform a lookup, e.g.: tr3gpp get tr38901 7.4 pathloss --scenario UMi-StreetCanyon --condition NLOS",
     )
     p_get.add_argument("tr")
     p_get.add_argument("key")
@@ -258,7 +258,7 @@ def build_parser():
 
     p_dump = sub.add_parser(
         "dump", help="dump a whole parameter set as JSON or CSV (for piping)",
-        description="e.g.: tr-api dump tr38901 7.5 channel_model_parameters --format json | jq",
+        description="e.g.: tr3gpp dump tr38901 7.5 channel_model_parameters --format json | jq",
     )
     p_dump.add_argument("tr")
     p_dump.add_argument("key")

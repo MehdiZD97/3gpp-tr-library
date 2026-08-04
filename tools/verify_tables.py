@@ -22,7 +22,7 @@ second source for formula content, not just a structural tiebreaker.
 
 CLI usage: `python tools/verify_tables.py` discovers every processed
 section, validates its YAML against the Pydantic models in
-`tools/tr_api/models.py`, cross-checks every table's CSV against its YAML,
+`tools/tr3gpp/models.py`, cross-checks every table's CSV against its YAML,
 and (when `references/` is present locally) cross-checks formulas against
 the HTML export. Prints a pass/fail summary and exits non-zero on any
 failure.
@@ -36,7 +36,14 @@ from pydantic import ValidationError
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from section_utils import REPO_ROOT, discover_section_md_files, read_csv_rows, split_front_matter  # noqa: E402
-from tr_api.models import AnnexBData, ChannelModelParameterEntry, Section74Data, Section75Data, Section79Data  # noqa: E402
+from tr3gpp.models import (  # noqa: E402
+    AnnexBData,
+    ChannelModelParameterEntry,
+    Section74Data,
+    Section75Data,
+    Section76Data,
+    Section79Data,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -315,7 +322,7 @@ def verify_section_7_4():
 # YAML/CSV represent it as one row per (scenario, condition) with 49 named
 # fields -- a list-of-entities shape, same as Table 7.4.1-1 -- rather than
 # as a literal 2D matrix. That's a deliberate design choice (it's also the
-# more useful shape for tr_api: one call returns every parameter for a given
+# more useful shape for tr3gpp: one call returns every parameter for a given
 # scenario/condition), not an accident that happened to dodge the need for
 # new tooling. The only place the "matrix" shape actually shows up is the
 # *inline Markdown* table, which transposes to parameter-rows x
@@ -748,6 +755,133 @@ def verify_section_7_9():
 
 
 # ---------------------------------------------------------------------------
+# TR 38.901 section 7.6 (Additional modelling components) -- the dependency-
+# driven core (7.6.0/1/3/4/8/9/10). All 11 CSV/YAML pairs fit the existing
+# verify_table() list-of-entities checker; no new checker shape was needed
+# (same outcome as §7.5, Annex B and §7.9).
+#
+# The HTML cross-check *does* apply here, but only to the table values -- and
+# that distinction is the section's key format finding. Clause 7.6 is
+# release-stratified: 7.6.0-7.6.8 embed their equations as old-style OLE
+# Equation.3 objects rendered as .wmz images with no text fallback anywhere
+# (the last one sits in Table 7.6.8-1's own header), while 7.6.9-7.6.16 are
+# modern OMML text. So the numbered *equations* in scope are PDF-visual
+# single-source (recorded in the section .md's verification_notes) -- but every
+# table *cell value* does render as HTML text and is genuinely re-checked here.
+# ---------------------------------------------------------------------------
+SECTION_7_6_DIR = os.path.join(REPO_ROOT, "TR-38.901", "v19.4.0", "07-channel-models")
+SECTION_7_6_YAML_PATH = os.path.join(SECTION_7_6_DIR, "7.6-additional-components.yaml")
+SECTION_7_6_TABLES_DIR = os.path.join(SECTION_7_6_DIR, "tables")
+
+
+def _optional_condition_normalizer(key):
+    """Fold the CSV's empty condition cell and the YAML's None together.
+
+    Table 7.6.3.1-2's Indoor and InF columns have no LOS/NLOS/O2I split.
+    """
+    scenario, condition = key
+    return (scenario, condition or None)
+
+
+def verify_section_7_6():
+    errors = []
+
+    with open(SECTION_7_6_YAML_PATH) as f:
+        data = yaml.safe_load(f)
+
+    try:
+        Section76Data(**data)
+    except ValidationError as exc:
+        errors.append(f"{SECTION_7_6_YAML_PATH}: schema validation failed:\n{exc}")
+        return errors
+
+    def table(name):
+        return os.path.join(SECTION_7_6_TABLES_DIR, name)
+
+    errors += verify_table(
+        table("table-7.6.1-1.csv"), data["oxygen_absorption_loss"], key_fields=("f_ghz",),
+        field_map={"alpha_db_per_km": ("alpha_db_per_km", identity)},
+    )
+    errors += verify_table(
+        table("table-7.6.3.1-2.csv"), data["spatial_consistency_correlation_distance"],
+        key_fields=("scenario", "condition"), key_normalizer=_optional_condition_normalizer,
+        field_map={f: (f, identity) for f in
+                   ("cluster_ray_specific_m", "los_nlos_state_m", "indoor_outdoor_state_m")},
+    )
+    errors += verify_table(
+        table("table-7.6.3.4-1.csv"), data["spatial_consistency_correlation_type"],
+        key_fields=("parameter",), field_map={"correlation_type": ("correlation_type", identity)},
+    )
+    errors += verify_table(
+        table("table-7.6.3.4-2.csv"), data["spatial_consistency_uncorrelated_states"],
+        key_fields=("parameter",), field_map={"uncorrelated_states": ("uncorrelated_states", identity)},
+    )
+    errors += verify_table(
+        table("table-7.6.4.1-1.csv"), data["self_blocking_region"], key_fields=("mode",),
+        field_map={f: (f, identity) for f in ("phi_sb_deg", "x_sb_deg", "theta_sb_deg", "y_sb_deg")},
+    )
+    errors += verify_table(
+        table("table-7.6.4.1-2.csv"), data["blocking_region"], key_fields=("scenario",),
+        field_map={f: (f, identity) for f in ("phi_k_deg", "x_k_deg", "theta_k_deg", "y_k_deg", "r_m")},
+    )
+    errors += verify_table(
+        # Keyed on both range columns: the sign table is a 3x3 grid, so neither
+        # the AOA nor the ZOA range alone is unique.
+        table("table-7.6.4.1-3.csv"), data["blockage_sign_description"],
+        key_fields=("aoa_range", "zoa_range"),
+        field_map={"signs_a1_a2": ("signs_a1_a2", identity), "signs_z1_z2": ("signs_z1_z2", identity)},
+    )
+    errors += verify_table(
+        table("table-7.6.4.1-4.csv"), data["blockage_correlation_distance"],
+        key_fields=("scenario", "condition"), field_map={"d_corr_m": ("d_corr_m", identity)},
+    )
+    errors += verify_table(
+        table("table-7.6.4.2-5.csv"), data["blocker_parameters"], key_fields=("blocker",),
+        field_map={f: (f, identity) for f in ("environment", "dimensions", "mobility_pattern")},
+    )
+    errors += verify_table(
+        table("table-7.6.8-1.csv"), data["ground_material_properties"], key_fields=("material_class",),
+        field_map={f: (f, identity) for f in
+                   ("a_epsilon", "b_epsilon", "c_sigma", "d_sigma", "frequency_range_ghz")},
+    )
+    errors += verify_table(
+        table("table-7.6.9-1.csv"), data["absolute_time_of_arrival"], key_fields=("scenario",),
+        field_map={f: (f, identity) for f in
+                   ("mu_lg_delta_tau", "sigma_lg_delta_tau", "corr_distance_m")},
+    )
+
+    if os.path.isfile(SOURCE_HTML):
+        # "7.6.0" is the region's start marker: it occurs exactly twice in the
+        # export (table of contents, then the body heading), so rfind lands on
+        # the body. Cross-check every *distinctive decimal* table value (bare
+        # small integers would match trivially and add no signal) against the
+        # tag-stripped §7.6 region.
+        if html_region_has_text_formulas(SOURCE_HTML, "7.6.0", "Clustered Delay Line (CDL) models"):
+            decimals = set()
+            for e in data["oxygen_absorption_loss"]:
+                decimals.add(e["alpha_db_per_km"])
+            for e in data["ground_material_properties"]:
+                decimals |= {e["a_epsilon"], e["c_sigma"], e["d_sigma"]}
+            for e in data["absolute_time_of_arrival"]:
+                decimals |= {e["mu_lg_delta_tau"], e["sigma_lg_delta_tau"]}
+            distinctive = [v for v in decimals if "." in str(v)]
+            mismatches = check_formulas_against_html(
+                SOURCE_HTML,
+                start_text="7.6.0",
+                end_text="Clustered Delay Line (CDL) models",
+                formulas=distinctive,
+            )
+            for value, missing in mismatches:
+                errors.append(f"§7.6 value cross-check: numbers {missing} from {value!r} not found in HTML export")
+        else:
+            print("  (unexpected: §7.6 HTML region has no OMML text -- table value cross-check skipped)")
+    else:
+        print(f"  (skipping HTML value cross-check: {SOURCE_HTML} not present locally)")
+
+    return errors
+
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 def main():
@@ -763,6 +897,7 @@ def main():
     checkers = {
         ("TR 38.901", "7.4"): verify_section_7_4,
         ("TR 38.901", "7.5"): verify_section_7_5,
+        ("TR 38.901", "7.6"): verify_section_7_6,
         ("TR 38.901", "7.9"): verify_section_7_9,
         ("TR 36.777", "Annex B"): verify_annex_b,
     }

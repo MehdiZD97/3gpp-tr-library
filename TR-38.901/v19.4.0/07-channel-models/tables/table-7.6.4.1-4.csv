@@ -1,0 +1,6 @@
+scenario,condition,d_corr_m
+UMi/UMa/SMa/RMa,LOS,10
+UMi/UMa/SMa/RMa,NLOS,10
+UMi/UMa/SMa/RMa,O2I,5
+InH,LOS,5
+InH,NLOS,5

@@ -1,7 +1,7 @@
 """
 Python API for TR 38.901's processed sections.
 
-    from tr_api import tr38901
+    from tr3gpp import tr38901
 
     entry = tr38901.section("7.4").pathloss(scenario="UMi-StreetCanyon", condition="NLOS")
     entry.shadow_fading_std_db      # a Pydantic model instance, not a raw dict
@@ -22,6 +22,13 @@ Python API for TR 38.901's processed sections.
     zsd = tr38901.section("7.5").zsd_zod_offset(scenario="UMa", condition="NLOS")
 
     notations = tr38901.section("7.5").notations   # Table 7.5-1
+
+    extra = tr38901.section("7.6")                    # Additional modelling components
+    extra.oxygen_absorption(f_ghz="60").alpha_db_per_km        # "15"
+    extra.correlation_distance(scenario="UMa", condition="NLOS")
+    extra.correlation_distance(scenario="InF")        # no LOS/NLOS/O2I split
+    extra.ground_material(material_class="Concrete").a_epsilon  # "5.31"
+    extra.absolute_time_of_arrival(scenario="UMa")    # Table 7.6.9-1
 
     isac = tr38901.section("7.9")                     # Channel model(s) for ISAC (Rel-19), full 7.9.0-7.9.6
     isac.rcs_model_2(target="Vehicle with single scattering point", scattering_point="Front")
@@ -46,14 +53,21 @@ from typing import Optional
 # Re-exported for backwards compatibility: callers import these from here.
 from ._loader import ScenarioNotFoundError, SectionNotFoundError, TRLoader
 from .models import (
+    AbsoluteTimeOfArrivalEntry,
     BackgroundChannelLinkEntry,
     BackgroundChannelParamEntry,
+    BlockageCorrelationDistanceEntry,
+    BlockageSignEntry,
+    BlockerParameterEntry,
+    BlockingRegionEntry,
     CalibrationAssumption,
     ChannelModelParameterEntry,
+    GroundMaterialEntry,
     LosConditionEntry,
     LosProbabilityEntry,
     NotationEntry,
     O2IPenetrationLoss,
+    OxygenAbsorptionEntry,
     PathlossEntry,
     RayOffsetAngle,
     RcsModel1Entry,
@@ -63,10 +77,15 @@ from .models import (
     ScalingFactorEntry,
     Section74Data,
     Section75Data,
+    Section76Data,
     Section79Data,
+    SelfBlockingRegionEntry,
     SensingScenarioParameter,
     ShadowFadingAutocorrelation,
+    SpatialConsistencyCorrelationDistanceEntry,
     SpatialConsistencyCorrelationEntry,
+    SpatialConsistencyCorrelationTypeEntry,
+    SpatialConsistencyUncorrelatedStatesEntry,
     SubClusterInfo,
     TargetChannelLinkEntry,
     XprEntry,
@@ -75,13 +94,13 @@ from .models import (
 
 DEFAULT_VERSION = "v19.4.0"
 
-# The access verb / unit noun for this TR, read by tr_api.introspect so both
+# The access verb / unit noun for this TR, read by tr3gpp.introspect so both
 # TR 38.901's numbered sections and TR 36.777's lettered annexes are described
 # uniformly.
 UNIT_KIND = "section"
 
 __all__ = [
-    "section", "Section74", "Section75", "Section79",
+    "section", "Section74", "Section75", "Section76", "Section79",
     "list_sections", "describe", "UNIT_KIND",
     "ScenarioNotFoundError", "SectionNotFoundError", "DEFAULT_VERSION",
 ]
@@ -90,7 +109,7 @@ __all__ = [
 class Section74:
     """TR 38.901 §7.4 (Pathloss, LOS probability and penetration modelling)."""
 
-    # Minimal explicit metadata the introspection layer (tr_api.introspect)
+    # Minimal explicit metadata the introspection layer (tr3gpp.introspect)
     # can't derive from a signature alone: for each lookup method, the data
     # attribute it queries and how each keyword arg maps to an entry field
     # (so "what values are available" can be listed). Method names, args,
@@ -198,6 +217,137 @@ class Section75:
     @property
     def sub_cluster_info(self) -> list[SubClusterInfo]:
         return self._data.sub_cluster_info
+
+
+class Section76:
+    """TR 38.901 §7.6 (Additional modelling components) -- the dependency-driven
+    core: 7.6.0/7.6.1 (oxygen absorption), 7.6.3 (spatial consistency), 7.6.4
+    (blockage), 7.6.8 (explicit ground reflection), 7.6.9 (absolute time of
+    arrival) and 7.6.10 (dual mobility).
+
+    7.6.2, 7.6.5-7.6.7 and 7.6.11-7.6.16 are not processed. 7.6.10 contributes
+    equations only (Eq. 7.6-45/46 in the section .md), so it has no data member
+    here -- same convention as §7.5's procedural equations.
+    """
+
+    # See Section74._QUERYABLE. correlation_distance's `condition` is optional:
+    # Table 7.6.3.1-2's Indoor and InF columns have no LOS/NLOS/O2I split, so
+    # those entries carry condition=None and are looked up by scenario alone.
+    _QUERYABLE = {
+        "oxygen_absorption": ("oxygen_absorption_loss", {"f_ghz": "f_ghz"}),
+        "correlation_distance": ("spatial_consistency_correlation_distance",
+                                 {"scenario": "scenario", "condition": "condition"}),
+        "correlation_type": ("spatial_consistency_correlation_type", {"parameter": "parameter"}),
+        "uncorrelated_states": ("spatial_consistency_uncorrelated_states", {"parameter": "parameter"}),
+        "self_blocking_region": ("self_blocking_region", {"mode": "mode"}),
+        "blocking_region": ("blocking_region", {"scenario": "scenario"}),
+        "blockage_correlation_distance": ("blockage_correlation_distance",
+                                          {"scenario": "scenario", "condition": "condition"}),
+        "blocker_parameters": ("blocker_parameters", {"blocker": "blocker"}),
+        "ground_material": ("ground_material_properties", {"material_class": "material_class"}),
+        "absolute_time_of_arrival": ("absolute_time_of_arrival", {"scenario": "scenario"}),
+    }
+
+    def __init__(self, section_id: str, version: str, data: Section76Data):
+        self.section_id = section_id
+        self.version = version
+        self._data = data
+
+    def _not_found(self, what, detail, available):
+        return ScenarioNotFoundError(
+            f"No {what} entry for {detail} in TR 38.901 §{self.section_id} "
+            f"({self.version}). Available: {available}"
+        )
+
+    def oxygen_absorption(self, *, f_ghz: str) -> OxygenAbsorptionEntry:
+        """§7.6.1 oxygen loss alpha(f) for one frequency bin of Table 7.6.1-1."""
+        for entry in self._data.oxygen_absorption_loss:
+            if entry.f_ghz == str(f_ghz):
+                return entry
+        raise self._not_found("oxygen absorption", f"f_ghz={f_ghz!r}",
+                              [e.f_ghz for e in self._data.oxygen_absorption_loss])
+
+    def correlation_distance(self, *, scenario: str,
+                             condition: Optional[str] = None) -> SpatialConsistencyCorrelationDistanceEntry:
+        """§7.6.3.1 spatial-consistency correlation distances (Table 7.6.3.1-2).
+
+        `condition` is omitted for Indoor and InF, which have no LOS/NLOS/O2I split.
+        """
+        for entry in self._data.spatial_consistency_correlation_distance:
+            if entry.scenario == scenario and entry.condition == condition:
+                return entry
+        available = [(e.scenario, e.condition) for e in self._data.spatial_consistency_correlation_distance]
+        raise self._not_found("correlation distance", f"scenario={scenario!r}, condition={condition!r}", available)
+
+    def correlation_type(self, *, parameter: str) -> SpatialConsistencyCorrelationTypeEntry:
+        """§7.6.3.4 correlation type among TRPs for one parameter (Table 7.6.3.4-1)."""
+        for entry in self._data.spatial_consistency_correlation_type:
+            if entry.parameter == parameter:
+                return entry
+        raise self._not_found("correlation type", f"parameter={parameter!r}",
+                              [e.parameter for e in self._data.spatial_consistency_correlation_type])
+
+    def uncorrelated_states(self, *, parameter: str) -> SpatialConsistencyUncorrelatedStatesEntry:
+        """§7.6.3.4 states in which a parameter is not spatially correlated (Table 7.6.3.4-2)."""
+        for entry in self._data.spatial_consistency_uncorrelated_states:
+            if entry.parameter == parameter:
+                return entry
+        raise self._not_found("uncorrelated states", f"parameter={parameter!r}",
+                              [e.parameter for e in self._data.spatial_consistency_uncorrelated_states])
+
+    def self_blocking_region(self, *, mode: str) -> SelfBlockingRegionEntry:
+        """§7.6.4.1 blockage model A self-blocking region parameters (Table 7.6.4.1-1)."""
+        for entry in self._data.self_blocking_region:
+            if entry.mode == mode:
+                return entry
+        raise self._not_found("self-blocking region", f"mode={mode!r}",
+                              [e.mode for e in self._data.self_blocking_region])
+
+    def blocking_region(self, *, scenario: str) -> BlockingRegionEntry:
+        """§7.6.4.1 blockage model A non-self-blocking region parameters (Table 7.6.4.1-2)."""
+        for entry in self._data.blocking_region:
+            if entry.scenario == scenario:
+                return entry
+        raise self._not_found("blocking region", f"scenario={scenario!r}",
+                              [e.scenario for e in self._data.blocking_region])
+
+    def blockage_correlation_distance(self, *, scenario: str,
+                                      condition: str) -> BlockageCorrelationDistanceEntry:
+        """§7.6.4.1 spatial correlation distance for the blocker centre (Table 7.6.4.1-4)."""
+        for entry in self._data.blockage_correlation_distance:
+            if entry.scenario == scenario and entry.condition == condition:
+                return entry
+        available = [(e.scenario, e.condition) for e in self._data.blockage_correlation_distance]
+        raise self._not_found("blockage correlation distance",
+                              f"scenario={scenario!r}, condition={condition!r}", available)
+
+    def blocker_parameters(self, *, blocker: str) -> BlockerParameterEntry:
+        """§7.6.4.2 recommended blockage model B blocker parameters (Table 7.6.4.2-5)."""
+        for entry in self._data.blocker_parameters:
+            if entry.blocker == blocker:
+                return entry
+        raise self._not_found("blocker parameters", f"blocker={blocker!r}",
+                              [e.blocker for e in self._data.blocker_parameters])
+
+    def ground_material(self, *, material_class: str) -> GroundMaterialEntry:
+        """§7.6.8 ground material properties for Eq. 7.6-41/7.6-42 (Table 7.6.8-1)."""
+        for entry in self._data.ground_material_properties:
+            if entry.material_class == material_class:
+                return entry
+        raise self._not_found("ground material", f"material_class={material_class!r}",
+                              [e.material_class for e in self._data.ground_material_properties])
+
+    def absolute_time_of_arrival(self, *, scenario: str) -> AbsoluteTimeOfArrivalEntry:
+        """§7.6.9 absolute-time-of-arrival lognormal parameters (Table 7.6.9-1)."""
+        for entry in self._data.absolute_time_of_arrival:
+            if entry.scenario == scenario:
+                return entry
+        raise self._not_found("absolute time of arrival", f"scenario={scenario!r}",
+                              [e.scenario for e in self._data.absolute_time_of_arrival])
+
+    @property
+    def blockage_sign_description(self) -> list[BlockageSignEntry]:
+        return self._data.blockage_sign_description
 
 
 class Section79:
@@ -329,6 +479,7 @@ class Section79:
 _SECTION_REGISTRY = {
     "7.4": ("07-channel-models/7.4-pathloss.yaml", Section74Data, Section74),
     "7.5": ("07-channel-models/7.5-fast-fading.yaml", Section75Data, Section75),
+    "7.6": ("07-channel-models/7.6-additional-components.yaml", Section76Data, Section76),
     "7.9": ("07-channel-models/7.9-isac-channel-model.yaml", Section79Data, Section79),
 }
 

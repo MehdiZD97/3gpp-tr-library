@@ -119,6 +119,64 @@ def test_index_md_contains_7_5_row(repo_root):
     assert "§7.5" in content
 
 
+# --- TR 38.901 §7.6 (Additional modelling components) structural checks. The
+# generic discovery-based tests above (test_all_discovered_sections_*) already
+# cover §7.6 automatically -- confirmed empirically, since
+# discover_section_md_files() returns it -- so these add only the
+# section-specific assertions. ---
+def test_section_7_6_md_exists(section_7_6_md_path):
+    assert os.path.isfile(section_7_6_md_path)
+
+
+def test_section_7_6_is_in_the_discovery_set(all_section_md_paths):
+    # The load-bearing claim behind "the generic tests cover it for free".
+    assert any(p.endswith("7.6-additional-components.md") for p in all_section_md_paths)
+
+
+def test_section_7_6_section_field_is_string(section_7_6_front_matter):
+    assert isinstance(section_7_6_front_matter["section"], str)
+    assert section_7_6_front_matter["section"] == "7.6"
+    assert section_7_6_front_matter["status"] == "verified"
+
+
+def test_section_7_6_title_is_the_real_clause_title(section_7_6_front_matter):
+    # Deliberate filename/title split, as for §7.4 and §7.9: the slug is short
+    # ("7.6-additional-components"), the title is the TR's own clause heading.
+    assert section_7_6_front_matter["title"] == "Additional modelling components"
+
+
+def test_section_7_6_yaml_exists_and_parses(section_7_6_yaml_path):
+    assert os.path.isfile(section_7_6_yaml_path)
+    with open(section_7_6_yaml_path) as f:
+        assert yaml.safe_load(f) is not None
+
+
+def test_section_7_6_yaml_has_expected_top_level_keys(section_7_6_yaml_data):
+    for key in (
+        "oxygen_absorption_loss",
+        "spatial_consistency_correlation_distance",
+        "spatial_consistency_correlation_type",
+        "spatial_consistency_uncorrelated_states",
+        "self_blocking_region", "blocking_region", "blockage_sign_description",
+        "blockage_correlation_distance", "blocker_parameters",
+        "ground_material_properties", "absolute_time_of_arrival",
+    ):
+        assert key in section_7_6_yaml_data
+    assert len(section_7_6_yaml_data) == 11
+
+
+def test_section_7_6_tables_parse_with_consistent_columns(section_7_6_table_rows):
+    table_id, rows = section_7_6_table_rows
+    assert len(rows) > 1, f"table-{table_id}.csv"
+
+
+def test_index_md_contains_7_6_row(repo_root):
+    with open(os.path.join(repo_root, "INDEX.md")) as f:
+        content = f.read()
+    assert "§7.6" in content
+    assert "Additional modelling components" in content
+
+
 # --- TR 38.901 §7.9 (ISAC) structural checks. The generic discovery-based
 # tests above already cover §7.9 automatically -- these add the section-specific
 # assertions. ---
