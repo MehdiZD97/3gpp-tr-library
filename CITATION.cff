@@ -27,9 +27,7 @@ license: MIT
 # use that release's own version DOI from the Zenodo record.
 doi: 10.5281/zenodo.21501655
 version: 0.2.0
-# `date-released` is deliberately absent until the release it describes is
-# actually tagged and archived — see the version-bump checklist in
-# docs/publishing.md, which lists this file as one of the places to update.
+date-released: 2026-08-04
 keywords:
   - 3GPP
   - channel model
